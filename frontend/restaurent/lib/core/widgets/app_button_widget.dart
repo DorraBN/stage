@@ -17,47 +17,47 @@ class AppButton extends StatelessWidget {
         width: double.infinity,
         height: 45,
         decoration: BoxDecoration(
-          color: getButtonColor(context, type!),
+          color: getButtonColor(context, type ?? ButtonType.PLAIN), // Added null check for type
           borderRadius: BorderRadius.circular(4.0),
           boxShadow: [
             BoxShadow(
-                //color: Color.fromRGBO(169, 176, 185, 0.42),
-                //spreadRadius: 0,
-                //blurRadius: 3.0,
-                //offset: Offset(0, 2),
-                )
+              color: Color.fromRGBO(169, 176, 185, 0.42),
+              spreadRadius: 0,
+              blurRadius: 3.0,
+              offset: Offset(0, 2),
+            ),
           ],
         ),
         child: Center(
-          child: Text(this.text!,
+          child: Text(this.text ?? '', // Added null check for text
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(color: getTextColor(context, type!))),
+                  .titleMedium!
+                  .copyWith(color: getTextColor(context, type ?? ButtonType.PLAIN))), // Added null check for type
         ),
       ),
     );
   }
 }
 
-Color getButtonColor(context, ButtonType type) {
+Color getButtonColor(BuildContext context, ButtonType type) {
   switch (type) {
     case ButtonType.PRIMARY:
-      return Theme.of(context).buttonColor;
+      return Theme.of(context).primaryColor; // Adjusted to return primaryColor
     case ButtonType.PLAIN:
       return Colors.white;
     default:
-      return Theme.of(context).primaryColor;
+      return Theme.of(context).primaryColor; // Adjusted to return primaryColor
   }
 }
 
-Color getTextColor(context, ButtonType type) {
+Color getTextColor(BuildContext context, ButtonType type) {
   switch (type) {
     case ButtonType.PLAIN:
       return Theme.of(context).primaryColor;
     case ButtonType.PRIMARY:
       return Colors.white;
     default:
-      return Theme.of(context).buttonColor;
+      return Theme.of(context).primaryColor;
   }
 }

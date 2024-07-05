@@ -1,7 +1,7 @@
 import 'package:restaurent/core/constants/color_constants.dart'; // Remplacez par le chemin correct
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
- // Importation du package d'icônes
+
 
 class DailyInfoModel {
   IconData? icon;
