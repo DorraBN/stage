@@ -123,7 +123,7 @@ class _MiniInformationWidgetState extends State<MiniInformationWidget> {
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                  color: widget.dailyData.color!.withOpacity(0.1),
+                 
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Icon(

@@ -65,7 +65,7 @@ class ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage("assets/images/profile_pic.png"),
+            backgroundImage: AssetImage("../../../../../assets/images/profile_pic.png"),
           ),
           if (!Responsive.isMobile(context))
             Padding(
@@ -106,7 +106,7 @@ class SearchField extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: SvgPicture.asset(
-              "assets/icons/Search.svg",
+              "../../../../../assets/icons/Search.svg",
             ),
           ),
         ),

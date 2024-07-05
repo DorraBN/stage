@@ -72,7 +72,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           SizedBox(
                             height: 60,
                           ),
-                          Image.asset("assets/logo/logo_icon.png", scale: 3),
+                          Image.asset("../../assets/logo/logo_icon.png", scale: 3),
                           SizedBox(height: 24.0),
                           //Flexible(
                           //  child: _loginScreen(context),

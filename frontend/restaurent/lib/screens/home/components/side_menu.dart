@@ -22,7 +22,7 @@ class SideMenu extends StatelessWidget {
                   height: defaultPadding * 3,
                 ),
                 Image.asset(
-                  "assets/logo/logo_icon.png",
+                  "../../assets/logo/logo_icon.png",
                   scale: 5,
                 ),
                 SizedBox(
@@ -33,42 +33,42 @@ class SideMenu extends StatelessWidget {
             )),
             DrawerListTile(
               title: "Dashboard",
-              svgSrc: "assets/icons/menu_dashbord.svg",
+              svgSrc: "../../assets/icons/menu_dashbord.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Posts",
-              svgSrc: "assets/icons/menu_tran.svg",
+              svgSrc: "../../assets/icons/menu_tran.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Pages",
-              svgSrc: "assets/icons/menu_task.svg",
+              svgSrc: "../../../../../assets/icons/menu_task.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Categories",
-              svgSrc: "assets/icons/menu_doc.svg",
+              svgSrc: "../../../../../assets/icons/menu_doc.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Appearance",
-              svgSrc: "assets/icons/menu_store.svg",
+              svgSrc: "../../../../../assets/icons/menu_store.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Users",
-              svgSrc: "assets/icons/menu_notification.svg",
+              svgSrc: "../../../../../assets/icons/menu_notification.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Tools",
-              svgSrc: "assets/icons/menu_profile.svg",
+              svgSrc: "../../../../../assets/icons/menu_profile.svg",
               press: () {},
             ),
             DrawerListTile(
               title: "Settings",
-              svgSrc: "assets/icons/menu_setting.svg",
+              svgSrc: "../../../../../assets/icons/menu_setting.svg",
               press: () {},
             ),
           ],

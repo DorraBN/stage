@@ -94,7 +94,7 @@ DataRow recentUserDataRow(RecentUser userInfo, BuildContext context) {
       DataCell(Container(
           padding: EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: getRoleColor(userInfo.role).withOpacity(.2),
+            
             border: Border.all(color: getRoleColor(userInfo.role)),
             borderRadius: BorderRadius.all(Radius.circular(5.0) //
                 ),

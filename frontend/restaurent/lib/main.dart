@@ -1,5 +1,6 @@
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/init/provider_list.dart';
+import 'package:restaurent/screens/dashboard/components/header.dart';
 import 'package:restaurent/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Smart Dashboard - Admin Panel v0.1 ',
+      title: 'restaurent ',
       theme: ThemeData.dark().copyWith(
         appBarTheme: AppBarTheme(backgroundColor: bgColor, elevation: 0),
         scaffoldBackgroundColor: bgColor,
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
-      home: Login(title: "Wellcome to the Admin & Dashboard Panel"),
+      home: Header(),
     );
   }
 }

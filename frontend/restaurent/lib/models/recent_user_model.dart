@@ -7,7 +7,7 @@ class RecentUser {
 
 List recentUsers = [
   RecentUser(
-    icon: "assets/icons/xd_file.svg",
+    icon: "../../assets/icons/xd_file.svg",
     name: "Deniz Çolak",
     role: "Software Architect",
     email: "de***ak@huawei.com",
@@ -15,7 +15,7 @@ List recentUsers = [
     posts: "4",
   ),
   RecentUser(
-    icon: "assets/icons/Figma_file.svg",
+    icon: "../../assets/icons/Figma_file.svg",
     name: "S*** Ç****",
     role: "Software Engineer",
     email: "se****k1@google.com",
@@ -23,7 +23,7 @@ List recentUsers = [
     posts: "19",
   ),
   RecentUser(
-    icon: "assets/icons/doc_file.svg",
+    icon: "../../assets/icons/doc_file.svg",
     name: "N***** D****",
     role: "Solution Architect",
     email: "ne****tr@google.com",
@@ -31,7 +31,7 @@ List recentUsers = [
     posts: "32",
   ),
   RecentUser(
-    icon: "assets/icons/sound_file.svg",
+    icon: "../../assets/icons/sound_file.svg",
     name: "B***** K****",
     role: "Project Manager",
     email: "bu****lk@google.com",
@@ -39,7 +39,7 @@ List recentUsers = [
     posts: "3",
   ),
   RecentUser(
-    icon: "assets/icons/media_file.svg",
+    icon: "../../assets/icons/media_file.svg",
     name: "A**** S**** K****",
     role: "Line Manager",
     email: "ah****az@google.com",
@@ -47,7 +47,7 @@ List recentUsers = [
     posts: "2",
   ),
   RecentUser(
-    icon: "assets/icons/pdf_file.svg",
+    icon: "../../assets/icons/pdf_file.svg",
     name: "T***** S****",
     role: "UI/UX Designer",
     email: "te****cu@google.com",
@@ -55,7 +55,7 @@ List recentUsers = [
     posts: "3",
   ),
   RecentUser(
-    icon: "assets/icons/excle_file.svg",
+    icon: "../../assets/icons/excle_file.svg",
     name: "K***** D****",
     role: "Business Analyst",
     email: "ke****an@gmail.com",
