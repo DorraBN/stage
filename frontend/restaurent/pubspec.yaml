@@ -44,6 +44,8 @@ dependencies:
   google_fonts: ^6.2.1
   icons_flutter: ^0.0.4
   table_calendar: ^3.1.2
+  ionicons: ^0.2.2
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
