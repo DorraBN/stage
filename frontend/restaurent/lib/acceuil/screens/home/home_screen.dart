@@ -1,14 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/constants.dart';
-
+import 'package:restaurent/acceuil/screens/home/components/footer.dart';
 import 'components/body.dart';
-
-import 'components/footer.dart';
-
 import 'components/header_container.dart';
 import 'components/menu.dart';
 
@@ -26,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: Drawer(
         child: ListView(
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
             DrawerHeader(
               child: Center(
@@ -39,25 +31,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            MobMenu()
+            MobMenu(),
           ],
         ),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
-              //header
               HeaderContainer(),
-              //body
               BodyContainer(),
-              //footer
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 80),
+              ReservationForm(),
+              SizedBox(height: 70),
               Footer(),
-              //now we make our website responsive
             ],
           ),
         ),

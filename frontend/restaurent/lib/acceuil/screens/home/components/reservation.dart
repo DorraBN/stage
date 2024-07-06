@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 20.0),
-            constraints: BoxConstraints.tightFor(width: double.infinity),
-            padding: EdgeInsets.all(12.0),
+            constraints: BoxConstraints(maxWidth: 600.0),
+            padding: EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blue, width: 2.0),
               borderRadius: BorderRadius.circular(10.0),
@@ -91,8 +91,7 @@ class _ReservationFormState extends State<ReservationForm> {
           SizedBox(height: 20),
           Row(
             children: [
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Your Name',
@@ -107,8 +106,7 @@ class _ReservationFormState extends State<ReservationForm> {
                 ),
               ),
               SizedBox(width: 10),
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
@@ -127,8 +125,7 @@ class _ReservationFormState extends State<ReservationForm> {
           SizedBox(height: 20),
           Row(
             children: [
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(
                     labelText: 'Number of Persons',
@@ -150,8 +147,7 @@ class _ReservationFormState extends State<ReservationForm> {
                 ),
               ),
               SizedBox(width: 10),
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
                 child: TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Reservation Date',
@@ -178,8 +174,7 @@ class _ReservationFormState extends State<ReservationForm> {
                 ),
               ),
               SizedBox(width: 10),
-              Flexible(
-                fit: FlexFit.tight,
+              Expanded(
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(
                     labelText: 'Reservation Time',
@@ -237,46 +232,24 @@ class Footer extends StatelessWidget {
       width: double.infinity,
       color: Colors.grey[800],
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Foodie',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Row(
-                children: [
-                  SocialIcon(icon: 'assets/icons/google-icon.svg'),
-                  SizedBox(width: 10.0),
-                  SocialIcon(icon: 'assets/icons/facebook-2.svg'),
-                  SizedBox(width: 10.0),
-                  SocialIcon(icon: 'assets/icons/twitter.svg'),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 20.0),
           Text(
-            'Contact us:',
+            'Foodie',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16.0,
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10.0),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ContactInfo(icon: Icons.email, text: 'contact@foodie.com'),
-              ContactInfo(icon: Icons.phone, text: '+123 456 789'),
-              ContactForm(),
+              SocialIcon(icon: 'assets/icons/google-icon.svg'),
+              SizedBox(width: 10.0),
+              SocialIcon(icon: 'assets/icons/facebook-2.svg'),
+              SizedBox(width: 10.0),
+              SocialIcon(icon: 'assets/icons/twitter.svg'),
             ],
           ),
         ],
@@ -303,47 +276,6 @@ class SocialIcon extends StatelessWidget {
         height: 20.0,
         width: 20.0,
       ),
-    );
-  }
-}
-
-class ContactInfo extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const ContactInfo({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: Colors.white,
-        ),
-        SizedBox(width: 5.0),
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ContactForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        // Handle button press
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.orange,
-      ),
-      child: Text('Reserve a table'),
     );
   }
 }

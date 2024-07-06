@@ -103,19 +103,12 @@ class AboutSection extends StatelessWidget {
           height: 20,
         ),
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.withOpacity(0.3)),
-          ),
+         
+          
           child: TextFormField(
             decoration: InputDecoration(
-                suffixIcon: Icon(
-                  Icons.adjust_rounded,
-                  color: kSecondaryColor,
-                ),
-                hintText: "Search your favourite food",
+             
+              
                 focusedBorder:
                     UnderlineInputBorder(borderSide: BorderSide.none),
                 enabledBorder:
@@ -127,30 +120,8 @@ class AboutSection extends StatelessWidget {
         ),
         Row(
           children: [
-            Expanded(
-              child: MaterialButton(
-                height: 55,
-                color: kSecondaryColor,
-                onPressed: () {},
-                child: Text(
-                  "Delivery",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "or",
-                style: TextStyle(
-                    color: kSecondaryColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
+           
+           
             Expanded(
               child: Container(
                 height: 50,

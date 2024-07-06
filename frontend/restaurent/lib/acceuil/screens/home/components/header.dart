@@ -70,7 +70,7 @@ class Header extends StatelessWidget {
                   color: Colors.white,
                   border: Border.all(color: Colors.grey.withOpacity(0.3)),
                 ),
-                child: Icon(Icons.search)),
+                ),
         SizedBox(
           width: 10,
         ),
