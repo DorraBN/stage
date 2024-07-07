@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/constants.dart';
+import 'package:restaurent/acceuil/model.dart/product_model.dart';
+
+import 'package:restaurent/acceuil/screens/home/components/food.dart';
 import 'package:restaurent/acceuil/screens/home/components/footer.dart';
+
+import 'package:restaurent/acceuil/screens/home/components/menus.dart';
 import 'components/body.dart';
 import 'components/header_container.dart';
 import 'components/menu.dart';
@@ -39,12 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(
             children: [
+          
               HeaderContainer(),
+          
               BodyContainer(),
               SizedBox(height: 80),
               ReservationForm(),
+           
               SizedBox(height: 70),
               Footer(),
+              
             ],
           ),
         ),

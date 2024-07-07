@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
-import 'package:restaurent/acceuil/model.dart/responsive.dart';
+import 'package:restaurent/acceuil/screens/home/components/menus.dart';
 import 'package:restaurent/acceuil/screens/home/components/product.dart';
 import 'package:restaurent/acceuil/screens/home/components/services_card.dart';
-
-
-import '../../../constants.dart';
-import 'email_banner.dart';
+import 'package:restaurent/acceuil/screens/home/components/email_banner.dart';
+import 'package:restaurent/acceuil/model.dart/responsive.dart';
+import '../../../constants.dart' as my_constants; // Renommez le fichier de constants
 
 class BodyContainer extends StatelessWidget {
   const BodyContainer({
@@ -17,14 +16,12 @@ class BodyContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.all(kPadding),
-      constraints: BoxConstraints(maxWidth: kMaxWidth),
+      padding: EdgeInsets.all(my_constants.kPadding), // Utilisez my_constants.kPadding
+      constraints: BoxConstraints(maxWidth: my_constants.kMaxWidth), // Utilisez my_constants.kMaxWidth
       child: Column(
         children: [
+        
           ServicesCard(),
-          //now we create model of our product images
-          // we are using gridview inside column and scrollview widget thats why we are facing error
-          // use shrinkwrap and ScrollPhysics widget
           Responsive(
             desktop: ProductCard(
               crossAxiscount: _size.width < 650 ? 2 : 3,
@@ -39,9 +36,18 @@ class BodyContainer extends StatelessWidget {
               aspectRatio: _size.width < 560 ? 0.85 : 1.1,
             ),
           ),
-          SizedBox(
-            height: 40,
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Naviguer vers MenuPage lorsque le bouton est pressé
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MenuPage()),
+              );
+            },
+            child: Text('Voir Plus'),
           ),
+          SizedBox(height: 20),
           EmailBanner(),
         ],
       ),
@@ -55,8 +61,10 @@ class ProductCard extends StatelessWidget {
     this.crossAxiscount = 3,
     this.aspectRatio = 1.1,
   }) : super(key: key);
+
   final int crossAxiscount;
   final double aspectRatio;
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(

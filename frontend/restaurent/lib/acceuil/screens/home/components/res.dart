@@ -3,8 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import '../../../constants.dart';
 
-class Products extends StatelessWidget {
-  const Products({
+class Products1 extends StatelessWidget {
+  const Products1({
     Key? key,
     required this.product,
     required this.press,
