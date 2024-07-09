@@ -228,7 +228,7 @@ class _ReservationFormState extends State<ReservationForm> {
                   ),
                   SizedBox(height: 10), // Reduced height
                   FractionallySizedBox(
-                    widthFactor: 0.2, // Adjust width as needed
+                    widthFactor: 0.4, // Adjust width as needed
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -240,11 +240,11 @@ class _ReservationFormState extends State<ReservationForm> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        padding: EdgeInsets.symmetric(vertical: 18.0),
                       ),
                       child: Text(
                         'Reserve a table',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
@@ -257,7 +257,6 @@ class _ReservationFormState extends State<ReservationForm> {
     );
   }
 }
-
 
 class Footer extends StatelessWidget {
   @override
@@ -268,143 +267,180 @@ class Footer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[800],
         image: DecorationImage(
-          image: AssetImage("../../../assets/images/menup.jpg"),
+          image: AssetImage("../../../assets/images/footer-bg.jpg"),
           fit: BoxFit.cover,
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Foodie',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    'Your ultimate dining experience',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ],
+          Positioned(
+            top: 25.0, // Adjust as needed for positioning from the top
+            left: -10.0, // Adjust as needed for horizontal positioning
+            child: Transform.rotate(
+              angle: -0.2, // Adjust the tilt angle here
+              child: Image.asset(
+                "../../../assets/images/shape-9.png", // Adjust the path accordingly
+                height: 170.0, // Adjust the size of the image as needed
+                width: 170.0,
               ),
-              Row(
-                children: [
-                  SocialIcon(icon: 'assets/icons/google-icon.svg'),
-                  SizedBox(width: 10.0),
-                  SocialIcon(icon: 'assets/icons/facebook-2.svg'),
-                  SizedBox(width: 10.0),
-                  SocialIcon(icon: 'assets/icons/twitter.svg'),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 40.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Contact us:',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    ContactInfoRow(
-                      icon: Icons.email,
-                      text: 'contact@foodie.com',
-                    ),
-                    ContactInfoRow(
-                      icon: Icons.phone,
-                      text: '+123 456 789',
-                    ),
-                    SizedBox(height: 10.0),
-                    LocationInfoRow(
-                      icon: Icons.location_on,
-                      text: '123 Restaurant St, Foodie City',
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Menu:',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    MenuLink(
-                      icon: Icons.restaurant_menu,
-                      title: 'Appetizers',
-                      onPressed: () {
-                        // Action to perform when clicking on "Appetizers"
-                      },
-                    ),
-                    MenuLink(
-                      icon: Icons.restaurant_menu,
-                      title: 'Main Course',
-                      onPressed: () {
-                        // Action to perform when clicking on "Main Course"
-                      },
-                    ),
-                    MenuLink(
-                      icon: Icons.restaurant_menu,
-                      title: 'Desserts',
-                      onPressed: () {
-                        // Action to perform when clicking on "Desserts"
-                      },
-                    ),
-                    MenuLink(
-                      icon: Icons.restaurant_menu,
-                      title: 'Drinks',
-                      onPressed: () {
-                        // Action to perform when clicking on "Drinks"
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 40.0),
-          ElevatedButton(
-            onPressed: () {
-              // Handle button press
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
             ),
-            child: Text('Reserve a table'),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Foodie',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Your ultimate dining experience',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SocialIcon(icon: 'assets/icons/google-icon.svg'),
+                      SizedBox(width: 10.0),
+                      SocialIcon(icon: 'assets/icons/facebook-2.svg'),
+                      SizedBox(width: 10.0),
+                      SocialIcon(icon: 'assets/icons/twitter.svg'),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Contact us:',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        ContactInfoRow(
+                          icon: Icons.email,
+                          text: 'contact@foodie.com',
+                        ),
+                        ContactInfoRow(
+                          icon: Icons.phone,
+                          text: '+123 456 789',
+                        ),
+                        SizedBox(height: 10.0),
+                        LocationInfoRow(
+                          icon: Icons.location_on,
+                          text: '123 Restaurant St, Foodie City',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Menu:',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        MenuLink(
+                          icon: Icons.restaurant_menu,
+                          title: 'Appetizers',
+                          onPressed: () {
+                            // Action to perform when clicking on "Appetizers"
+                          },
+                        ),
+                        MenuLink(
+                          icon: Icons.restaurant_menu,
+                          title: 'Main Course',
+                          onPressed: () {
+                            // Action to perform when clicking on "Main Course"
+                          },
+                        ),
+                        MenuLink(
+                          icon: Icons.restaurant_menu,
+                          title: 'Desserts',
+                          onPressed: () {
+                            // Action to perform when clicking on "Desserts"
+                          },
+                        ),
+                        MenuLink(
+                          icon: Icons.restaurant_menu,
+                          title: 'Drinks',
+                          onPressed: () {
+                            // Action to perform when clicking on "Drinks"
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Location:',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        LocationInfoRow(
+                          icon: Icons.location_on,
+                          text: '123 Restaurant St, Foodie City',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle button press
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                ),
+                child: Text('Reserve a table'),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
+
 
 class LocationInfoRow extends StatelessWidget {
   final IconData icon;
@@ -489,3 +525,5 @@ class ContactInfoRow extends StatelessWidget {
     );
   }
 }
+
+

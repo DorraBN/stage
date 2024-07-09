@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/model.dart/responsive.dart';
+import 'package:restaurent/acceuil/screens/home/components/menu.dart';
 
 import '../../../constants.dart';
 
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 
 class BannerSection extends StatelessWidget {
   const BannerSection({
@@ -56,7 +59,7 @@ class BannerSection extends StatelessWidget {
               flex: 2,
               child: Column(
                 children: [
-                  // You can add other widgets here if necessary
+                  // Add other widgets here if necessary
                 ],
               ),
             ),
@@ -109,6 +112,10 @@ class AboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+         SizedBox(
+          height: 50,
+        
+        ),
         AutoSizeText(
           "Eat today",
           maxLines: 1,
@@ -116,6 +123,7 @@ class AboutSection extends StatelessWidget {
         ),
         SizedBox(
           height: 10,
+        
         ),
         AutoSizeText(
           "Live another day",
@@ -127,13 +135,7 @@ class AboutSection extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Text(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black54,
-          ),
-        ),
+       
         SizedBox(
           height: 20,
         ),
@@ -150,40 +152,78 @@ class AboutSection extends StatelessWidget {
         ),
         Row(
           children: [
-           Expanded(
-  child: Container(
-    height: 40, // Hauteur réduite du conteneur
-    decoration: BoxDecoration(
-      color: kSecondaryColor, // Couleur de fond du conteneur
-      borderRadius: BorderRadius.circular(8.0), // Optionnel : bordures arrondies
-    ),
-    child: OutlinedButton(
-      onPressed: () {},
-      style: OutlinedButton.styleFrom(
-        side: BorderSide.none, // Supprime la bordure extérieure
-        backgroundColor: kSecondaryColor, // Couleur de fond du bouton
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10), // Ajuste le rembourrage du texte
-        child: Text(
-          "Pick Up",
+            Expanded(
+          
+                  child: FractionallySizedBox(
+                    widthFactor: 0.4,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle button press
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 18.0),
+                      ),
+                      child: Text(
+                        'Reserve a table',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              
+            
+          ],
+        ),
+         SizedBox(
+          height: 10,
+        ),
+        AutoSizeText(
+          "OR",
+          maxLines: 1,
           style: TextStyle(
-            color: Colors.white, // Couleur du texte
-            fontSize: 14, // Taille de la police réduite
-            fontWeight: FontWeight.w600,
+            fontSize: 18,
           ),
         ),
-      ),
-    ),
-  ),
-)
-
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            Expanded(
+          
+                  child: FractionallySizedBox(
+                    widthFactor: 0.4,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle button press
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 18.0),
+                      ),
+                      child: Text(
+                        'order delivery',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              
+            
           ],
         ),
       ],
     );
   }
 }
+
 
 class Header extends StatelessWidget {
   const Header({
@@ -198,17 +238,20 @@ class Header extends StatelessWidget {
         // It displays only on mobile and tab
         if (!Responsive.isDesktop(context))
           Builder(
-              builder: (context) => IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: Icon(Icons.menu))),
+            builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
+          ),
         Text(
           "Foodie",
           style: TextStyle(
-              fontSize: 25.0,
-              fontWeight: FontWeight.w900,
-              color: kSecondaryColor),
+            fontSize: 25.0,
+            fontWeight: FontWeight.w900,
+            color: kSecondaryColor,
+          ),
         ),
         Spacer(),
         // Menu
@@ -217,7 +260,7 @@ class Header extends StatelessWidget {
         _size.width > 400
             ? Expanded(
                 child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust left and right padding
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
@@ -227,7 +270,7 @@ class Header extends StatelessWidget {
                 ),
               )
             : Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: EdgeInsets.symmetric(horizontal: 5), // Adjust left and right padding
                 height: 50,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -264,164 +307,22 @@ class HeaderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0), // Adjust outer padding as needed
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(50),
-            constraints: BoxConstraints(maxWidth: kMaxWidth),
+            padding: EdgeInsets.all(0), // Adjust inner padding as needed
+            constraints: BoxConstraints(maxWidth: 3000),
             child: Column(
               children: [
                 Header(),
                 SizedBox(
-                  height: 10,
+                  height: 50,
                 ),
                 Responsive.isDesktop(context) ? BannerSection() : MobBanner(),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class HeaderWebMenu extends StatelessWidget {
-  const HeaderWebMenu({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        HeaderMenu(
-          press: () {},
-          title: "Menu",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "For Riders",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "About",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Reviews",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Restaurants",
-        ),
-      ],
-    );
-  }
-}
-
-class MobFooterMenu extends StatelessWidget {
-  const MobFooterMenu({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        HeaderMenu(
-          press: () {},
-          title: "Menu",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "For Riders",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "About",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Reviews",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Restaurants",
-        ),
-      ],
-    );
-  }
-}
-
-class HeaderMenu extends StatelessWidget {
-  const HeaderMenu({
-    Key? key,
-    required this.title,
-    required this.press,
-  }) : super(key: key);
-  final String title;
-  final VoidCallback press;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: press,
-      child: Container(
-        child: Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-      ),
-    );
-  }
-}
-
-class MobMenu extends StatefulWidget {
-  const MobMenu({Key? key}) : super(key: key);
-
-  @override
-  _MobMenuState createState() => _MobMenuState();
-}
-
-class _MobMenuState extends State<MobMenu> {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          DrawerHeader(
-            child: Center(
-              child: Text(
-                "Foodie",
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          MobFooterMenu(),
         ],
       ),
     );

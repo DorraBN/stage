@@ -1,11 +1,14 @@
-import 'package:restaurent/acceuil/screens/home/home_screen.dart';
+
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/init/provider_list.dart';
+
 
 import 'package:restaurent/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import 'acceuil/screens/home/home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
-      home:HomeScreen(),
+      home:HomeScreen (),
     );
   }
 }

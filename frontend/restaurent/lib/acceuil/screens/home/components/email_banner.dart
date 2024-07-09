@@ -15,7 +15,7 @@ class EmailBanner extends StatelessWidget {
         ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.asset(
-              "../../../assets/images/subscribe_banner.jpg",
+              "../../../assets/images/hero-slider-1.jpg",
               height: 200,
               width: 1230,
               fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class EmailBanner extends StatelessWidget {
                               topRight: Radius.circular(15.0),
                               bottomRight: Radius.circular(15.0))),
                       child: Icon(
-                        Icons.shopping_bag_outlined,
+                        Icons.shopping_cart,
                         color: Colors.white,
                         size: 22,
                       ),

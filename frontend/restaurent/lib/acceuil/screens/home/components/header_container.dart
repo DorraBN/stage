@@ -25,9 +25,9 @@ class HeaderContainer extends StatelessWidget {
               children: [
                 Header(),
                 SizedBox(
-                  height: 5,
+                  height: 10,
                 ),
-                
+                Responsive.isDesktop(context) ? BannerSection() : MobBanner(),
               ],
             ),
           ),
