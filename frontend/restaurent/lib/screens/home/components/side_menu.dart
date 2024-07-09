@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:restaurent/core/constants/color_constants.dart';
+import 'package:restaurent/screens/dashboard/pages/menu.dart';
+import 'package:restaurent/screens/dashboard/pages/orders.dart';
+import 'package:restaurent/screens/dashboard/pages/payement.dart';
+import 'package:restaurent/screens/dashboard/pages/staff.dart';
+import 'package:restaurent/screens/dashboard/pages/tables.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -70,12 +76,18 @@ class SideMenu extends StatelessWidget {
             DrawerListTile(
               title: "Orders",
               icon: Icons.receipt_long,
-              press: () {},
+              press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrdersPage()),
+              );},
             ),
             DrawerListTile(
               title: "Tables",
               icon: Icons.table_chart,
-              press: () {},
+              press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TablesPage()),
+              );},
             ),
             DrawerListTile(
               title: "Categories",
@@ -85,17 +97,28 @@ class SideMenu extends StatelessWidget {
             DrawerListTile(
               title: "Menu",
               icon: Icons.restaurant_menu,
-              press: () {},
+              press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MenuPage()),
+              );},
             ),
             DrawerListTile(
               title: "Staff",
               icon: Icons.people,
-              press: () {},
+              press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StaffPage()),
+              );},
             ),
             DrawerListTile(
               title: "Payments",
               icon: Icons.payment,
-              press: () {},
+              press: () {
+                 Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaymentsPage()),
+              );
+              },
             ),
                DrawerListTile(
               title: "Reports",
