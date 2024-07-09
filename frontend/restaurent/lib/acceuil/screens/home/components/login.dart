@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/screens/home/components/profile.dart';
+import 'package:restaurent/screens/dashboard/dashboard_screen.dart';
+import 'package:restaurent/screens/home/home_screen.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -248,7 +250,7 @@ class Body extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             },
             style: ElevatedButton.styleFrom(

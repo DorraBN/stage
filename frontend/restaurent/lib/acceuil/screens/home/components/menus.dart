@@ -3,8 +3,8 @@ import 'package:restaurent/acceuil/screens/home/components/login.dart';
 
 const double kPadding = 16.0;
 
-class MenuPage extends StatelessWidget {
-  const MenuPage({
+class MenuPage1 extends StatelessWidget {
+  const MenuPage1({
     Key? key,
   }) : super(key: key);
 
@@ -184,5 +184,5 @@ class ServiceCard extends StatelessWidget {
 
 
 void main() {
-  runApp(MaterialApp(home: MenuPage()));
+  runApp(MaterialApp(home: MenuPage1()));
 }

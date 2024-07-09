@@ -8,7 +8,7 @@ import 'package:restaurent/acceuil/screens/home/components/email_banner.dart';
 import 'package:restaurent/acceuil/model.dart/responsive.dart';
 import 'package:restaurent/acceuil/screens/home/menu/menupage.dart';
 
-import '../../../constants.dart' as my_constants; // Renommez le fichier de constants
+import '../../../constants.dart' as my_constants; 
 
 class BodyContainer extends StatelessWidget {
   const BodyContainer({
@@ -19,24 +19,23 @@ class BodyContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.all(my_constants.kPadding), // Utilisez my_constants.kPadding
-      constraints: BoxConstraints(maxWidth: my_constants.kMaxWidth), // Utilisez my_constants.kMaxWidth
+      padding: EdgeInsets.all(my_constants.kPadding), 
+      constraints: BoxConstraints(maxWidth: my_constants.kMaxWidth), 
       child: Column(
         children: [
               Container(
-            height: 600, // Hauteur spécifiée pour RestaurantMenuPage
+            height: 600, 
             child: AboutUsPage(),
           ),
           ServicesCard(),
         
           Container(
-            height: 400, // Hauteur spécifiée pour RestaurantMenuPage
+            height: 400, 
             child: RestaurantMenuPage(),
           ),
             SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              // Naviguer vers MenuPage lorsque le bouton est pressé
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => MenuPage()),
@@ -45,10 +44,10 @@ class BodyContainer extends StatelessWidget {
             
              child: ElevatedButton.icon(
                 onPressed: () {
-                  // Ajoutez ici la logique pour gérer le clic sur le bouton
+                
                 },
-                icon: Icon(Icons.event), // Icône du bouton
-                label: Text('Reserve a table'), // Texte du bouton
+                icon: Icon(Icons.event), 
+                label: Text('Reserve a table'), 
               ),
           ),
           Responsive(
@@ -68,10 +67,10 @@ class BodyContainer extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              // Naviguer vers MenuPage lorsque le bouton est pressé
+              
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MenuPage()),
+                MaterialPageRoute(builder: (context) => MenuPage1()),
               );
             },
             child: Text('see more'),
@@ -127,17 +126,17 @@ class RestaurantMenuPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Menu du Restaurant'),
         leading: IconButton(
-          icon: Icon(Icons.menu), // Icône à afficher à gauche du titre
+          icon: Icon(Icons.menu),
           onPressed: () {
-            // Ajoutez ici la logique pour ouvrir un menu latéral ou effectuer une autre action
+         
           },
         ),
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/hero-slider-2.jpg'), // Chemin de l'image de fond
-            fit: BoxFit.cover, // Ajustement de l'image pour couvrir toute la surface
+            image: AssetImage('assets/images/hero-slider-2.jpg'), 
+            fit: BoxFit.cover, 
           ),
         ),
         child: Column(
@@ -170,7 +169,7 @@ class RestaurantMenuPage extends StatelessWidget {
                                   IconButton(
                                     icon: Icon(Icons.shopping_cart),
                                     onPressed: () {
-                                      // Ajoutez ici la logique pour ajouter l'article au panier
+                                      
                                     },
                                   ),
                                 ],

@@ -1,6 +1,37 @@
-import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:restaurent/core/constants/color_constants.dart';
+
+class HomePage extends StatelessWidget {
+  HomePage({Key? key}) : super(key: key);
+
+  // Create a global key to uniquely identify the Scaffold
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Restaurant App"),
+        leading: IconButton(
+          icon: Icon(Icons.menu, color: Colors.white),
+          onPressed: () {
+            if (_scaffoldKey.currentState!.isDrawerOpen) {
+              _scaffoldKey.currentState!.openEndDrawer();
+            } else {
+              _scaffoldKey.currentState!.openDrawer();
+            }
+          },
+        ),
+      ),
+      drawer: const SideMenu(),
+      body: Center(
+        child: Text('Home Page Content'),
+      ),
+    );
+  }
+}
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -22,53 +53,59 @@ class SideMenu extends StatelessWidget {
                   height: defaultPadding * 3,
                 ),
                 Image.asset(
-                  "../../assets/logo/logo_icon.png",
+                  "assets/logo/logo_icon.png",
                   scale: 5,
                 ),
                 SizedBox(
                   height: defaultPadding,
                 ),
-                Text("Restaurent")
+                Text("Restaurant")
               ],
             )),
             DrawerListTile(
               title: "Dashboard",
-              svgSrc: "../../assets/icons/menu_dashbord.svg",
+              icon: Icons.dashboard,
               press: () {},
             ),
             DrawerListTile(
-              title: "Posts",
-              svgSrc: "../../assets/icons/menu_tran.svg",
+              title: "Orders",
+              icon: Icons.receipt_long,
               press: () {},
             ),
             DrawerListTile(
-              title: "Pages",
-              svgSrc: "../../../../../assets/icons/menu_task.svg",
+              title: "Tables",
+              icon: Icons.table_chart,
               press: () {},
             ),
             DrawerListTile(
               title: "Categories",
-              svgSrc: "../../../../../assets/icons/menu_doc.svg",
+              icon: Icons.category,
               press: () {},
             ),
             DrawerListTile(
-              title: "Appearance",
-              svgSrc: "../../../../../assets/icons/menu_store.svg",
+              title: "Menu",
+              icon: Icons.restaurant_menu,
               press: () {},
             ),
             DrawerListTile(
-              title: "Users",
-              svgSrc: "../../../../../assets/icons/menu_notification.svg",
+              title: "Staff",
+              icon: Icons.people,
               press: () {},
             ),
             DrawerListTile(
-              title: "Tools",
-              svgSrc: "../../../../../assets/icons/menu_profile.svg",
+              title: "Payments",
+              icon: Icons.payment,
               press: () {},
             ),
+               DrawerListTile(
+              title: "Reports",
+              icon: Icons.analytics,
+              press: () {},
+            ), 
+            
             DrawerListTile(
               title: "Settings",
-              svgSrc: "../../../../../assets/icons/menu_setting.svg",
+              icon: Icons.settings,
               press: () {},
             ),
           ],
@@ -81,13 +118,13 @@ class SideMenu extends StatelessWidget {
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
-    // For selecting those three line once press "Command+D"
     required this.title,
-    required this.svgSrc,
+    required this.icon,
     required this.press,
   }) : super(key: key);
 
-  final String title, svgSrc;
+  final String title;
+  final IconData icon;
   final VoidCallback press;
 
   @override
@@ -95,10 +132,10 @@ class DrawerListTile extends StatelessWidget {
     return ListTile(
       onTap: press,
       horizontalTitleGap: 0.0,
-      leading: SvgPicture.asset(
-        svgSrc,
+      leading: Icon(
+        icon,
         color: Colors.white54,
-        height: 16,
+        size: 16,
       ),
       title: Text(
         title,
