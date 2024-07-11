@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/screens/home/components/profile.dart';
+import 'package:restaurent/acceuil/screens/home/components/register.dart';
 import 'package:restaurent/screens/dashboard/dashboard_screen.dart';
 import 'package:restaurent/screens/home/home_screen.dart';
 
@@ -51,7 +52,8 @@ class Menu extends StatelessWidget {
           Row(
             children: [
               _menuItem(title: 'Sign In', isActive: true),
-              _registerButton()
+             _registerButton(context)
+
             ],
           ),
         ],
@@ -91,30 +93,39 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget _registerButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 10,
-            blurRadius: 12,
+   Widget _registerButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterPage()), // Navigate to RegisterPage
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 10,
+              blurRadius: 12,
+            ),
+          ],
+        ),
+        child: Text(
+          'Register',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
           ),
-        ],
-      ),
-      child: Text(
-        'Register',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black54,
         ),
       ),
     );
   }
 }
+
 
 class Body extends StatelessWidget {
   @override
