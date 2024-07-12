@@ -48,6 +48,7 @@ class _MenuPageState extends State<MenuPage> {
   void initState() {
     super.initState();
     _fetchMenuItems();
+    
   }
 
   // Fonction pour récupérer les éléments du menu depuis l'API
@@ -92,7 +93,7 @@ class _MenuPageState extends State<MenuPage> {
     });
   }
 
-  // Fonction pour supprimer un élément du menu
+ 
   Future<void> _deleteMenuItem(int index) async {
     try {
       int id = _menuItems[index].id; // Récupérer l'ID de l'élément à supprimer
