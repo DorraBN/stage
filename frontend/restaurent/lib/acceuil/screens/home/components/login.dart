@@ -1,10 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:restaurent/acceuil/screens/home/components/profile.dart';
-import 'package:restaurent/acceuil/screens/home/components/register.dart';
-import 'package:restaurent/screens/dashboard/dashboard_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:restaurent/screens/home/home_screen.dart';
+import 'package:restaurent/acceuil/screens/home/components/register.dart';
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> loginUser(BuildContext context) async {
+    final url = Uri.parse('http://127.0.0.1:8000/api/login');
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
+      );
+
+      final responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        // Login successful, navigate to home screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        // Login failed, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['message'] ?? 'Login failed'),
+          ),
+        );
+      }
+    } catch (error) {
+      // Exception occurred during login
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to login: $error'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,17 +53,22 @@ class LoginPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('../../../assets/images/testimonial-bg.jpg'),
+                image: AssetImage('assets/images/testimonial-bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           ListView(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 8),
+              horizontal: MediaQuery.of(context).size.width / 8,
+            ),
             children: [
               Menu(),
-              Body(),
+              Body(
+                emailController: emailController,
+                passwordController: passwordController,
+                onLoginPressed: () => loginUser(context),
+              ),
             ],
           ),
         ],
@@ -52,8 +97,7 @@ class Menu extends StatelessWidget {
           Row(
             children: [
               _menuItem(title: 'Sign In', isActive: true),
-             _registerButton(context)
-
+              _registerButton(context),
             ],
           ),
         ],
@@ -72,7 +116,8 @@ class Menu extends StatelessWidget {
               '$title',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: isActive ? Color.fromARGB(255, 183, 148, 58) : Colors.grey,
+                color:
+                    isActive ? Color.fromARGB(255, 183, 148, 58) : Colors.grey,
               ),
             ),
             SizedBox(
@@ -80,25 +125,26 @@ class Menu extends StatelessWidget {
             ),
             isActive
                 ? Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 183, 118, 58),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   )
-                : SizedBox()
+                : SizedBox(),
           ],
         ),
       ),
     );
   }
 
-   Widget _registerButton(BuildContext context) {
+  Widget _registerButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => RegisterPage()), // Navigate to RegisterPage
+          MaterialPageRoute(builder: (context) => RegisterPage()),
         );
       },
       child: Container(
@@ -126,8 +172,17 @@ class Menu extends StatelessWidget {
   }
 }
 
-
 class Body extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final VoidCallback onLoginPressed;
+
+  Body({
+    required this.emailController,
+    required this.passwordController,
+    required this.onLoginPressed,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -151,7 +206,9 @@ class Body extends StatelessWidget {
               Text(
                 "If you don't have an account",
                 style: TextStyle(
-                    color: Colors.black54, fontWeight: FontWeight.bold),
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(
                 height: 10,
@@ -161,33 +218,39 @@ class Body extends StatelessWidget {
                   Text(
                     "You can",
                     style: TextStyle(
-                        color: Colors.black54, fontWeight: FontWeight.bold),
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(width: 15),
                   GestureDetector(
                     onTap: () {
-                      print(MediaQuery.of(context).size.width);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                      );
                     },
                     child: Text(
                       "Register here!",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 183, 116, 58),
-                          fontWeight: FontWeight.bold),
+                        color: Color.fromARGB(255, 183, 116, 58),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
               ),
               Image.asset(
-                '../../../assets/images/f2.jpg',
+                'assets/images/f2.jpg',
                 width: 50,
               ),
             ],
           ),
         ),
-       
         Padding(
           padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height / 6),
+            vertical: MediaQuery.of(context).size.height / 6,
+          ),
           child: Container(
             width: 320,
             child: _formLogin(context),
@@ -201,6 +264,7 @@ class Body extends StatelessWidget {
     return Column(
       children: [
         TextField(
+          controller: emailController,
           decoration: InputDecoration(
             hintText: 'Enter email or Phone number',
             filled: true,
@@ -219,6 +283,8 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: 30),
         TextField(
+          controller: passwordController,
+          obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
             counterText: 'Forgot password?',
@@ -254,18 +320,14 @@ class Body extends StatelessWidget {
             ],
           ),
           child: ElevatedButton(
+            onPressed: onLoginPressed,
             child: Container(
-                width: double.infinity,
-                height: 50,
-                child: Center(child: Text("Sign In"))),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
-            },
+              width: double.infinity,
+              height: 50,
+              child: Center(child: Text("Sign In")),
+            ),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 183, 116, 58),
+              backgroundColor: Color.fromARGB(255, 183, 116, 58),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -273,31 +335,33 @@ class Body extends StatelessWidget {
           ),
         ),
         SizedBox(height: 40),
-        Row(children: [
-          Expanded(
-            child: Divider(
-              color: Colors.grey[300],
-              height: 50,
+        Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: Colors.grey[300],
+                height: 50,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text("Or continue with"),
-          ),
-          Expanded(
-            child: Divider(
-              color: Colors.grey[400],
-              height: 50,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text("Or continue with"),
             ),
-          ),
-        ]),
+            Expanded(
+              child: Divider(
+                color: Colors.grey[400],
+                height: 50,
+              ),
+            ),
+          ],
+        ),
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _loginWithButton(image: '../../../assets/images/google.png'),
-            _loginWithButton(image: '../../../assets/images/github.png', isActive: true),
-            _loginWithButton(image: '../../../assets/images/facebook.png'),
+            _loginWithButton(image: 'assets/images/google.png'),
+            _loginWithButton(image: 'assets/images/github.png', isActive: true),
+            _loginWithButton(image: 'assets/images/facebook.png'),
           ],
         ),
       ],
@@ -308,47 +372,46 @@ class Body extends StatelessWidget {
     return Container(
       width: 90,
       height: 70,
-      decoration: isActive
-          ? BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey),
+        boxShadow: isActive
+            ? [
                 BoxShadow(
                   color: Colors.grey,
                   spreadRadius: 10,
                   blurRadius: 30,
-                )
-              ],
-              borderRadius: BorderRadius.circular(15),
-            )
-          : BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.grey),
-            ),
+                ),
+              ]
+            : [],
+      ),
       child: Center(
-          child: Container(
-        decoration: isActive
-            ? BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(35),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 2,
-                    blurRadius: 15,
-                  )
-                ],
+        child: isActive
+            ? Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(35),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 2,
+                      blurRadius: 15,
+                    )
+                  ],
+                ),
+                child: Image.asset(
+                  image,
+                  width: 35,
+                ),
               )
-            : BoxDecoration(),
-        child: Image.asset(
-          '$image',
-          width: 35,
-        ),
-      )),
+            : Image.asset(
+                image,
+                width: 35,
+              ),
+      ),
     );
   }
 }
-
-
 
 void main() {
   runApp(MaterialApp(

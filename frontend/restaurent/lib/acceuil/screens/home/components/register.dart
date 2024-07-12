@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/screens/home/home_screen.dart';
 import 'package:http/http.dart' as http;
@@ -113,6 +112,7 @@ class Menu extends StatelessWidget {
       ),
       child: Text(
         'Login',
+        
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black54,
@@ -123,6 +123,11 @@ class Menu extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -193,6 +198,7 @@ class Body extends StatelessWidget {
     return Column(
       children: [
         TextField(
+          controller: nameController,
           decoration: InputDecoration(
             hintText: 'Enter name',
             filled: true,
@@ -211,6 +217,7 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: 20),
         TextField(
+          controller: emailController,
           decoration: InputDecoration(
             hintText: 'Enter email ',
             filled: true,
@@ -229,6 +236,7 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: 20),
         TextField(
+          controller: phoneController,
           decoration: InputDecoration(
             hintText: 'Enter Phone number',
             filled: true,
@@ -247,6 +255,7 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: 20),
         TextField(
+          controller: passwordController,
           decoration: InputDecoration(
             hintText: 'Password',
             counterText: 'Forgot password?',
@@ -283,8 +292,13 @@ class Body extends StatelessWidget {
           ),
           child: ElevatedButton(
             onPressed: () {
-              // Call your registerUser function here
-              registerUser("John Doe", "john@example.com", "1234567890", "password", context);
+              registerUser(
+                nameController.text,
+                emailController.text,
+                phoneController.text,
+                passwordController.text,
+                context,
+              );
             },
             child: Container(
               width: double.infinity,
@@ -363,35 +377,34 @@ class Body extends StatelessWidget {
     );
   }
 
+  Future<void> registerUser(String name, String email, String phoneNumber, String password, BuildContext context) async {
+    final String apiUrl = 'http://127.0.0.1:8000/api/register';
 
-Future<void> registerUser(String name, String email, String phoneNumber, String password, BuildContext context) async {
-  final String apiUrl = 'http://127.0.0.1:8000/api/register';
+    final Map<String, String> requestBody = {
+      'name': name,
+      'email': email,
+      'phone': phoneNumber,
+      'password': password,
+    };
 
-  final Map<String, String> requestBody = {
-    'name': name,
-    'email': email,
-    'phone': phoneNumber,
-    'password': password,
-  };
-
-  final response = await http.post(
-    Uri.parse(apiUrl),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(requestBody),
-  );
-
-  if (response.statusCode == 200) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful')));
-    // Optionally, you can navigate to another screen upon successful registration
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(requestBody),
     );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration failed')));
-    print('Failed to register: ${response.reasonPhrase}');
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful')));
+      // Optionally, you can navigate to another screen upon successful registration
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration failed')));
+      print('Failed to register: ${response.reasonPhrase}');
+    }
   }
-}
 }
