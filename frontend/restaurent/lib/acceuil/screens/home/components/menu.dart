@@ -12,6 +12,20 @@ class HeaderWebMenu extends StatelessWidget {
       children: [
         HeaderMenu(
           press: () {},
+          title: "Home",
+        ),
+        SizedBox(
+          width: kPadding,
+        ),
+        HeaderMenu(
+          press: () {},
+          title: "About Us",
+        ),
+        SizedBox(
+          width: kPadding,
+        ),
+        HeaderMenu(
+          press: () {},
           title: "Menu",
         ),
         SizedBox(
@@ -19,28 +33,14 @@ class HeaderWebMenu extends StatelessWidget {
         ),
         HeaderMenu(
           press: () {},
-          title: "For Riders",
+          title: "Reservation",
         ),
         SizedBox(
           width: kPadding,
         ),
         HeaderMenu(
           press: () {},
-          title: "About",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Reviews",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Restaurants",
+          title: "Contact Us",
         ),
       ],
     );

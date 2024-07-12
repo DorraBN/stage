@@ -276,14 +276,22 @@ class _TablesPageState extends State<TablesPage> {
                     DataCell(Text(item.updatedAt.toString())),
                     DataCell(Row(
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => _showTableItemDialog(item: item, index: _tableItems.indexOf(item)),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _deleteTableItem(_tableItems.indexOf(item)),
-                        ),
+                      IconButton(
+  icon: Icon(
+    Icons.edit,
+    color: Colors.green, // Définir la couleur de l'icône en rouge
+  ),
+     onPressed: () => _showTableItemDialog(item: item, index: _tableItems.indexOf(item)),
+),
+
+                       IconButton(
+  icon: Icon(
+    Icons.delete,
+    color: Colors.red, // Définir la couleur de l'icône en rouge
+  ),
+  onPressed: () => _deleteTableItem(_tableItems.indexOf(item)),
+),
+
                       ],
                     )),
                   ]))

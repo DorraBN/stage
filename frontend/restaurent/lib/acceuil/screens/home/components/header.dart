@@ -246,7 +246,7 @@ class Header extends StatelessWidget {
             ),
           ),
         Text(
-          "Foodie",
+          "Restaurent",
           style: TextStyle(
             fontSize: 25.0,
             fontWeight: FontWeight.w900,

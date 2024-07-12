@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
+import 'package:restaurent/screens/dashboard/components/recent_users%20copy.dart';
 import 'package:restaurent/screens/dashboard/pages/menu.dart';
 import 'package:restaurent/screens/dashboard/pages/orders.dart';
 import 'package:restaurent/screens/dashboard/pages/payement.dart';
 import 'package:restaurent/screens/dashboard/pages/staff.dart';
 import 'package:restaurent/screens/dashboard/pages/tables.dart';
-
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -69,9 +68,12 @@ class SideMenu extends StatelessWidget {
               ],
             )),
             DrawerListTile(
-              title: "Dashboard",
+              title: "Home",
               icon: Icons.dashboard,
-              press: () {},
+               press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );},
             ),
             DrawerListTile(
               title: "Orders",
@@ -90,9 +92,12 @@ class SideMenu extends StatelessWidget {
               );},
             ),
             DrawerListTile(
-              title: "Categories",
-              icon: Icons.category,
-              press: () {},
+              title: "Reservation",
+              icon: Icons.event,
+               press: () { Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RecentUsers()),
+              );},
             ),
             DrawerListTile(
               title: "Menu",
