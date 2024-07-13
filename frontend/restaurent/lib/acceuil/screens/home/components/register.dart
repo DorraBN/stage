@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/acceuil/screens/home/home_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,7 +36,6 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
-
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class Menu extends StatelessWidget {
           Row(
             children: [
               _menuItem(title: 'Register', isActive: true),
-              _LoginButton(),
+              _LoginButton(context),
             ],
           ),
         ],
@@ -96,26 +96,33 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget _LoginButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            spreadRadius: 10,
-            blurRadius: 12,
+  Widget _LoginButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              spreadRadius: 10,
+              blurRadius: 12,
+            ),
+          ],
+        ),
+        child: Text(
+          'Login',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
           ),
-        ],
-      ),
-      child: Text(
-        'Login',
-        
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black54,
         ),
       ),
     );
@@ -149,7 +156,7 @@ class Body extends StatelessWidget {
                 height: 30,
               ),
               Text(
-                "If you don't have an account",
+                "Already have an account",
                 style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -166,6 +173,7 @@ class Body extends StatelessWidget {
                     onTap: () {
                       print(MediaQuery.of(context).size.width);
                     },
+                    
                     child: Text(
                       "Sign in here!",
                       style: TextStyle(
@@ -202,7 +210,7 @@ class Body extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Enter name',
             filled: true,
-            fillColor: Colors.blueGrey[50],
+            fillColor: const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -213,7 +221,7 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),
+          ),  style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 20),
         TextField(
@@ -221,7 +229,7 @@ class Body extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Enter email ',
             filled: true,
-            fillColor: Colors.blueGrey[50],
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -232,7 +240,7 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),
+          ),  style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 20),
         TextField(
@@ -240,7 +248,7 @@ class Body extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Enter Phone number',
             filled: true,
-            fillColor: Colors.blueGrey[50],
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -251,7 +259,7 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),
+          ),  style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 20),
         TextField(
@@ -264,7 +272,7 @@ class Body extends StatelessWidget {
               color: Colors.grey,
             ),
             filled: true,
-            fillColor: Colors.blueGrey[50],
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -275,7 +283,7 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),
+          ),  style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 40),
         Container(

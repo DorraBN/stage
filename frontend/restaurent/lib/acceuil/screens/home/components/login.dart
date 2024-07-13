@@ -263,24 +263,26 @@ class Body extends StatelessWidget {
   Widget _formLogin(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          controller: emailController,
-          decoration: InputDecoration(
-            hintText: 'Enter email or Phone number',
-            filled: true,
-            fillColor: Colors.blueGrey[50],
-            labelStyle: TextStyle(fontSize: 12),
-            contentPadding: EdgeInsets.only(left: 30),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.blueGrey),
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
-        ),
+       TextField(
+  controller: emailController,
+  decoration: InputDecoration(
+    hintText: 'Enter email or Phone number',
+    filled: true,
+    fillColor: Colors.blueGrey[50],
+    labelStyle: TextStyle(fontSize: 12),
+    contentPadding: EdgeInsets.only(left: 30),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blueGrey),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blueGrey),
+      borderRadius: BorderRadius.circular(15),
+    ),
+  ),
+  style: TextStyle(color: Colors.black), // Définit la couleur du texte à noir
+)
+,
         SizedBox(height: 30),
         TextField(
           controller: passwordController,
@@ -305,6 +307,7 @@ class Body extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
           ),
+            style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 40),
         Container(

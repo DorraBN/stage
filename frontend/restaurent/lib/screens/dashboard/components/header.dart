@@ -23,14 +23,14 @@ class Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hello, Deniz 👋",
+                "Hello, Admin 👋",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(
                 height: 8,
               ),
               Text(
-                "Wellcome to your dashboard",
+                "Welcome to your dashboard",
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
@@ -65,13 +65,13 @@ class ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage("../../../../../assets/images/profile_pic.png"),
+            backgroundImage: AssetImage("../../../../../assets/images/profile.jpg"),
           ),
           if (!Responsive.isMobile(context))
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Deniz Çolak"),
+              child: Text("Admin"),
             ),
           Icon(Icons.keyboard_arrow_down),
         ],

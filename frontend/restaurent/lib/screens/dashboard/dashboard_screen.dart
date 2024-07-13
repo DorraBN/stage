@@ -1,3 +1,4 @@
+import 'package:restaurent/acceuil/screens/home/components/cards.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/responsive.dart';
 
@@ -33,7 +34,7 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         //MyFiels(),
                         //SizedBox(height: defaultPadding),
-                      
+                      CardPage (),
                         SizedBox(height: defaultPadding),
                         RecentDiscussions(),
                         if (Responsive.isMobile(context))

@@ -1,7 +1,17 @@
-import 'package:restaurent/core/constants/color_constants.dart';
-import 'package:restaurent/core/utils/colorful_tag.dart';
-import 'package:restaurent/models/recent_user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurent/core/constants/color_constants.dart';
+
+class RestaurantInfo {
+  final DateTime createDate;
+  final int totalReservations;
+  final int totalDelivery;
+
+  RestaurantInfo({
+    required this.createDate,
+    required this.totalDelivery,
+    required this.totalReservations,
+  });
+}
 
 class RecentDiscussions extends StatelessWidget {
   const RecentDiscussions({
@@ -10,6 +20,20 @@ class RecentDiscussions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<RestaurantInfo> restaurants = [
+      RestaurantInfo(
+        createDate: DateTime(2023, 1, 15),
+        totalReservations: 50,
+        totalDelivery: 50,
+      ),
+      RestaurantInfo(
+        createDate: DateTime(2023, 1, 15),
+        totalReservations: 50,
+        totalDelivery: 50,
+      ),
+      // Add more restaurants here
+    ];
+
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -20,8 +44,8 @@ class RecentDiscussions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Open Positions",
-            style: Theme.of(context).textTheme.titleMedium,
+            "Daily Recent Statics",
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(
             width: double.infinity,
@@ -30,18 +54,21 @@ class RecentDiscussions extends StatelessWidget {
               columnSpacing: defaultPadding,
               columns: [
                 DataColumn(
-                  label: Text("Position Name"),
+                  label: Text("Restaurant"),
                 ),
                 DataColumn(
-                  label: Text("Create Date"),
+                  label: Text("Date"),
                 ),
                 DataColumn(
-                  label: Text("Total Application"),
+                  label: Text("Total reservations"),
+                ),
+                DataColumn(
+                  label: Text("Total Delivery"),
                 ),
               ],
               rows: List.generate(
-                recentUsers.length,
-                (index) => recentUserDataRow(recentUsers[index]),
+                restaurants.length,
+                (index) => restaurantDataRow(context, restaurants[index]),
               ),
             ),
           ),
@@ -51,20 +78,21 @@ class RecentDiscussions extends StatelessWidget {
   }
 }
 
-DataRow recentUserDataRow(RecentUser userInfo) {
+DataRow restaurantDataRow(BuildContext context, RestaurantInfo restaurantInfo) {
   return DataRow(
     cells: [
       DataCell(Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: getRoleColor(userInfo.role).withOpacity(.2),
-            border: Border.all(color: getRoleColor(userInfo.role)),
-            borderRadius: BorderRadius.all(Radius.circular(5.0) //
-                ),
-          ),
-          child: Text(userInfo.role!))),
-      DataCell(Text(userInfo.date!)),
-      DataCell(Text(userInfo.posts!)),
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(.2),
+          border: Border.all(color: Colors.blue),
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        ),
+        child: Text("Restaurant Name"), // Placeholder for restaurant name
+      )),
+      DataCell(Text(restaurantInfo.createDate.toString())),
+      DataCell(Text(restaurantInfo.totalReservations.toString())),
+      DataCell(Text(restaurantInfo.totalDelivery.toString())),
     ],
   );
 }

@@ -57,12 +57,17 @@ class SideMenu extends StatelessWidget {
                 SizedBox(
                   height: defaultPadding * 3,
                 ),
-                Image.asset(
-                  "assets/logo/logo_icon.png",
-                  scale: 5,
-                ),
+               ClipOval(
+  child: Image.asset(
+    "../../../.././assets/images/logo.jpg",
+    scale: 5,
+    width: 50, // ajustez la largeur et la hauteur selon vos besoins
+    height: 50,
+  ),
+)
+,
                 SizedBox(
-                  height: defaultPadding,
+                  height: 10,
                 ),
                 Text("Restaurant")
               ],

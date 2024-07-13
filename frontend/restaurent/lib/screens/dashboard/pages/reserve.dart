@@ -21,7 +21,7 @@ class Reserve extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Candidates",
+            "Recent Reservations",
             style: Theme.of(context).textTheme.titleMedium,
           ),
           SingleChildScrollView(
@@ -36,13 +36,16 @@ class Reserve extends StatelessWidget {
                     label: Text("Name Surname"),
                   ),
                   DataColumn(
-                    label: Text("Applied Position"),
+                    label: Text("phone number"),
                   ),
                   DataColumn(
-                    label: Text("E-mail"),
+                    label: Text("number of people"),
+                  ),
+                   DataColumn(
+                    label: Text("Reservation Date"),
                   ),
                   DataColumn(
-                    label: Text("Registration Date"),
+                    label: Text("Reservation Time"),
                   ),
                   DataColumn(
                     label: Text("Status"),
