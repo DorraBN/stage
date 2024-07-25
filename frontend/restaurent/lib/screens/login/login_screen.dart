@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/widgets/app_button_widget.dart';
 import 'package:restaurent/core/widgets/input_widget.dart';
 import 'package:restaurent/screens/dashboard/pages/verification.dart';
+import 'dart:convert';
 
 import 'package:restaurent/screens/home/home_screen.dart';
 import 'package:restaurent/screens/login/components/slider_widget.dart';
-
-import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -22,6 +23,8 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
 
   var _isMoved = false;
+  String _email = ''; // Store the email value
+  String _name = ''; // Store the name value
 
   @override
   void initState() {
@@ -37,6 +40,21 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
   void dispose() {
     _animationController?.dispose();
     super.dispose();
+  }
+
+  Future<bool> _checkEmailExists(String email) async {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/api/check-email'), // Replace with your API endpoint
+      body: jsonEncode({'email': email}),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      return result['exists']; // Assuming your backend returns a JSON with an 'exists' field
+    } else {
+      throw Exception('Failed to check email');
+    }
   }
 
   @override
@@ -67,17 +85,16 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                       height: MediaQuery.of(context).size.height / 1.2,
                       child: Column(
                         children: <Widget>[
-                        SizedBox(height: 10),
-ClipOval(
-  child: Image.asset(
-    "../../assets/images/logo.jpg",
-    scale: 3,
-    width: 100, // Ajustez la largeur selon vos besoins
-    height: 100, // Ajustez la hauteur selon vos besoins
-    fit: BoxFit.cover, // Ajuste l'image pour couvrir tout le cercle
-  ),
-),
-
+                          SizedBox(height: 10),
+                          ClipOval(
+                            child: Image.asset(
+                              "../../assets/images/logo.jpg",
+                              scale: 3,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           SizedBox(height: 24.0),
                           Flexible(
                             child: _registerScreen(context),
@@ -106,13 +123,15 @@ ClipOval(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             InputWidget(
-              keyboardType: TextInputType.emailAddress,
-              onSaved: (String? value) {},
-              onChanged: (String? value) {},
+              keyboardType: TextInputType.text,
+              onSaved: (String? value) {
+                _name = value ?? '';
+              },
+              onChanged: (String? value) {
+                _name = value ?? '';
+              },
               validator: (String? value) {
-                return (value != null && value.contains('@'))
-                    ? 'Do not use the @ char.'
-                    : null;
+                return value != null && value.isEmpty ? 'Name cannot be empty' : null;
               },
               topLabel: "Name",
               hintText: "Enter Name",
@@ -120,11 +139,15 @@ ClipOval(
             SizedBox(height: 8.0),
             InputWidget(
               keyboardType: TextInputType.emailAddress,
-              onSaved: (String? value) {},
-              onChanged: (String? value) {},
+              onSaved: (String? value) {
+                _email = value ?? '';
+              },
+              onChanged: (String? value) {
+                _email = value ?? '';
+              },
               validator: (String? value) {
-                return (value != null && value.contains('@'))
-                    ? 'Do not use the @ char.'
+                return (value != null && !value.contains('@'))
+                    ? 'Please enter a valid email address.'
                     : null;
               },
               topLabel: "Email",
@@ -140,16 +163,58 @@ ClipOval(
               validator: (String? value) {},
             ),
             SizedBox(height: 24.0),
-            AppButton(
-              type: ButtonType.PRIMARY,
-              text: "Check your reservations",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => VerificationPage()),
-                );
-              },
-            ),
+          AppButton(
+  type: ButtonType.PRIMARY,
+  text: "Check your reservations",
+  onPressed: () async {
+    if (_email.isEmpty) {
+      // Handle empty email case
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter an email address')),
+      );
+      return;
+    }
+
+    try {
+      final exists = await _checkEmailExists(_email);
+      if (exists) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VerificationPage(email: _email, name:_name),
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('No Reservation'),
+              content: Text(
+                'Hello, $_name! You have not made any reservation. Email: $_email',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pop(); // Go back to the previous page
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again later.')),
+      );
+    }
+  },
+),
             SizedBox(height: 24.0),
             Center(
               child: Wrap(
@@ -157,7 +222,6 @@ ClipOval(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   SizedBox(width: 8),
-                  
                 ],
               ),
             ),
