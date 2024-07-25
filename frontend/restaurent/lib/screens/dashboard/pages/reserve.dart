@@ -22,6 +22,29 @@ class _ReserveState extends State<Reserve> {
     futureReservations = fetchReservations();
   }
 
+  Future<void> _deleteReservation(String id) async {
+    final response = await http.delete(Uri.parse('http://127.0.0.1:8000/api/deletereserves/$id'));
+
+    if (response.statusCode == 200) {
+      // Successfully deleted
+      setState(() {
+        futureReservations = fetchReservations(); // Refresh the list
+      });
+    } else {
+      throw Exception('Failed to delete reservation');
+    }
+  }
+
+  Future<Map<String, dynamic>> _fetchReservationDetails(String id) async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/reserves/$id'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception('Failed to load reservation details');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,223 +149,420 @@ class _ReserveState extends State<Reserve> {
       ),
     );
   }
-}
 
-DataRow dataRow(Map<String, dynamic> reservation, BuildContext context) {
-  String status = reservation['status']?.toString() ?? 'Confirmed';
-  Color statusColor;
+  DataRow dataRow(Map<String, dynamic> reservation, BuildContext context) {
+    String status = reservation['status']?.toString() ?? 'Confirmed';
+    Color statusColor;
 
-  switch (status) {
-    case "Confirmed":
-      statusColor = Colors.green;
-      break;
-    case 'Cancelled':
-      statusColor = Colors.red;
-      break;
-    case 'Pending':
-      statusColor = Colors.orange;
-      break;
-    default:
-      statusColor = Colors.grey;
+    switch (status) {
+      case "Confirmed":
+        statusColor = Colors.green;
+        break;
+      case 'Cancelled':
+        statusColor = Colors.red;
+        break;
+      case 'Pending':
+        statusColor = Colors.orange;
+        break;
+      default:
+        statusColor = Colors.grey;
+    }
+
+    return DataRow(
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              TextAvatar(
+                size: 35,
+                backgroundColor: Colors.white,
+                textColor: Colors.white,
+                fontSize: 14,
+                upperCase: true,
+                numberLetters: 1,
+                shape: Shape.Rectangle,
+                text: reservation['name']?.toString() ?? '',
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text(
+                  reservation['name']?.toString() ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+        DataCell(Text(reservation['email']?.toString() ?? '')),
+        DataCell(Text(reservation['phone']?.toString() ?? '')),
+        DataCell(Text(reservation['person']?.toString() ?? '')),
+        DataCell(Text(reservation['reservation_date']?.toString() ?? '')),
+        DataCell(Text(reservation['time']?.toString() ?? '')),
+        DataCell(Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: statusColor,
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          ),
+          child: Text(
+            status,
+            style: TextStyle(color: Colors.white),
+          ),
+        )),
+        DataCell(
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.visibility, color: greenColor),
+                onPressed: () async {
+                  final details = await _fetchReservationDetails(reservation['id'].toString());
+            showDialog(
+  context: context,
+  builder: (_) {
+    return AlertDialog(
+      title: Center(
+        child: Column(
+          children: [
+            Icon(Icons.info, size: 36, color: Colors.blue),
+            SizedBox(height: 20),
+            Text("Reservation Details", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+      content: Container(
+        color: secondaryColor,
+        width: 360,
+        height: 370,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.person, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Name: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['name'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.email, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Email: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['email'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.phone, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Phone Number: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['phone'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.group, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Number of People: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['person'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.calendar_today, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Reservation Date: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['reservation_date'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.access_time, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Reservation Time: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['time'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.message, color: Colors.blue),
+                SizedBox(width: 8),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      children: [
+                        TextSpan(
+                          text: "Message: ", 
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: "${details['message'] ?? 'N/A'}",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          child: Text("Close"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  },
+);
+
+                },
+              ),
+              SizedBox(width: 6),
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.blue),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.update, size: 36, color: Colors.blue),
+                              SizedBox(height: 20),
+                              Text("Update Reservation"),
+                            ],
+                          ),
+                        ),
+                        content: Container(
+                          color: secondaryColor,
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Text(
+                                  "Update reservation for '${reservation['name'] ?? ''}':"),
+                              SizedBox(height: 16),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "New Reservation Date",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "New Reservation Time",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.close, size: 14),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    label: Text("Cancel"),
+                                  ),
+                                  SizedBox(width: 20),
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.update, size: 14),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue),
+                                    onPressed: () {
+                                      // Add your update logic here
+                                      Navigator.of(context).pop();
+                                    },
+                                    label: Text("Update"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              SizedBox(width: 6),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.redAccent),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.warning_outlined, size: 36, color: Colors.red),
+                              SizedBox(height: 20),
+                              Text("Confirm Deletion"),
+                            ],
+                          ),
+                        ),
+                        content: Container(
+                          color: secondaryColor,
+                          height: 70,
+                          child: Column(
+                            children: [
+                              Text(
+                                  "Are you sure you want to delete '${reservation['name'] ?? ''}'?"),
+                              SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.close, size: 14),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    label: Text("Cancel"),
+                                  ),
+                                  SizedBox(width: 20),
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.delete, size: 14),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red),
+                                    onPressed: () {
+                                      _deleteReservation(reservation['id'].toString());
+                                      Navigator.of(context).pop();
+                                    },
+                                    label: Text("Delete"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            TextAvatar(
-              size: 35,
-              backgroundColor: Colors.white,
-              textColor: Colors.white,
-              fontSize: 14,
-              upperCase: true,
-              numberLetters: 1,
-              shape: Shape.Rectangle,
-              text: reservation['name']?.toString() ?? '',
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(
-                reservation['name']?.toString() ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text(reservation['email']?.toString() ?? '')),
-      DataCell(Text(reservation['phone']?.toString() ?? '')),
-      DataCell(Text(reservation['person']?.toString() ?? '')),
-      DataCell(Text(reservation['reservation_date']?.toString() ?? '')),
-      DataCell(Text(reservation['time']?.toString() ?? '')),
-      DataCell(Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: statusColor,
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        ),
-        child: Text(
-          status,
-          style: TextStyle(color: Colors.white),
-        ),
-      )),
-      DataCell(
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.visibility, color: greenColor),
-              onPressed: () {},
-            ),
-            SizedBox(width: 6),
-            IconButton(
-              icon: Icon(Icons.edit, color: Colors.blue),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Center(
-                        child: Column(
-                          children: [
-                            Icon(Icons.update, size: 36, color: Colors.blue),
-                            SizedBox(height: 20),
-                            Text("Update Reservation"),
-                          ],
-                        ),
-                      ),
-                      content: Container(
-                        color: secondaryColor,
-                        height: 200,
-                        child: Column(
-                          children: [
-                            Text(
-                                "Update reservation for '${reservation['name'] ?? ''}':"),
-                            SizedBox(height: 16),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: "New Reservation Date",
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: "New Reservation Time",
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton.icon(
-                                  icon: Icon(Icons.close, size: 14),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  label: Text("Cancel"),
-                                ),
-                                SizedBox(width: 20),
-                                ElevatedButton.icon(
-                                  icon: Icon(Icons.update, size: 14),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue),
-                                  onPressed: () {
-                                    // Add your update logic here
-                                    Navigator.of(context).pop();
-                                  },
-                                  label: Text("Update"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-            SizedBox(width: 6),
-            IconButton(
-              icon: Icon(Icons.delete, color: Colors.redAccent),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Center(
-                        child: Column(
-                          children: [
-                            Icon(Icons.warning_outlined, size: 36, color: Colors.red),
-                            SizedBox(height: 20),
-                            Text("Confirm Deletion"),
-                          ],
-                        ),
-                      ),
-                      content: Container(
-                        color: secondaryColor,
-                        height: 70,
-                        child: Column(
-                          children: [
-                            Text(
-                                "Are you sure want to delete '${reservation['name'] ?? ''}'?"),
-                            SizedBox(height: 16),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton.icon(
-                                  icon: Icon(Icons.close, size: 14),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.grey),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  label: Text("Cancel"),
-                                ),
-                                SizedBox(width: 20),
-                                ElevatedButton.icon(
-                                  icon: Icon(Icons.delete, size: 14),
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red),
-                                  onPressed: () {
-                                    // Add your delete logic here
-                                    Navigator.of(context).pop();
-                                  },
-                                  label: Text("Delete"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
+  Future<List<Map<String, dynamic>>> fetchReservations() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/showreserves'));
 
-Future<List<Map<String, dynamic>>> fetchReservations() async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/showreserves'));
-
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((data) => data as Map<String, dynamic>).toList();
-  } else {
-    throw Exception('Failed to load reservations');
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => data as Map<String, dynamic>).toList();
+    } else {
+      throw Exception('Failed to load reservations');
+    }
   }
 }
