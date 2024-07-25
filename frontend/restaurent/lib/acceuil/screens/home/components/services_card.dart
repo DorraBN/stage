@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import 'package:flutter/material.dart';
+
+const kPadding = 16.0;
 
 class ServicesCard extends StatelessWidget {
   const ServicesCard({
@@ -9,20 +12,20 @@ class ServicesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // now we make service section attractive and good
     return Wrap(
-      // ignore: prefer_const_literals_to_create_immutables
+      spacing: kPadding,
+      runSpacing: kPadding,
       children: [
         Services(
-          image: "../../../assets/images/delivery_boy.jpg",
+          icon: Icons.delivery_dining,
           title: "Fastest Delivery",
         ),
         Services(
-          image: "../../../assets/images/menu.jpg",
+          icon: Icons.menu_book,
           title: "So Much to Choose From",
         ),
         Services(
-          image: "../../../assets/images/offer.jpg",
+          icon: Icons.local_offer,
           title: "Best Offer in Town",
         ),
       ],
@@ -33,10 +36,12 @@ class ServicesCard extends StatelessWidget {
 class Services extends StatelessWidget {
   const Services({
     Key? key,
-    required this.image,
+    required this.icon,
     required this.title,
   }) : super(key: key);
-  final String image, title;
+  final IconData icon;
+  final String title;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,13 +56,19 @@ class Services extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      image,
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.orange.shade400,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        icon,
+                        size: 40,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -66,8 +77,10 @@ class Services extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -76,7 +89,7 @@ class Services extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit, ",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black54,
@@ -89,6 +102,7 @@ class Services extends StatelessWidget {
     );
   }
 }
+
 
 class FoodPricePage extends StatelessWidget {
   @override

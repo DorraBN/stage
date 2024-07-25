@@ -19,64 +19,66 @@ class BodyContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.all(my_constants.kPadding), 
-      constraints: BoxConstraints(maxWidth: my_constants.kMaxWidth), 
+      padding: EdgeInsets.all(my_constants.kPadding),
       child: Column(
         children: [
-              Container(
-            height: 600, 
+          Container(
+            height: 500,
+            width: double.infinity, // Make sure the container takes the full width available
             child: AboutUsPage(),
           ),
-          ServicesCard(),
-        
           Container(
-            height: 400, 
-            child: RestaurantMenuPage(),
-          ),
-            SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuPage()),
-              );
-            },
-            
-             child: ElevatedButton.icon(
-                onPressed: () {
-                
-                },
-                icon: Icon(Icons.event), 
-                label: Text('Reserve a table'), 
-              ),
-          ),
-          Responsive(
-            desktop: ProductCard(
-              crossAxiscount: _size.width < 650 ? 2 : 3,
-              aspectRatio: _size.width < 650 ? 0.85 : 1.1,
+            constraints: BoxConstraints(maxWidth: my_constants.kMaxWidth),
+            child: Column(
+              children: [
+                ServicesCard(),
+                Container(
+                  height: 400,
+                  child: RestaurantMenuPage(),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MenuPage()),
+                    );
+                  },
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.event),
+                    label: Text('Reserve a table'),
+                  ),
+                ),
+                Responsive(
+                  desktop: ProductCard(
+                    crossAxiscount: _size.width < 650 ? 2 : 3,
+                    aspectRatio: _size.width < 650 ? 0.85 : 1.1,
+                  ),
+                  tablet: ProductCard(
+                    crossAxiscount: _size.width < 825 ? 2 : 3,
+                    aspectRatio: _size.width < 825 ? 0.85 : 1.1,
+                  ),
+                  mobile: ProductCard(
+                    crossAxiscount: _size.width < 690 ? 2 : 3,
+                    aspectRatio: _size.width < 560 ? 0.85 : 1.1,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MenuPage1()),
+                    );
+                  },
+                  child: Text('see more'),
+                ),
+                SizedBox(height: 20),
+                EmailBanner(),
+              ],
             ),
-            tablet: ProductCard(
-              crossAxiscount: _size.width < 825 ? 2 : 3,
-              aspectRatio: _size.width < 825 ? 0.85 : 1.1,
-            ),
-            mobile: ProductCard(
-              crossAxiscount: _size.width < 690 ? 2 : 3,
-              aspectRatio: _size.width < 560 ? 0.85 : 1.1,
-            ),
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuPage1()),
-              );
-            },
-            child: Text('see more'),
-          ),
-          SizedBox(height: 20),
-          EmailBanner(),
         ],
       ),
     );

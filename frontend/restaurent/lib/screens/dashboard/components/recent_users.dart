@@ -95,14 +95,13 @@ DataRow recentUserDataRow(RecentUser userInfo, BuildContext context) {
           padding: EdgeInsets.all(5),
           decoration: BoxDecoration(
             
-            border: Border.all(color: getRoleColor(userInfo.role)),
+            border: Border.all(color: getRoleColor(userInfo.status)),
             borderRadius: BorderRadius.all(Radius.circular(5.0) //
                 ),
           ),
-          child: Text(userInfo.role!))),
+          child: Text(userInfo.status!))),
       DataCell(Text(userInfo.email!)),
-      DataCell(Text(userInfo.date!)),
-      DataCell(Text(userInfo.posts!)),
+
       DataCell(
         Row(
           children: [

@@ -24,6 +24,7 @@ class DashboardScreen extends StatelessWidget {
               Header(),
               SizedBox(height: defaultPadding),
               MiniInformation(),
+             
               SizedBox(height: defaultPadding),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,6 +38,7 @@ class DashboardScreen extends StatelessWidget {
                       CardPage (),
                         SizedBox(height: defaultPadding),
                         RecentDiscussions(),
+                       
                         if (Responsive.isMobile(context))
                           SizedBox(height: defaultPadding),
                         if (Responsive.isMobile(context)) UserDetailsWidget(),
@@ -50,6 +52,7 @@ class DashboardScreen extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: UserDetailsWidget(),
+                      
                     ),
                 ],
               )

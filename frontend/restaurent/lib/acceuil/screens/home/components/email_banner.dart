@@ -13,13 +13,14 @@ class EmailBanner extends StatelessWidget {
     return Stack(
       children: [
         ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.asset(
-              "../../../assets/images/hero-slider-1.jpg",
-              height: 200,
-              width: 1230,
-              fit: BoxFit.cover,
-            )),
+          borderRadius: BorderRadius.circular(15),
+          child: Image.asset(
+            "../../../assets/images/hero-slider-1.jpg",
+            height: 200,
+            width: 1230,
+            fit: BoxFit.cover,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(kPadding),
           child: Align(
@@ -46,16 +47,18 @@ class EmailBanner extends StatelessWidget {
                         height: 50,
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            border:
-                                Border.all(color: Colors.grey.withOpacity(0.3)),
+                            border: Border.all(color: Colors.grey.withOpacity(0.3)),
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(15.0),
                                 bottomLeft: Radius.circular(15.0))),
                         child: TextFormField(
+                          style: TextStyle(color: Colors.black), // Change the color of the input text to black
                           decoration: InputDecoration(
                               hintText: "Enter your email here",
                               hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
+                                  color: Colors.black, // Change the color to black
+                                  fontWeight: FontWeight.w600, 
+                                  fontSize: 14),
                               focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide.none),
                               enabledBorder: UnderlineInputBorder(
@@ -65,16 +68,29 @@ class EmailBanner extends StatelessWidget {
                     ),
                     Container(
                       height: 50,
-                      width: 50,
+                      width: 100,
                       decoration: BoxDecoration(
                           color: kSecondaryColor,
                           borderRadius: BorderRadius.only(
                               topRight: Radius.circular(15.0),
                               bottomRight: Radius.circular(15.0))),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                        size: 22,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "Subscribe",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

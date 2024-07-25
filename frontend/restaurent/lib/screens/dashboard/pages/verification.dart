@@ -3,8 +3,8 @@ import 'package:restaurent/core/utils/colorful_tag.dart';
 import 'package:restaurent/models/recent_user_model.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/material.dart';
-class Reserve extends StatelessWidget {
-  const Reserve({
+class VerificationPage extends StatelessWidget {
+  const VerificationPage({
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +27,11 @@ class Reserve extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
-              SizedBox(width: 8), // Add some space between the icon and the text
+              SizedBox(width: 8), 
+              Text(
+                "Hello, Admin 👋",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),// Add some space between the icon and the text
               Text(
                 "Recent Reservations",
                 style: Theme.of(context).textTheme.titleMedium,
@@ -42,10 +46,7 @@ class Reserve extends StatelessWidget {
                 columnSpacing: defaultPadding,
                 columns: [
                   DataColumn(
-                    label: Text("Name"),
-                  ),
-                   DataColumn(
-                    label: Text("email"),
+                    label: Text("Name Surname"),
                   ),
                   DataColumn(
                     label: Text("Phone Number"),
@@ -122,7 +123,6 @@ DataRow recentUserDataRow(RecentUser userInfo, BuildContext context) {
           ],
         ),
       ),
-      DataCell(Text(userInfo.email!)),
       DataCell(Text(userInfo.phoneNumber!)),
       DataCell(Text(userInfo.numberOfPeople.toString())),
       DataCell(Text(userInfo.reservationDate!)),

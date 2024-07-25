@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-
-
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:restaurent/acceuil/screens/home/components/reservation.dart';
-
 class ReservationForm extends StatefulWidget {
   @override
   _ReservationFormState createState() => _ReservationFormState();
@@ -18,6 +12,7 @@ class _ReservationFormState extends State<ReservationForm> {
 
   String _name = '';
   String _phone = '';
+  String _email = '';
   String _person = '1 Person';
   DateTime _reservationDate = DateTime.now();
   String _time = '08:00am';
@@ -30,7 +25,9 @@ class _ReservationFormState extends State<ReservationForm> {
     '4 Person',
     '5 Person',
     '6 Person',
-    '7 Person'
+    '7 Person',
+    '8 Person',
+    'larger party'
   ];
 
   List<String> _timeOptions = [
@@ -51,21 +48,93 @@ class _ReservationFormState extends State<ReservationForm> {
     '10:00pm'
   ];
 
+Future<void> _submitReservation() async {
+  final url = Uri.parse('http://127.0.0.1:8000/api/reserves');
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'name': _name,
+      'phone': _phone,
+      'email': _email,
+      'person': _person,
+      'reservation_date': _reservationDate.toIso8601String(),
+      'time': _time,
+      'message': _message,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    // Réservation réussie
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20),
+          title: Center(
+            child: Text(
+              'Réservation réussie!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Image.asset('../../../../../assets/images/p4.png', // Remplacez par le chemin vers votre image
+                height: 100,
+                width: 100,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Votre réservation a été effectuée avec succès.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(fontSize: 16),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    // Échec de la réservation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Échec de la réservation')),
+    );
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40.0), // Adjust horizontal padding
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Card(
-        margin: EdgeInsets.all(20), // Adjust margin as needed
+        margin: EdgeInsets.all(10),
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('../../../assets/images/shape-5.png'), // Path to your PNG image
+              image: AssetImage('../../../assets/images/shape-5.png'),
               fit: BoxFit.cover,
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.all(70),
+            padding: EdgeInsets.all(20),
             child: Form(
               key: _formKey,
               child: Column(
@@ -76,13 +145,13 @@ class _ReservationFormState extends State<ReservationForm> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Text(
                     'Booking request +88-123-123456 or fill out the order form',
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 10), // Reduced height
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -93,7 +162,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               labelText: 'Your Name',
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                              prefixIcon: Icon(Icons.person), // Icon added here
+                              prefixIcon: Icon(Icons.person),
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -111,7 +180,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               labelText: 'Phone Number',
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                              prefixIcon: Icon(Icons.phone), // Icon added here
+                              prefixIcon: Icon(Icons.phone),
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -123,7 +192,25 @@ class _ReservationFormState extends State<ReservationForm> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10), // Reduced height
+                  SizedBox(height: 10),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+                        prefixIcon: Icon(Icons.email),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) {
+                        setState(() {
+                          _email = value;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -134,7 +221,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               labelText: 'Number of Persons',
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                              prefixIcon: Icon(Icons.person_outline), // Icon added here
+                              prefixIcon: Icon(Icons.person_outline),
                             ),
                             value: _person,
                             items: _personOptions.map((String person) {
@@ -159,7 +246,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               labelText: 'Reservation Date',
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                              prefixIcon: Icon(Icons.calendar_today), // Icon added here
+                              prefixIcon: Icon(Icons.calendar_today),
                             ),
                             readOnly: true,
                             onTap: () async {
@@ -189,7 +276,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               labelText: 'Reservation Time',
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                              prefixIcon: Icon(Icons.access_time), // Icon added here
+                              prefixIcon: Icon(Icons.access_time),
                             ),
                             value: _time,
                             items: _timeOptions.map((String time) {
@@ -208,7 +295,7 @@ class _ReservationFormState extends State<ReservationForm> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10), // Reduced height
+                  SizedBox(height: 10),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 5),
                     child: TextFormField(
@@ -216,7 +303,7 @@ class _ReservationFormState extends State<ReservationForm> {
                         labelText: 'Message',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
-                        prefixIcon: Icon(Icons.message), // Icon added here
+                        prefixIcon: Icon(Icons.message),
                       ),
                       maxLines: 3,
                       onChanged: (value) {
@@ -226,13 +313,13 @@ class _ReservationFormState extends State<ReservationForm> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10), // Reduced height
+                  SizedBox(height: 10),
                   FractionallySizedBox(
-                    widthFactor: 0.4, // Adjust width as needed
+                    widthFactor: 0.4,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          // Process data
+                          _submitReservation();
                         }
                       },
                       style: ElevatedButton.styleFrom(
