@@ -43,6 +43,38 @@ Future<void> deleteReservation(String id) async {
   }
 }
 
+Future<void> updateReservation(UserReservation reservation) async {
+  final Uri apiUrl = Uri.parse('http://127.0.0.1:8000/api/updateReserve/${reservation.id}');
+  
+  try {
+    final response = await http.put(
+      apiUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'name': reservation.name,
+        'phone': reservation.phoneNumber,
+        'email': reservation.email,
+        'person': reservation.numberOfPeople,
+        'reservation_date': reservation.reservationDate,
+        'time': reservation.reservationTime,
+        'message': reservation.message,
+        'status': reservation.status,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Successfully updated
+    } else {
+      throw Exception('Failed to update reservation');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+}
+
+
 class UserReservation {
   final int id;
   final String name;
@@ -51,7 +83,7 @@ class UserReservation {
   final String numberOfPeople;
   final String reservationDate;
   final String reservationTime;
-   final String message;
+  final String message;
   final String status;
 
   UserReservation({
@@ -62,8 +94,8 @@ class UserReservation {
     required this.numberOfPeople,
     required this.reservationDate,
     required this.reservationTime,
-      required this.message,
-    required this.status, 
+    required this.message,
+    required this.status,
   });
 
   // Convert JSON to UserReservation
@@ -77,7 +109,7 @@ class UserReservation {
       reservationDate: json['reservation_date'] ?? 'Unknown',
       reservationTime: json['time'] ?? 'Unknown',
       message: json['message'] ?? 'Unknown',
-      status: 'Confirmed',// assuming status is always 'Confirmed' as it's not in JSON
+       status: json['status'] ?? 'Unknown',// assuming status is always 'Confirmed' as it's not in JSON
     );
   }
 }
@@ -108,6 +140,110 @@ class _VerificationPageState extends State<VerificationPage> {
     });
   }
 
+  void _showUpdateReservationDialog(BuildContext context, UserReservation reservation) {
+    final _formKey = GlobalKey<FormState>();
+    final _nameController = TextEditingController(text: reservation.name);
+    final _phoneController = TextEditingController(text: reservation.phoneNumber);
+    final _emailController = TextEditingController(text: reservation.email);
+    final _peopleController = TextEditingController(text: reservation.numberOfPeople);
+    final _dateController = TextEditingController(text: reservation.reservationDate);
+    final _timeController = TextEditingController(text: reservation.reservationTime);
+    final _messageController = TextEditingController(text: reservation.message);
+    final _statusController = TextEditingController(text: reservation.status);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Update Reservation'),
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: 'Name'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a name';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _phoneController,
+                    decoration: InputDecoration(labelText: 'Phone Number'),
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(labelText: 'Email'),
+                  ),
+                  TextFormField(
+                    controller: _peopleController,
+                    decoration: InputDecoration(labelText: 'Number of People'),
+                  ),
+                  TextFormField(
+                    controller: _dateController,
+                    decoration: InputDecoration(labelText: 'Reservation Date'),
+                  ),
+                  TextFormField(
+                    controller: _timeController,
+                    decoration: InputDecoration(labelText: 'Reservation Time'),
+                  ),
+                  TextFormField(
+                    controller: _messageController,
+                    decoration: InputDecoration(labelText: 'Message'),
+                  ),
+                  TextFormField(
+                    controller: _statusController,
+                    decoration: InputDecoration(labelText: 'Status'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Update'),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  final updatedReservation = UserReservation(
+                    id: reservation.id,
+                    name: _nameController.text,
+                    phoneNumber: _phoneController.text,
+                    email: _emailController.text,
+                    numberOfPeople: _peopleController.text,
+                    reservationDate: _dateController.text,
+                    reservationTime: _timeController.text,
+                    message: _messageController.text,
+                    status: _statusController.text,
+                  );
+
+                  updateReservation(updatedReservation).then((_) {
+                    setState(() {
+                      _reservations = fetchUserDataByEmail(widget.email);
+                    });
+                    Navigator.of(context).pop();
+                  }).catchError((error) {
+                    print('Error: $error');
+                    Navigator.of(context).pop();
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showReservationDetailsDialog(BuildContext context, UserReservation reservation) {
     showDialog(
       context: context,
@@ -123,8 +259,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 Text('Number of People: ${reservation.numberOfPeople}'),
                 Text('Reservation Date: ${reservation.reservationDate}'),
                 Text('Reservation Time: ${reservation.reservationTime}'),
-                                Text('Message: ${reservation.message}'),
-
+                Text('Message: ${reservation.message}'),
                 Text('Status: ${reservation.status}'),
               ],
             ),
@@ -287,7 +422,7 @@ class _VerificationPageState extends State<VerificationPage> {
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.blue),
                 onPressed: () {
-                  // Implement update logic
+                  _showUpdateReservationDialog(context, reservation);
                 },
               ),
               SizedBox(width: 6),
