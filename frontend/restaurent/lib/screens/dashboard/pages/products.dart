@@ -1,8 +1,9 @@
+import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
+import 'package:restaurent/core/constants/color_constants.dart'; // Make sure this path is correct
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   late Future<List<Map<String, dynamic>>> futureProduct;
-  File? _image;
 
   @override
   void initState() {
@@ -36,6 +36,7 @@ class _ProductsPageState extends State<ProductsPage> {
     final response = await http.delete(Uri.parse('http://127.0.0.1:8000/api/deleteproducts/$id'));
 
     if (response.statusCode == 200) {
+      // Successfully deleted
       setState(() {
         futureProduct = fetchProduct(); // Refresh the list
       });
@@ -44,13 +45,13 @@ class _ProductsPageState extends State<ProductsPage> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<Map<String, dynamic>> _fetchProductDetails(String id) async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/productdetails/$id'));
 
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+    if (response.statusCode == 200) {
+      return json.decode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception('Failed to load product details');
     }
   }
 
@@ -60,6 +61,7 @@ class _ProductsPageState extends State<ProductsPage> {
     final _descriptionController = TextEditingController(text: item?['description']);
     final _priceController = TextEditingController(text: item?['price']?.toString());
     final _categoryController = TextEditingController(text: item?['category']);
+    final _imageController = TextEditingController(text: item?['image']);
     final _isAvailableController = TextEditingController(text: item?['is_available']?.toString());
 
     showDialog(
@@ -120,9 +122,15 @@ class _ProductsPageState extends State<ProductsPage> {
                       return null;
                     },
                   ),
-                  TextButton(
-                    onPressed: _pickImage,
-                    child: Text(_image == null ? 'Pick Image' : 'Change Image'),
+                  TextFormField(
+                    controller: _imageController,
+                    decoration: InputDecoration(labelText: 'Image URL'),
+                    validator: (value) {
+                      if (value != null && !Uri.tryParse(value)!.hasAbsolutePath == true) {
+                        return 'Please enter a valid URL';
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     controller: _isAvailableController,
@@ -156,15 +164,16 @@ class _ProductsPageState extends State<ProductsPage> {
                     'description': _descriptionController.text,
                     'price': double.parse(_priceController.text),
                     'category': _categoryController.text,
+                    'image': _imageController.text,
                     'is_available': _isAvailableController.text == '1',
                     'created_at': DateTime.now().toIso8601String(),
                     'updated_at': DateTime.now().toIso8601String(),
                   };
 
                   if (item == null) {
-                    _saveTableItem(newItem);
+                    _saveTableItem(newItem); // Implement this method
                   } else {
-                    _editTableItem(index!, newItem);
+                    _editTableItem(index!, newItem); // Implement this method
                   }
 
                   Navigator.of(context).pop();
@@ -179,21 +188,11 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Future<void> _saveTableItem(Map<String, dynamic> item) async {
-    final request = http.MultipartRequest(
-      'POST',
+    final response = await http.post(
       Uri.parse('http://127.0.0.1:8000/api/productss'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(item),
     );
-    request.fields['name'] = item['name'];
-    request.fields['description'] = item['description'];
-    request.fields['price'] = item['price'].toString();
-    request.fields['category'] = item['category'];
-    request.fields['is_available'] = item['is_available'].toString();
-    
-    if (_image != null) {
-      request.files.add(await http.MultipartFile.fromPath('image', _image!.path));
-    }
-
-    final response = await request.send();
 
     if (response.statusCode == 200) {
       setState(() {
@@ -226,89 +225,103 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: AppBar(
         title: Text("Products"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      body: Container(
+        padding: EdgeInsets.all(defaultPadding),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Row(
           children: [
             Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: futureProduct,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final item = snapshot.data![index];
-                        return Card(
-                          elevation: 5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: item['image'] != null
-                                    ? Image.network(
-                                        item['image'],
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Container(
-                                        color: Colors.grey[200],
-                                        child: Center(
-                                          child: Text(item['name'] ?? '',
-                                              style: TextStyle(fontSize: 20)),
-                                        ),
-                                      ),
+              flex: 2,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FutureBuilder<List<Map<String, dynamic>>>(
+                      future: futureProduct,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              horizontalMargin: 0,
+                              columnSpacing: defaultPadding,
+                              columns: [
+                                DataColumn(label: Text("Name")),
+                                DataColumn(label: Text("Image")),
+                                DataColumn(label: Text("Description")),
+                                DataColumn(label: Text("Price")),
+                                DataColumn(label: Text("Category")),
+                                DataColumn(label: Text("Created At")),
+                                DataColumn(label: Text("Updated At")),
+                                DataColumn(label: Text("Availability")),
+                                DataColumn(label: Text("Operation")),
+                              ],
+                              rows: List.generate(
+                                snapshot.data!.length,
+                                (index) => dataRow(snapshot.data![index], context),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(item['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
-                                    Text(item['category'] ?? ''),
-                                    Text('Price: ${item['price']?.toString() ?? ''}'),
-                                    Text('Availability: ${item['is_available'] == 1 ? 'Available' : 'Unavailable'}'),
-                                  ],
-                                ),
-                              ),
-                              ButtonBar(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () => _showTableItemDialog(item: item, index: index),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () => _deleteProduct(item['id'].toString()),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        }
+
+                        return Center(child: CircularProgressIndicator());
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => _showTableItemDialog(),
-              icon: Icon(Icons.add),
-              label: Text("Add Product"),
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showTableItemDialog(),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  DataRow dataRow(Map<String, dynamic> item, BuildContext context) {
+    return DataRow(
+      cells: [
+        DataCell(Text(item['name'])),
+        DataCell(
+          item['image'] != null
+              ? Image.network(
+                  item['image'],
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                )
+              : Text('No Image'),
+        ),
+        DataCell(Text(item['description'])),
+        DataCell(Text(item['price'].toString())),
+        DataCell(Text(item['category'])),
+        DataCell(Text(item['created_at'])),
+        DataCell(Text(item['updated_at'])),
+        DataCell(Text(item['is_available'] == 1 ? 'Available' : 'Unavailable')),
+        DataCell(
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () => _showTableItemDialog(item: item),
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => _deleteProduct(item['id'].toString()),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

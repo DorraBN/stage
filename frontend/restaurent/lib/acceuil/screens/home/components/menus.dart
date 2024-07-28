@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:restaurent/acceuil/screens/home/components/login.dart';
-
-const double kPadding = 16.0;
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:auto_size_text/auto_size_text.dart';
 
 class MenuPage1 extends StatefulWidget {
   const MenuPage1({Key? key}) : super(key: key);
@@ -11,194 +11,284 @@ class MenuPage1 extends StatefulWidget {
 }
 
 class _MenuPage1State extends State<MenuPage1> {
-  int numberOfDishes = 6; // Initial number of dishes
-  double totalPrice = 120.0; // Initial total price
+  late Future<List<Map<String, dynamic>>> futureProduct;
+  List<Map<String, dynamic>> selectedProducts = [];
+  int productCounter = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Menu"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+  void initState() {
+    super.initState();
+    futureProduct = fetchProduct();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchProduct() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/products'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> productsJson = json.decode(response.body);
+      return productsJson.cast<Map<String, dynamic>>();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchProductDetails(int id) async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/productdetails/$id'));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load product details');
+    }
+  }
+
+  void _showProductDetails(Map<String, dynamic> product) async {
+    try {
+      final productDetails = await fetchProductDetails(product['id']);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Column(
+                children: [
+                  Icon(Icons.info, size: 36, color: Colors.blue),
+                  SizedBox(height: 20),
+                  Text(productDetails['name'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ],
               ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+            ),
+            content: Container(
+              color: const Color.fromARGB(255, 60, 60, 60),
+              width: 380,
+              height: 390,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (productDetails['image'] != null)
+                      Image.network(
+                        productDetails['image'],
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      )
+                    else
+                      Container(
+                        height: 150,
+                        width: double.infinity,
+                        color: const Color.fromARGB(255, 47, 46, 46),
+                        child: Icon(Icons.image_not_supported),
+                      ),
+                    SizedBox(height: 10), // Add space between image and text
+                    _buildDetailRow(Icons.person, "Name: ", productDetails['name']),
+                    _buildDetailRow(Icons.category, "Category: ", productDetails['category']),
+                    _buildDetailRow(Icons.description, "Description: ", productDetails['description']),
+                    _buildDetailRow(Icons.attach_money, "Price: ", productDetails['price'].toString()),
+                  ],
                 ),
               ),
             ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {
-                // Handle item 1 tap
-              },
+            actions: [
+              ElevatedButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Error fetching product details: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to load product details.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Close'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _addToCart(Map<String, dynamic> product) {
+    setState(() {
+      selectedProducts.add(product);
+      productCounter++;
+    });
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blue),
+        SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.black),
+              children: [
+                TextSpan(
+                  text: label,
+                  style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: value,
+                ),
+              ],
             ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Handle item 2 tap
-              },
-            ),
-          ],
+          ),
         ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+@override
+Widget build(BuildContext context) {
+  // Calculer la somme des prix des produits sélectionnés
+  double totalPrice = selectedProducts.fold(
+    0.0,
+    (sum, product) => sum + double.parse(product['price'] ?? '0.0'),
+  );
+
+  return Scaffold(
+    appBar: AppBar(
+      title: Text("Products"),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.menu, color: Colors.green),
+          onPressed: () {
+            // Action à définir pour l'icône de menu
+          },
+        ),
+      ],
+    ),
+    body: Container(
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 51, 51, 51),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      body: Row(
+      child: Row(
         children: [
           Expanded(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "Fastest Delivery",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 57, 57, 57),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: futureProduct,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
                       ),
-                      SizedBox(width: kPadding),
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "So Much to Choose From",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: kPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "Best Offer in Town",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
-                      ),
-                      SizedBox(width: kPadding),
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "Best Offer in Town",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: kPadding),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "Best Offer in Town",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
-                      ),
-                      SizedBox(width: kPadding),
-                      Expanded(
-                        child: ServiceCard(
-                          image: "assets/images/big-sandwich-hamburger.jpg",
-                          title: "Best Offer in Town",
-                          description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                          context: context,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(
+                          item: snapshot.data![index],
+                          onView: () => _showProductDetails(snapshot.data![index]),
+                          onAddToCart: () => _addToCart(snapshot.data![index]),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
               ),
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.all(kPadding),
-              color: Colors.green[100], // Light green background for the rectangle
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 50, 49, 49),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Number of Dishes',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    'Products in Cart: $productCounter',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: selectedProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = selectedProducts[index];
+                        return ListTile(
+                          leading: ClipOval(
+                            child: product['image'] != null
+                                ? Image.network(
+                                    product['image'],
+                                    height: 50,
+                                    width: 50,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.grey,
+                                    child: Icon(Icons.image_not_supported, size: 24, color: Colors.white),
+                                  ),
+                          ),
+                          title: Text(product['name'], style: TextStyle(color: Colors.white)),
+                          subtitle: Text('Price: ${product['price']}', style: TextStyle(color: Colors.white)),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              // Fonction pour supprimer le produit de la liste
+                              setState(() {
+                                selectedProducts.removeAt(index);
+                                productCounter = selectedProducts.length;
+                                // Recalculer la somme des prix après suppression
+                                totalPrice = selectedProducts.fold(
+                                  0.0,
+                                  (sum, product) => sum + double.parse(product['price'] ?? '0.0'),
+                                );
+                              });
+                            },
+                          ),
+                        );
+                      },
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Ajouter la logique de paiement ici
+                    },
+                    child: Text("Pay"),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    '$numberOfDishes', // Display dynamic number of dishes
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Total Price',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '\$${totalPrice.toStringAsFixed(2)}', // Display dynamic total price
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Payment Methods',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  PaymentMethodButton(
-                    method: 'Credit Card',
-                    icon: Icons.credit_card,
-                  ),
-                  SizedBox(height: 10),
-                  PaymentMethodButton(
-                    method: 'PayPal',
-                    icon: Icons.paypal,
-                  ),
-                  SizedBox(height: 10),
-                  PaymentMethodButton(
-                    method: 'Cash on Delivery',
-                    icon: Icons.monetization_on,
+                    'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 ],
               ),
@@ -206,100 +296,101 @@ class _MenuPage1State extends State<MenuPage1> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 }
+}
+class ProductCard extends StatelessWidget {
+  final Map<String, dynamic> item;
+  final VoidCallback onView;
+  final VoidCallback onAddToCart;
 
-class ServiceCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String description;
-  final BuildContext context;
-
-  const ServiceCard({
-    Key? key,
-    required this.image,
-    required this.title,
-    required this.description,
-    required this.context,
-  }) : super(key: key);
-
-  void addToCart() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
+  const ProductCard({Key? key, required this.item, required this.onView, required this.onAddToCart}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 8,
-      borderRadius: BorderRadius.circular(8.0),
-      child: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                image,
-                height: 150,
-                width: double.infinity, // Ensures the image takes up the full width of the card
-                fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+      
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(5),
+              topRight: Radius.circular(5),
+            ),
+            child: item['image'] != null
+                ? Image.network(
+  item['image'] ?? '',
+  height: 150,
+  width: double.infinity,
+  fit: BoxFit.cover,
+  errorBuilder: (context, error, stackTrace) {
+    return Center(child: Icon(Icons.image_not_supported, size: 50));
+  },
+  loadingBuilder: (context, child, progress) {
+    if (progress == null) {
+      return child;
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
+  },
+)
+                : Container(
+                    height: 150,
+                    width: double.infinity,
+                    color: Colors.grey,
+                    child: Icon(Icons.image_not_supported),
+                  ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 33, 33, 34),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
               ),
             ),
-            SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            padding: EdgeInsets.all(8.0),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  item['name'],
+                  maxLines: 1,
+                  minFontSize: 14,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                SizedBox(height: 5),
+                AutoSizeText(
+                  'Price: ${item['price'].toString()}',
+                  maxLines: 1,
+                  minFontSize: 12,
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.shopping_cart, color: Colors.green),
+                      onPressed: onAddToCart,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.visibility, color: Colors.blue),
+                      onPressed: onView,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Text(
-              description,
-              style: TextStyle(color: Colors.black54),
-            ),
-            SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: addToCart,
-              icon: Icon(Icons.shopping_cart),
-              label: Text('Add to Cart'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
-
-class PaymentMethodButton extends StatelessWidget {
-  final String method;
-  final IconData icon;
-
-  const PaymentMethodButton({
-    Key? key,
-    required this.method,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () {
-        // Handle payment method selection
-      },
-      icon: Icon(icon),
-      label: Text(method),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, 
-        backgroundColor: Colors.blue, // Text color
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(home: MenuPage1()));
 }
