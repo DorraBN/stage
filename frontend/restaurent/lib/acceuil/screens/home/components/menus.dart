@@ -337,7 +337,7 @@ Widget build(BuildContext context) {
                           ),
                           child: Center(
                             child: Text(
-                              'Pay',
+                              'continue ->',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
