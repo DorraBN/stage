@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:restaurent/acceuil/screens/home/components/payement.dart';
 
 class MenuPage1 extends StatefulWidget {
   const MenuPage1({Key? key}) : super(key: key);
@@ -154,13 +155,11 @@ class _MenuPage1State extends State<MenuPage1> {
       ],
     );
   }
-
 @override
 Widget build(BuildContext context) {
-  // Calculer la somme des prix des produits sélectionnés
   double totalPrice = selectedProducts.fold(
     0.0,
-    (sum, product) => sum + double.parse(product['price'] ?? '0.0'),
+    (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
   );
 
   return Scaffold(
@@ -259,36 +258,104 @@ Widget build(BuildContext context) {
                           ),
                           title: Text(product['name'], style: TextStyle(color: Colors.white)),
                           subtitle: Text('Price: ${product['price']}', style: TextStyle(color: Colors.white)),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              // Fonction pour supprimer le produit de la liste
-                              setState(() {
-                                selectedProducts.removeAt(index);
-                                productCounter = selectedProducts.length;
-                                // Recalculer la somme des prix après suppression
-                                totalPrice = selectedProducts.fold(
-                                  0.0,
-                                  (sum, product) => sum + double.parse(product['price'] ?? '0.0'),
-                                );
-                              });
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.remove, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    if (product['quantity'] > 1) {
+                                      product['quantity']--;
+                                    } else {
+                                      selectedProducts.removeAt(index);
+                                    }
+                                    productCounter = selectedProducts.length;
+                                    totalPrice = selectedProducts.fold(
+                                      0.0,
+                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                                    );
+                                  });
+                                },
+                              ),
+                              Text(
+                                (product['quantity'] ?? 1).toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    product['quantity'] = (product['quantity'] ?? 1) + 1;
+                                    totalPrice = selectedProducts.fold(
+                                      0.0,
+                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                                    );
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedProducts.removeAt(index);
+                                    productCounter = selectedProducts.length;
+                                    totalPrice = selectedProducts.fold(
+                                      0.0,
+                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                                    );
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         );
                       },
                     ),
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Ajouter la logique de paiement ici
-                    },
-                    child: Text("Pay"),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Total Price: \$${totalPrice.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentPage(
+                                selectedProducts: selectedProducts,
+                                totalPrice: totalPrice,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Pay',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          width: 120,
+                          alignment: Alignment.center,
+                          height: 50,
+                          margin: EdgeInsets.only(bottom: 10),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
+                    ],
                   ),
                 ],
               ),
