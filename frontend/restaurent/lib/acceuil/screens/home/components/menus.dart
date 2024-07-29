@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/acceuil/screens/home/components/payement.dart';
+import 'package:restaurent/screens/dashboard/pages/login1.dart';
+import 'package:restaurent/screens/login/login_screen.dart';
 
 class MenuPage1 extends StatefulWidget {
   const MenuPage1({Key? key}) : super(key: key);
@@ -163,17 +166,35 @@ Widget build(BuildContext context) {
   );
 
   return Scaffold(
-    appBar: AppBar(
-      title: Text("Products"),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.menu, color: Colors.green),
-          onPressed: () {
-            // Action à définir pour l'icône de menu
-          },
-        ),
-      ],
-    ),
+        appBar: AppBar(
+        title: Text("Products"),
+        actions: [
+          Container(
+            margin: EdgeInsets.all(8.0),
+            child: TextButton.icon(
+              onPressed: () {
+                // Action à définir pour le bouton Track Orders
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login1()), // Remplacez par la page cible
+                );
+              },
+              icon: Icon(Icons.track_changes, color: Colors.white),
+              label: Text(
+                "Track Orders",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     body: Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -329,26 +350,36 @@ Widget build(BuildContext context) {
                             ),
                           );
                         },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'continue ->',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                          width: 120,
-                          alignment: Alignment.center,
-                          height: 50,
-                          margin: EdgeInsets.only(bottom: 10),
-                        ),
+                       child: Container(
+  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  decoration: BoxDecoration(
+    color: Colors.green,
+    borderRadius: BorderRadius.circular(8.0),
+  ),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center, // Centre le contenu dans la Row
+    children: [
+      Text(
+        'Continue',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+        ),
+      ),
+      SizedBox(width: 8), // Espacement entre le texte et l'icône
+      Icon(
+        Icons.fast_forward_sharp, // Icône de flèche vers l'avant
+        color: Colors.white,
+        size: 10,
+      ),
+    ],
+  ),
+  width: 120,
+  alignment: Alignment.center,
+  height: 50,
+  margin: EdgeInsets.only(bottom: 10),
+),
+
                       ),
                       SizedBox(width: 10),
                       Text(
