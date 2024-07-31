@@ -11,7 +11,11 @@ class ImageUpload extends StatefulWidget {
 
 class _ImageUploadState extends State<ImageUpload> {
   final _addFormKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _categoryController = TextEditingController();
+  bool _isAvailable = false;
   XFile? _pickedFile;
   String? _imageDataUrl; // Storage for the base64 image data
   final picker = ImagePicker();
@@ -34,23 +38,27 @@ class _ImageUploadState extends State<ImageUpload> {
     if (_addFormKey.currentState!.validate() && _imageDataUrl != null) {
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/imageadd'),
+          Uri.parse('http://127.0.0.1:8000/api/productss'),
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'title': _titleController.text,
+            'name': _nameController.text,
+            'description': _descriptionController.text,
+            'price': double.parse(_priceController.text),
+            'category': _categoryController.text,
             'image': _imageDataUrl,
+            'is_available': _isAvailable ? 1 : 0,
           }),
         );
 
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Image added successfully')),
+            SnackBar(content: Text('Product added successfully')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to add image')),
+            SnackBar(content: Text('Failed to add product')),
           );
         }
       } catch (e) {
@@ -60,7 +68,7 @@ class _ImageUploadState extends State<ImageUpload> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image and enter a title')),
+        SnackBar(content: Text('Please select an image and fill in all fields')),
       );
     }
   }
@@ -75,7 +83,6 @@ class _ImageUploadState extends State<ImageUpload> {
         ),
       );
     } else {
-      // Use Image.memory to display the base64 image data
       return Image.memory(
         base64Decode(_imageDataUrl!),
         height: 150,
@@ -89,7 +96,7 @@ class _ImageUploadState extends State<ImageUpload> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Images'),
+        title: Text('Add Product'),
       ),
       body: Form(
         key: _addFormKey,
@@ -102,18 +109,72 @@ class _ImageUploadState extends State<ImageUpload> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Image Title'),
+                    Text('Name'),
                     TextFormField(
-                      controller: _titleController,
+                      controller: _nameController,
                       decoration: const InputDecoration(
-                        hintText: 'Enter Title',
+                        hintText: 'Enter Name',
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter title';
+                          return 'Please enter name';
                         }
                         return null;
                       },
+                    ),
+                    SizedBox(height: 16),
+                    Text('Description'),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter Description',
+                      ),
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    Text('Price'),
+                    TextFormField(
+                      controller: _priceController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter Price',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter price';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    Text('Category'),
+                    TextFormField(
+                      controller: _categoryController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter Category',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter category';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Text('Availability'),
+                        Switch(
+                          value: _isAvailable,
+                          onChanged: (value) {
+                            setState(() {
+                              _isAvailable = value;
+                            });
+                          },
+                        ),
+                      ],
                     ),
                     SizedBox(height: 16),
                     OutlinedButton(

@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:html' as html;
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:restaurent/screens/dashboard/pages/image.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -14,7 +13,12 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   late Future<List<Map<String, dynamic>>> futureProduct;
-  html.File? _selectedImage;
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _categoryController = TextEditingController();
+  XFile? _pickedFile;
+  String? _imageDataUrl;
 
   @override
   void initState() {
@@ -45,245 +49,23 @@ class _ProductsPageState extends State<ProductsPage> {
     }
   }
 
- Future<void> _saveTableItem(Map<String, dynamic> item) async {
-  final request = http.MultipartRequest(
-    'POST',
-    Uri.parse('http://127.0.0.1:8000/api/products'),
-  );
-  request.fields['name'] = item['name'];
-  request.fields['description'] = item['description'];
-  request.fields['price'] = item['price'].toString();
-  request.fields['category'] = item['category'];
-  request.fields['is_available'] = item['is_available'] ? '1' : '0';
-
-  if (_selectedImage != null) {
-    final reader = html.FileReader();
-    reader.readAsArrayBuffer(_selectedImage!);
-
-    reader.onLoadEnd.listen((_) async {
-      final bytes = reader.result as Uint8List;
-      final multipartFile = http.MultipartFile.fromBytes(
-        'image',
-        bytes,
-        filename: _selectedImage!.name,
-      );
-      request.files.add(multipartFile);
-
-      try {
-        final response = await request.send();
-
-        if (response.statusCode == 200) {
-          setState(() {
-            futureProduct = fetchProduct(); // Refresh the list
-            _selectedImage = null; // Reset the selected image
-          });
-        } else {
-          throw Exception('Failed to add product');
-        }
-      } catch (e) {
-        print('Error: $e');
-      }
-    });
-  } else {
-    try {
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        setState(() {
-          futureProduct = fetchProduct(); // Refresh the list
-          _selectedImage = null; // Reset the selected image
-        });
-      } else {
-        throw Exception('Failed to add product');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-}
-
-  Future<void> _editTableItem(int index, Map<String, dynamic> item) async {
-    final request = http.MultipartRequest(
-      'PUT',
-      Uri.parse('http://127.0.0.1:8000/api/editproduct/$index'),
-    );
-    request.fields['name'] = item['name'];
-    request.fields['description'] = item['description'];
-    request.fields['price'] = item['price'].toString();
-    request.fields['category'] = item['category'];
-    request.fields['is_available'] = item['is_available'] ? '1' : '0';
-
-    if (_selectedImage != null) {
-      final reader = html.FileReader();
-      reader.readAsArrayBuffer(_selectedImage!);
-
-      reader.onLoadEnd.listen((_) async {
-        final bytes = reader.result as Uint8List;
-        final multipartFile = http.MultipartFile.fromBytes(
-          'image',
-          bytes,
-          filename: _selectedImage!.name,
-        );
-        request.files.add(multipartFile);
-
-        final response = await request.send();
-
-        if (response.statusCode == 200) {
-          setState(() {
-            futureProduct = fetchProduct(); // Refresh the list
-            _selectedImage = null; // Reset the selected image
-          });
-        } else {
-          throw Exception('Failed to edit product');
-        }
-      });
-    } else {
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        setState(() {
-          futureProduct = fetchProduct(); // Refresh the list
-          _selectedImage = null; // Reset the selected image
-        });
-      } else {
-        throw Exception('Failed to edit product');
-      }
-    }
-  }
-
- void _pickImage() {
-  final input = html.FileUploadInputElement()..accept = 'image/*';
-  input.click();
-
-  input.onChange.listen((e) {
-    final files = input.files;
-    if (files!.isEmpty) return;
-    setState(() {
-      _selectedImage = files[0];
-    });
-  });
-}
-
-
-  void _showTableItemDialog({Map<String, dynamic>? item, int? index}) {
-    final _formKey = GlobalKey<FormState>();
-    final _nameController = TextEditingController(text: item?['name']);
-    final _descriptionController = TextEditingController(text: item?['description']);
-    final _priceController = TextEditingController(text: item?['price']?.toString());
-    final _categoryController = TextEditingController(text: item?['category']);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(item == null ? 'Add Item' : 'Edit Item'),
-          content: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Name'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the name';
-                      }
-                      if (value.length > 255) {
-                        return 'Name cannot exceed 255 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Description'),
-                    validator: (value) {
-                      if (value != null && value.length > 1000) {
-                        return 'Description cannot exceed 1000 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _priceController,
-                    decoration: InputDecoration(labelText: 'Price'),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid price';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _categoryController,
-                    decoration: InputDecoration(labelText: 'Category'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the category';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextButton(
-                    onPressed: _pickImage,
-                    child: Text('Select Image'),
-                  ),
-                  if (_selectedImage != null)
-                    Image.network(
-                      html.Url.createObjectUrlFromBlob(html.Blob([_selectedImage!.slice(0, _selectedImage!.size)])),
-                      height: 100,
-                    ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  final newItem = {
-                    'id': item?['id'] ?? 0,
-                    'name': _nameController.text,
-                    'description': _descriptionController.text,
-                    'price': double.parse(_priceController.text),
-                    'category': _categoryController.text,
-                    'is_available': true,
-                    'created_at': DateTime.now().toIso8601String(),
-                    'updated_at': DateTime.now().toIso8601String(),
-                  };
-
-                  if (item == null) {
-                    _saveTableItem(newItem);
-                  } else {
-                    _editTableItem(index!, newItem);
-                  }
-
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text(item == null ? 'Add' : 'Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Products"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              // Navigate to the image upload page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ImageUpload()),
+              );
+            },
+          ),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -326,10 +108,6 @@ class _ProductsPageState extends State<ProductsPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showTableItemDialog(),
-        child: Icon(Icons.add),
-      ),
     );
   }
 
@@ -351,7 +129,13 @@ class _ProductsPageState extends State<ProductsPage> {
             children: [
               IconButton(
                 icon: Icon(Icons.edit),
-                onPressed: () => _showTableItemDialog(item: item, index: item['id']),
+                onPressed: () {
+                  _nameController.text = item['name'];
+                  _descriptionController.text = item['description'];
+                  _priceController.text = item['price'].toString();
+                  _categoryController.text = item['category'];
+                  // You can add the logic to fetch and display the image here
+                },
               ),
               IconButton(
                 icon: Icon(Icons.delete),
@@ -364,3 +148,4 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 }
+
