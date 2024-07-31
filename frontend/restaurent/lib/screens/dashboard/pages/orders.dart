@@ -1,6 +1,8 @@
+import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class Order {
   final int id;
@@ -8,8 +10,12 @@ class Order {
   final String phoneNumber;
   final String deliveryAddress;
   final String paymentMethod;
+  final String? cardNumber;
+  final String? expiryDate;
+  final String? cvv;
   final double totalPrice;
   final bool isConfirmed;
+  final DateTime createdAt;
 
   Order({
     required this.id,
@@ -17,6 +23,10 @@ class Order {
     required this.phoneNumber,
     required this.deliveryAddress,
     required this.paymentMethod,
+    this.cardNumber,
+    this.expiryDate,
+    this.cvv,
+    required this.createdAt,
     required this.totalPrice,
     required this.isConfirmed,
   });
@@ -31,11 +41,11 @@ class Order {
       totalPrice: (json['total_price'] is String
           ? double.tryParse(json['total_price']) ?? 0.0
           : (json['total_price'] as num).toDouble()),
+      createdAt: DateTime.parse(json['created_at']),
       isConfirmed: json['is_confirmed'] == 1,
     );
   }
 }
-
 class OrderService {
   final String apiUrl = 'http://127.0.0.1:8000/api/orderss';
 
@@ -397,21 +407,31 @@ void _viewOrder(Order order) async {
   }
 }
 
-
-
 void _updateOrder(Order order) async {
   final _formKey = GlobalKey<FormState>();
   final _customerNameController = TextEditingController(text: order.customerName);
   final _phoneNumberController = TextEditingController(text: order.phoneNumber);
   final _deliveryAddressController = TextEditingController(text: order.deliveryAddress);
   final _paymentMethodController = TextEditingController(text: order.paymentMethod);
+  final _cardNumberController = TextEditingController(text: order.cardNumber ?? '');
+  final _expiryDateController = TextEditingController(text: order.expiryDate ?? '');
+  final _cvvController = TextEditingController(text: order.cvv ?? '');
   final _totalPriceController = TextEditingController(text: order.totalPrice.toString());
+  bool _isConfirmed = order.isConfirmed;
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Update Order ${order.id}'),
+        title: Center(
+          child: Column(
+            children: [
+              Icon(Icons.update, size: 36, color: Colors.blue),
+              SizedBox(height: 20),
+              Text("Update Order"),
+            ],
+          ),
+        ),
         content: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -421,75 +441,107 @@ void _updateOrder(Order order) async {
                 TextFormField(
                   controller: _customerNameController,
                   decoration: InputDecoration(labelText: 'Customer Name'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a customer name' : null,
                 ),
                 TextFormField(
                   controller: _phoneNumberController,
                   decoration: InputDecoration(labelText: 'Phone Number'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a phone number' : null,
                 ),
                 TextFormField(
                   controller: _deliveryAddressController,
                   decoration: InputDecoration(labelText: 'Delivery Address'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a delivery address' : null,
                 ),
                 TextFormField(
                   controller: _paymentMethodController,
                   decoration: InputDecoration(labelText: 'Payment Method'),
-                  validator: (value) => value!.isEmpty ? 'Please enter a payment method' : null,
+                ),
+                TextFormField(
+                  controller: _cardNumberController,
+                  decoration: InputDecoration(labelText: 'Card Number'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextFormField(
+                  controller: _expiryDateController,
+                  decoration: InputDecoration(labelText: 'Expiry Date'),
+                  keyboardType: TextInputType.datetime,
+                ),
+                TextFormField(
+                  controller: _cvvController,
+                  decoration: InputDecoration(labelText: 'CVV'),
+                  keyboardType: TextInputType.number,
                 ),
                 TextFormField(
                   controller: _totalPriceController,
                   decoration: InputDecoration(labelText: 'Total Price'),
                   keyboardType: TextInputType.number,
-                  validator: (value) => value!.isEmpty ? 'Please enter a total price' : null,
+                ),
+                SizedBox(height: 16),
+                CheckboxListTile(
+                  title: Text('Confirmed'),
+                  value: _isConfirmed,
+                  onChanged: (value) {
+                    setState(() {
+                      _isConfirmed = value!;
+                    });
+                  },
                 ),
               ],
             ),
           ),
         ),
         actions: [
-          ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                final updatedOrder = {
-                  'customer_name': _customerNameController.text,
-                  'phone_number': _phoneNumberController.text,
-                  'delivery_address': _deliveryAddressController.text,
-                  'payment_method': _paymentMethodController.text,
-                  'total_price': double.parse(_totalPriceController.text),
-                  // Assuming other fields are handled similarly
-                };
-
-                OrderService().updateOrder(order.id, updatedOrder).then((_) {
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(Icons.close, size: 14),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                onPressed: () {
                   Navigator.of(context).pop();
-                  setState(() {
-                    futureOrders = OrderService().fetchOrders(); // Refresh the list
-                  });
-                }).catchError((e) {
-                  print('Error updating order: $e');
-                });
-              }
-            },
-            child: Text('Update'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancel'),
+                },
+                label: Text("Cancel"),
+              ),
+              SizedBox(width: 20),
+              ElevatedButton.icon(
+                icon: Icon(Icons.update, size: 14),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final updatedOrder = {
+                      'customer_name': _customerNameController.text,
+                      'phone_number': _phoneNumberController.text,
+                      'delivery_address': _deliveryAddressController.text,
+                      'payment_method': _paymentMethodController.text,
+                      'card_number': _cardNumberController.text,
+                      'expiry_date': _expiryDateController.text,
+                      'cvv': _cvvController.text,
+                      'total_price': double.tryParse(_totalPriceController.text) ?? 0.0,
+                      'is_confirmed': _isConfirmed ? 1 : 0,
+                    };
+
+                    OrderService().updateOrder(order.id, updatedOrder).then((_) {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        futureOrders = OrderService().fetchOrders(); // Refresh the list
+                      });
+                    }).catchError((e) {
+                      print('Error updating order: $e');
+                    });
+                  }
+                },
+                label: Text("Update"),
+              ),
+            ],
           ),
         ],
       );
     },
   );
 }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Liste des Commandes'),
+        title: Text('Order List'),
       ),
       body: FutureBuilder<List<Order>>(
         future: futureOrders,
@@ -497,30 +549,66 @@ void _updateOrder(Order order) async {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur : ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucune commande disponible.'));
+            return Center(child: Text('No orders available.'));
           } else {
             return DataTable(
               columns: const [
-              
-                DataColumn(label: Text('Nom du Client')),
-                DataColumn(label: Text('Téléphone')),
-                DataColumn(label: Text('Adresse de Livraison')),
-                DataColumn(label: Text('Méthode de Paiement')),
-                DataColumn(label: Text('Prix Total')),
-                DataColumn(label: Text('État de la Commande')),
+                DataColumn(label: Text('Customer Name')),
+                DataColumn(label: Text('Phone')),
+                DataColumn(label: Text('Delivery Address')),
+                DataColumn(label: Text('Created At')),
+                DataColumn(label: Text('Payment Method')),
+                DataColumn(label: Text('Total Price')),
+                DataColumn(label: Text('Order Status')),
                 DataColumn(label: Text('Actions')),
               ],
               rows: snapshot.data!.map((order) {
                 return DataRow(
                   cells: [
-                 DataCell(Text(order.customerName)),
+                    DataCell(
+                      Row(
+                        children: [
+                          TextAvatar(
+                            size: 35,
+                            backgroundColor: Colors.white,
+                            textColor: Colors.white,
+                            fontSize: 14,
+                            upperCase: true,
+                            numberLetters: 1,
+                            shape: Shape.Rectangle,
+                            text: order.customerName,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              order.customerName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     DataCell(Text(order.phoneNumber)),
                     DataCell(Text(order.deliveryAddress)),
+                    DataCell(Text(DateFormat('yyyy-MM-dd HH:mm').format(order.createdAt))),
                     DataCell(Text(order.paymentMethod)),
-                    DataCell(Text('${order.totalPrice.toStringAsFixed(2)} €')),
-                    DataCell(Text(order.isConfirmed ? 'Confirmée' : 'Non Confirmée')),
+                    DataCell(Text('${order.totalPrice.toStringAsFixed(2)} dinars')),
+                    DataCell(
+                      ElevatedButton(
+                        onPressed: () {}, // Add functionality if needed
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: order.isConfirmed ? Colors.green : Colors.red,
+                          minimumSize: Size(100, 36), // Adjust size as needed
+                        ),
+                        child: Text(
+                          order.isConfirmed ? 'Confirmed' : 'Cancelled',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
                     DataCell(
                       Row(
                         children: [

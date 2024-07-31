@@ -7,7 +7,7 @@ import 'package:restaurent/screens/dashboard/pages/orders.dart';
 import 'package:restaurent/screens/dashboard/pages/payement.dart';
 import 'package:restaurent/screens/dashboard/pages/products.dart';
 import 'package:restaurent/screens/dashboard/pages/reserve.dart';
-import 'package:restaurent/screens/dashboard/pages/staff.dart';
+
 import 'package:restaurent/screens/dashboard/pages/tables.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -114,14 +114,7 @@ class SideMenu extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => MenuPage()),
               );},
             ),
-            DrawerListTile(
-              title: "Staff",
-              icon: Icons.people,
-              press: () { Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StaffPage()),
-              );},
-            ),
+          
               DrawerListTile(
               title: "products",
               icon: Icons.food_bank,

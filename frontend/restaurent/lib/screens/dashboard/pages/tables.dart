@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:restaurent/core/constants/color_constants.dart';
 
 // Modèle de TableItem
 class TableItem {
@@ -248,62 +250,112 @@ class _TablesPageState extends State<TablesPage> {
   }
 
   // Méthode build de l'interface utilisateur
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Table Management"),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text("Table Management"),
+    ),
+    body: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: DataTable(
+        columns: [
+          DataColumn(label: Text('Name')),
+          DataColumn(label: Text('Capacity')),
+          DataColumn(label: Text('Position')),
+          DataColumn(label: Text('Availability')),
+          DataColumn(label: Text('Created At')),
+          DataColumn(label: Text('Updated At')),
+          DataColumn(label: Text('Actions')),
+        ],
+        rows: _tableItems.map((item) => DataRow(cells: [
+          DataCell(Text(item.name)),
+          DataCell(Text(item.capacity.toString())),
+          DataCell(Text(item.position)),
+          DataCell(Container(
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            decoration: BoxDecoration(
+              color: item.availability ? Colors.green : Colors.red,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              item.availability ? 'Available' : 'Not Available',
+              style: TextStyle(color: Colors.white),
+            ),
+          )),
+          DataCell(Text(DateFormat('yyyy-MM-dd HH:mm').format(item.createdAt))),
+          DataCell(Text(DateFormat('yyyy-MM-dd HH:mm').format(item.updatedAt))),
+          DataCell(Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.green),
+                onPressed: () => _showTableItemDialog(item: item, index: _tableItems.indexOf(item)),
+              ),
+              SizedBox(width: 6),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.redAccent),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.warning_outlined, size: 36, color: Colors.red),
+                              SizedBox(height: 20),
+                              Text("Confirm Deletion"),
+                            ],
+                          ),
+                        ),
+                        content: Container(
+                          height: 70,
+                          child: Column(
+                            children: [
+                              Text("Are you sure you want to delete this item?"),
+                              SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.close, size: 14),
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    label: Text("Cancel"),
+                                  ),
+                                  SizedBox(width: 20),
+                                  ElevatedButton.icon(
+                                    icon: Icon(Icons.delete, size: 14),
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                    onPressed: () {
+                                      _deleteTableItem(_tableItems.indexOf(item));
+                                      Navigator.of(context).pop(); // Ferme le dialogue
+                                    },
+                                    label: Text("Delete"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          )),
+        ])).toList(),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: DataTable(
-          columns: [
-            DataColumn(label: Text('Name')),
-            DataColumn(label: Text('Capacity')),
-            DataColumn(label: Text('Position')),
-            DataColumn(label: Text('Availability')),
-            DataColumn(label: Text('Created At')),
-            DataColumn(label: Text('Updated At')),
-            DataColumn(label: Text('Actions')),
-          ],
-          rows: _tableItems
-              .map((item) => DataRow(cells: [
-                    DataCell(Text(item.name)),
-                    DataCell(Text(item.capacity.toString())),
-                    DataCell(Text(item.position)),
-                    DataCell(Text(item.availability ? 'Available' : 'Not Available')),
-                    DataCell(Text(item.createdAt.toString())),
-                    DataCell(Text(item.updatedAt.toString())),
-                    DataCell(Row(
-                      children: [
-                      IconButton(
-  icon: Icon(
-    Icons.edit,
-    color: Colors.green, // Définir la couleur de l'icône en rouge
-  ),
-     onPressed: () => _showTableItemDialog(item: item, index: _tableItems.indexOf(item)),
-),
-
-                       IconButton(
-  icon: Icon(
-    Icons.delete,
-    color: Colors.red, // Définir la couleur de l'icône en rouge
-  ),
-  onPressed: () => _deleteTableItem(_tableItems.indexOf(item)),
-),
-
-                      ],
-                    )),
-                  ]))
-              .toList(),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showTableItemDialog(),
-        child: Icon(Icons.add),
-      ),
-    );
-  }
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () => _showTableItemDialog(),
+      child: Icon(Icons.add),
+    ),
+  );
+}
 }
 
 void main() {

@@ -2,6 +2,7 @@
 import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/init/provider_list.dart';
+import 'package:restaurent/screens/dashboard/pages/image.dart';
 
 
 import 'package:restaurent/screens/login/login_screen.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
-      home:LoginPage(),
+      home:ImageUpload (),
     );
   }
 }
