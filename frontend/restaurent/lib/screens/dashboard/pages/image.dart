@@ -47,7 +47,7 @@ class _ImageUploadState extends State<ImageUpload> {
             'description': _descriptionController.text,
             'price': double.parse(_priceController.text),
             'category': _categoryController.text,
-            'image': _imageDataUrl,
+            'image': 'data:image/png;base64,$_imageDataUrl',
             'is_available': _isAvailable ? 1 : 0,
           }),
         );
