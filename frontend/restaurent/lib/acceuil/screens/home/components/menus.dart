@@ -255,85 +255,79 @@ Widget build(BuildContext context) {
                     'Products in Cart: $productCounter',
                     style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: selectedProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = selectedProducts[index];
-                        return ListTile(
-                          leading: ClipOval(
-                            child: product['image'] != null
-                                ? Image.network(
-                                    product['image'],
-                                    height: 50,
-                                    width: 50,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    height: 50,
-                                    width: 50,
-                                    color: Colors.grey,
-                                    child: Icon(Icons.image_not_supported, size: 24, color: Colors.white),
-                                  ),
-                          ),
-                          title: Text(product['name'], style: TextStyle(color: Colors.white)),
-                          subtitle: Text('Price: ${product['price']}', style: TextStyle(color: Colors.white)),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.remove, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    if (product['quantity'] > 1) {
-                                      product['quantity']--;
-                                    } else {
-                                      selectedProducts.removeAt(index);
-                                    }
-                                    productCounter = selectedProducts.length;
-                                    totalPrice = selectedProducts.fold(
-                                      0.0,
-                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
-                                    );
-                                  });
-                                },
-                              ),
-                              Text(
-                                (product['quantity'] ?? 1).toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    product['quantity'] = (product['quantity'] ?? 1) + 1;
-                                    totalPrice = selectedProducts.fold(
-                                      0.0,
-                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
-                                    );
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedProducts.removeAt(index);
-                                    productCounter = selectedProducts.length;
-                                    totalPrice = selectedProducts.fold(
-                                      0.0,
-                                      (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
-                                    );
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                 Expanded(
+  child: ListView.builder(
+    itemCount: selectedProducts.length,
+    itemBuilder: (context, index) {
+      final product = selectedProducts[index];
+      return ListTile(
+        leading: product['image'] != null
+            ? Image.network(
+                'http://127.0.0.1:8000${product['image']}',
+                height: 500,
+                width: 200,
+               
+              )
+            : Text('No Image'),
+        title: Text(product['name'], style: TextStyle(color: Colors.white)),
+        subtitle: Text('Price: ${product['price']}', style: TextStyle(color: Colors.white)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  if (product['quantity'] > 1) {
+                    product['quantity']--;
+                  } else {
+                    selectedProducts.removeAt(index);
+                  }
+                  productCounter = selectedProducts.length;
+                  totalPrice = selectedProducts.fold(
+                    0.0,
+                    (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                  );
+                });
+              },
+            ),
+            Text(
+              (product['quantity'] ?? 1).toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  product['quantity'] = (product['quantity'] ?? 1) + 1;
+                  totalPrice = selectedProducts.fold(
+                    0.0,
+                    (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                  );
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                setState(() {
+                  selectedProducts.removeAt(index);
+                  productCounter = selectedProducts.length;
+                  totalPrice = selectedProducts.fold(
+                    0.0,
+                    (sum, product) => sum + (double.tryParse(product['price'] ?? '0.0') ?? 0.0) * (product['quantity'] ?? 1),
+                  );
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  ),
+),
+
+                  
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -415,35 +409,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5),
-              topRight: Radius.circular(5),
-            ),
-            child: item['image'] != null
-                ? Image.network(
-  item['image'] ?? '',
-  height: 150,
-  width: double.infinity,
-  fit: BoxFit.cover,
-  errorBuilder: (context, error, stackTrace) {
-    return Center(child: Icon(Icons.image_not_supported, size: 50));
-  },
-  loadingBuilder: (context, child, progress) {
-    if (progress == null) {
-      return child;
-    } else {
-      return Center(child: CircularProgressIndicator());
-    }
-  },
-)
-                : Container(
-                    height: 150,
-                    width: double.infinity,
-                    color: Colors.grey,
-                    child: Icon(Icons.image_not_supported),
-                  ),
-          ),
+         
           Container(
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 33, 33, 34),
@@ -463,6 +429,15 @@ class ProductCard extends StatelessWidget {
                   minFontSize: 14,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
+                 SizedBox(height: 16),
+                                item['image'] != null
+                                    ? Image.network(
+                                        'http://127.0.0.1:8000${item['image']}',
+                                        height: 200,
+                                        width: 300,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Text('No Image'),
                 SizedBox(height: 5),
                 AutoSizeText(
                   'Price: ${item['price'].toString()}',
@@ -478,10 +453,70 @@ class ProductCard extends StatelessWidget {
                       icon: Icon(Icons.shopping_cart, color: Colors.green),
                       onPressed: onAddToCart,
                     ),
-                    IconButton(
-                      icon: Icon(Icons.visibility, color: Colors.blue),
-                      onPressed: onView,
-                    ),
+                   IconButton(
+                  icon: Icon(Icons.visibility, color: Colors.green),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  item['name'] ?? '',
+                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 16),
+                                item['image'] != null
+                                    ? Image.network(
+                                        'http://127.0.0.1:8000${item['image']}',
+                                        height: 200,
+                                        width: 300,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Text('No Image'),
+                                SizedBox(height: 16),
+                                Text(
+                                  'Description: ${item['description'] ?? ''}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Price: ${item['price'] ?? '0.0'}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Category: ${item['category'] ?? ''}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Created At: ${item['created_at'] ?? ''}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Updated At: ${item['updated_at'] ?? ''}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Close'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
                   ],
                 ),
               ],

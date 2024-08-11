@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import '../../../constants.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Products extends StatelessWidget {
   const Products({
@@ -30,8 +32,8 @@ class Products extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      product.image,
+                    child: Image.network(
+                      'http://127.0.0.1:8000${product.image}',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -48,7 +50,6 @@ class Products extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                    
                       IconButton(
                         onPressed: () {
                           // Action à effectuer lorsqu'on clique sur l'icône du panier
@@ -64,5 +65,53 @@ class Products extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  // Exemple de liste de produits
+  final List<Product> products;
+
+  const ProductCard({Key? key, required this.products}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        final product = products[index];
+        return Products(
+          product: product,
+          press: () {
+            // Action à effectuer lorsqu'on clique sur le produit
+          },
+        );
+      },
+    );
+  }
+}
+class Product {
+  final String image;
+  final String title;
+
+  Product({required this.image, required this.title});
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      image: json['image'],
+      title: json['title'],
+    );
+  }
+}
+
+// Fonction pour obtenir les produits depuis l'API
+Future<List<Product>> fetchProducts() async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/products'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> data = json.decode(response.body);
+    return data.map((json) => Product.fromJson(json)).toList();
+  } else {
+    throw Exception('Failed to load products');
   }
 }

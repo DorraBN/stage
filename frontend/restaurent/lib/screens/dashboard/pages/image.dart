@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -11,14 +10,17 @@ class ImageUpload extends StatefulWidget {
 
 class _ImageUploadState extends State<ImageUpload> {
   final _addFormKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _priceController = TextEditingController();
-  final _categoryController = TextEditingController();
-  bool _isAvailable = false;
+  final _titleController = TextEditingController();
   XFile? _pickedFile;
-  String? _imageDataUrl; // Storage for the base64 image data
+  String? _imageDataUrl;
   final picker = ImagePicker();
+  late Future<List<dynamic>> _images;
+
+  @override
+  void initState() {
+    super.initState();
+    _images = _fetchImages();
+  }
 
   Future<void> getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -35,160 +37,154 @@ class _ImageUploadState extends State<ImageUpload> {
   }
 
   Future<void> _uploadImage() async {
-    if (_addFormKey.currentState!.validate() && _imageDataUrl != null) {
+    if (_addFormKey.currentState?.validate() ?? false) {
       try {
         final response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/api/productss'),
+          Uri.parse('http://127.0.0.1:8000/api/imageadd'),
           headers: <String, String>{
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'name': _nameController.text,
-            'description': _descriptionController.text,
-            'price': double.parse(_priceController.text),
-            'category': _categoryController.text,
-            'image': 'data:image/png;base64,$_imageDataUrl',
-            'is_available': _isAvailable ? 1 : 0,
+            'title': _titleController.text,
+            'image': _imageDataUrl,
           }),
         );
 
         if (response.statusCode == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Product added successfully')),
+            SnackBar(content: Text('Image added successfully')),
           );
+          setState(() {
+            _images = _fetchImages();
+          });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to add product')),
+            SnackBar(content: Text('Failed to add image: ${response.reasonPhrase}')),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred: $e')),
+          SnackBar(content: Text('Failed to add image: $e')),
         );
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image and fill in all fields')),
-      );
     }
   }
 
-  Widget _buildImage() {
-    if (_imageDataUrl == null) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(
-          Icons.add,
-          color: Colors.grey,
-        ),
-      );
-    } else {
-      return Image.memory(
-        base64Decode(_imageDataUrl!),
-        height: 150,
-        width: 150,
-        fit: BoxFit.cover,
-      );
+ Future<List<dynamic>> _fetchImages() async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/images'));
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+
+    // Vérifier si jsonData est null ou si la liste est vide
+    if (jsonData == null) {
+      return []; // Retourner une liste vide si jsonData est null
     }
+
+    if (jsonData is Map<String, dynamic>) {
+      return jsonData['data'] as List<dynamic>? ?? [];
+    }
+
+    if (jsonData is List<dynamic>) {
+      return jsonData;
+    }
+
+    throw Exception('Unexpected JSON format');
+  } else {
+    throw Exception('Failed to load images');
+  }
+}
+
+  Widget _buildImageList(List<dynamic> images) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: images.length,
+      itemBuilder: (context, index) {
+        final image = images[index];
+        final title = image['title'] ?? 'No Title';
+        final imageUrl = 'http://127.0.0.1:8000' + image['url'];
+
+        return ListTile(
+          title: Text(title),
+          leading: Image.network(imageUrl, width: 50, height: 50, fit: BoxFit.cover),
+        );
+      },
+    );
+  }
+
+  Widget _buildImage() {
+    return _pickedFile != null
+        ? Image.memory(
+            base64Decode(_imageDataUrl!),
+            width: 100,
+            height: 100,
+          )
+        : Text('No image selected');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text('Add Images'),
       ),
       body: Form(
         key: _addFormKey,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Name'),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Name',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter name';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('Description'),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Description',
-                      ),
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('Price'),
-                    TextFormField(
-                      controller: _priceController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Price',
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter price';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('Category'),
-                    TextFormField(
-                      controller: _categoryController,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter Category',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter category';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Text('Availability'),
-                        Switch(
-                          value: _isAvailable,
-                          onChanged: (value) {
-                            setState(() {
-                              _isAvailable = value;
-                            });
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Image Title'),
+                        TextFormField(
+                          controller: _titleController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter Title',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter title';
+                            }
+                            return null;
                           },
+                        ),
+                        SizedBox(height: 16),
+                        OutlinedButton(
+                          onPressed: getImage,
+                          child: _buildImage(),
+                        ),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _uploadImage,
+                          child: Text('Save'),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
-                    OutlinedButton(
-                      onPressed: getImage,
-                      child: _buildImage(),
-                    ),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _uploadImage,
-                      child: Text('Save'),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(height: 16),
+                FutureBuilder<List<dynamic>>(
+                  future: _images,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Failed to load images: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No images found'));
+                    } else {
+                      return _buildImageList(snapshot.data!);
+                    }
+                  },
+                ),
+              ],
             ),
           ),
         ),
