@@ -46,6 +46,15 @@ class Products extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
+                AutoSizeText(
+                  '\$${product.price.toStringAsFixed(2)}', // Formatage du prix avec 2 décimales
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green, // Couleur du texte du prix
+                  ),
+                ),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

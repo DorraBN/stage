@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:table_calendar/table_calendar.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Reserve extends StatefulWidget {
   const Reserve({Key? key}) : super(key: key);
@@ -102,48 +103,7 @@ class _ReserveState extends State<Reserve> {
                 ),
               ),
             ),
-            SizedBox(width: defaultPadding),
-            Container(
-              padding: EdgeInsets.all(defaultPadding),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 46, 45, 45),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              width: 330, // Fixed width for the calendar container
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Calendar",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: TableCalendar(
-                      focusedDay: _selectedDay,
-                      firstDay: DateTime.utc(2020, 01, 01),
-                      lastDay: DateTime.utc(2100, 12, 31),
-                      selectedDayPredicate: (day) {
-                        return isSameDay(_selectedDay, day);
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          
           ],
         ),
       ),
@@ -165,7 +125,7 @@ class _ReserveState extends State<Reserve> {
         statusColor = Colors.orange;
         break;
       default:
-        statusColor = Colors.grey;
+        statusColor = Colors.green;
     }
 
     return DataRow(
@@ -547,6 +507,17 @@ class _ReserveState extends State<Reserve> {
                     },
                   );
                 },
+              ), IconButton(
+                icon: Icon(Icons.email, color: Colors.pink),
+                onPressed: () async {
+                  try {
+                    await _sendEmail(reservation['email']?.toString() ?? '');
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Could not send email: $e')),
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -554,7 +525,22 @@ class _ReserveState extends State<Reserve> {
       ],
     );
   }
+  Future<void> _sendEmail(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      queryParameters: {
+        'subject': 'Reservation Details',
+        'body': 'Dear customer, \n\nHere are the details of your reservation...'
+      },
+    );
 
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      throw 'Could not launch $emailUri';
+    }
+  }
   Future<List<Map<String, dynamic>>> fetchReservations() async {
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/showreserves'));
 

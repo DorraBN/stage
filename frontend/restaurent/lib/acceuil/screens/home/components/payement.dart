@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
@@ -75,7 +76,7 @@ Widget build(BuildContext context) {
         SizedBox(width: 8),
         Expanded(
           child: Text(
-            '${product['name']} - $quantity x \$${product['price']}',
+            '${product['name']} - $quantity x ${product['price']} dinars',
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -371,38 +372,131 @@ Widget build(BuildContext context) {
     );
   }
 
+
 void _exportAsPdf() async {
   final pdf = pw.Document();
 
+  // Remplacez 'assets/logo.png' par le chemin de votre image de logo
+  final logoImage = pw.MemoryImage(
+    (await rootBundle.load('../../../.././assets/images/logo.jpg')).buffer.asUint8List(),
+  );
+
   pdf.addPage(
     pw.Page(
-      build: (pw.Context context) => pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
+      build: (pw.Context context) => pw.Stack(
         children: [
-          pw.Text('Restaurant Delivery Confirmation', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 20),
-          pw.Text('Customer Name: ${_nameController.text}'),
-          pw.Text('Phone Number: ${_phoneController.text}'),
-          pw.Text('Delivery Address: ${_addressController.text}'),
-          pw.SizedBox(height: 20),
-          pw.Text('Order Details:', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 10),
-          ...widget.selectedProducts.map((product) {
-            int quantity = product['quantity'] ?? 1;
-            return pw.Text('${product['name']} - $quantity x \$${product['price']}');
-          }).toList(),
-          pw.SizedBox(height: 20),
-          pw.Text('Total Price: ${widget.totalPrice.toStringAsFixed(2)} Dinars', style: pw.TextStyle(color: PdfColors.red)),
-          pw.SizedBox(height: 20),
-          pw.Text('Payment Method: $_paymentMethod'),
-          if (_paymentMethod == 'Credit Card') ...[
-            pw.SizedBox(height: 20),
-            pw.Text('Card Number: ${_cardNumberController.text}'),
-            pw.Text('Expiry Date: ${_expiryDateController.text}'),
-            pw.Text('CVV: ${_cvvController.text}'),
-          ],
-          pw.SizedBox(height: 20),
-          pw.Text('Delivery Date: ${DateTime.now()}'),
+          // Cadre décoré
+          pw.Positioned(
+            left: 10,
+            top: 10,
+            right: 10,
+            bottom: 10,
+            child: pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.blue, width: 4), // Cadre épais bleu
+                borderRadius: pw.BorderRadius.circular(15), // Coins arrondis
+                // Ajoutez des motifs ou des décorations supplémentaires si nécessaire
+              ),
+              padding: pw.EdgeInsets.all(20),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  // Logo centré
+                  pw.Align(
+                    alignment: pw.Alignment.topCenter,
+                    child: pw.Image(logoImage, width: 100), // Ajustez la taille du logo si nécessaire
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Restaurant Delivery Confirmation',
+                    style: pw.TextStyle(
+                      fontSize: 24,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Customer Name: ${_nameController.text}',
+                  ),
+                  pw.Text(
+                    'Phone Number: ${_phoneController.text}',
+                  ),
+                  pw.Text(
+                    'Delivery Address: ${_addressController.text}',
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Order Details:',
+                    style: pw.TextStyle(
+                      fontSize: 20,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.black,
+                    ),
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: widget.selectedProducts.map((product) {
+                      int quantity = product['quantity'] ?? 1;
+                      return pw.Text(
+                        '${product['name']} - $quantity x ${product['price']} dinars',
+                      );
+                    }).toList(),
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Total Price: ${widget.totalPrice.toStringAsFixed(2)} Dinars',
+                    style: pw.TextStyle(color: PdfColors.red),
+                  ),
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Payment Method: $_paymentMethod',
+                  ),
+                  if (_paymentMethod == 'Credit Card') ...[
+                    pw.SizedBox(height: 20),
+                    pw.Text(
+                      'Card Number: ${_cardNumberController.text}',
+                    ),
+                    pw.Text(
+                      'Expiry Date: ${_expiryDateController.text}',
+                    ),
+                    pw.Text(
+                      'CVV: ${_cvvController.text}',
+                    ),
+                  ],
+                  pw.SizedBox(height: 20),
+                  pw.Text(
+                    'Delivery Date: ${DateTime.now()}',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Adresse et numéro de téléphone du restaurant en bas à droite
+          pw.Positioned(
+            bottom: 20,
+            right: 20,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              children: [
+                pw.Text(
+                  'Restaurant Address: 123 Restaurant St, City, Country',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    color: PdfColors.black,
+                  ),
+                ),
+                pw.Text(
+                  'Phone Number: +123 456 7890',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                    color: PdfColors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ),
@@ -418,8 +512,8 @@ void _exportAsPdf() async {
   }
 }
 
-  void _exportAsExcel() {
-    // Implémentez ici votre logique d'exportation en Excel
-    print('Export as Excel');
-  }
+void _exportAsExcel() {
+  // Implémentez ici votre logique d'exportation en Excel
+  print('Export as Excel');
+}
 }

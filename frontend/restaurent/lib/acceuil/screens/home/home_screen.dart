@@ -7,6 +7,7 @@ import 'package:restaurent/acceuil/screens/home/components/footer.dart';
 import 'package:restaurent/acceuil/screens/home/components/header.dart';
 import 'package:restaurent/acceuil/screens/home/components/menus.dart';
 import 'package:restaurent/acceuil/screens/home/menu/meals.dart';
+import 'package:restaurent/post.dart';
 import 'package:restaurent/screens/login/login_screen.dart';
 import 'components/body.dart';
 import 'components/menu.dart';
@@ -54,6 +55,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               BodyContainer(),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  
+                  constraints: BoxConstraints(maxHeight: 530),
+                  
+                  child: MyApp1(),
+                ),
+              ),
               Container(
                 padding: EdgeInsets.all(0), // Adjust inner padding as needed
                 constraints: BoxConstraints(maxWidth: 750),
@@ -96,7 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+               
               SizedBox(height: 80),
+              
               Footer(),
             ],
           ),

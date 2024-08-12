@@ -56,7 +56,8 @@ dependencies:
   pdf: ^3.11.0
   printing: ^5.13.1
   pdfx: ^2.6.0
- 
+  barcode_scan2: ^4.0.0
+  qr_flutter: ^4.1.0
   http: ^1.0.0
 dev_dependencies:
   flutter_test:
