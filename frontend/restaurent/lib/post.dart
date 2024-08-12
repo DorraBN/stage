@@ -1,162 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 
 void main() {
-  runApp(Posts());
+  runApp(ConvertToPdfPage());
 }
 
-class Posts extends StatelessWidget {
+class ConvertToPdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Post Image App',
+      title: 'Flutter PDF Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PostImagePage(),
+      home: MyHomePage(),
     );
   }
 }
 
-class PostImagePage extends StatefulWidget {
-  @override
-  _PostImagePageState createState() => _PostImagePageState();
-}
-
-class _PostImagePageState extends State<PostImagePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _bodyController = TextEditingController();
-  final _imageUrlController = TextEditingController();
-
-  List<dynamic> posts = [];
-
-  Future<void> fetchPosts() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/postss'); // Remplacez par votre URL d'API
-
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        posts = json.decode(response.body);
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to fetch posts')),
-      );
-    }
-  }
-
-  Future<void> createPost(String body, String imageUrl) async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/posts'); // Remplacez par votre URL d'API
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'body': body,
-        'user_id': 1, // Utilisateur fixe pour cet exemple
-        'image': imageUrl, // Envoyer l'URL de l'image
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      fetchPosts(); // Rafraîchir la liste des posts après en avoir créé un
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Post created successfully')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create post')),
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPosts(); // Récupérer les posts au démarrage
-  }
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create and View Posts'),
+        title: Text('Create PDF Example'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _bodyController,
-                    decoration: InputDecoration(labelText: 'Body'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _imageUrlController,
-                    decoration: InputDecoration(labelText: 'Image URL'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter an image URL';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        createPost(_bodyController.text, _imageUrlController.text);
-                      }
-                    },
-                    child: Text('Create Post'),
-                  ),
-                ],
-              ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'This is some content that will be saved as a PDF.',
+              style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: ListTile(
-                      leading: Image.network(
-                        post['image'] ?? '',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Text(post['body']),
+            ElevatedButton(
+              onPressed: () async {
+                final pdf = pw.Document();
+
+                pdf.addPage(
+                  pw.Page(
+                    build: (pw.Context context) => pw.Center(
+                      child: pw.Text('Hello World! This is a PDF document.'),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+
+                // Save the PDF to a file
+                await Printing.sharePdf(
+                    bytes: await pdf.save(), filename: 'my_document.pdf');
+              },
+              child: Text('Convert to PDF'),
             ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _bodyController.dispose();
-    _imageUrlController.dispose();
-    super.dispose();
   }
 }

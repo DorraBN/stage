@@ -9,7 +9,19 @@ import 'package:restaurent/acceuil/model.dart/responsive.dart';
 import 'package:restaurent/acceuil/screens/home/menu/menupage.dart';
 
 import '../../../constants.dart' as my_constants; 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
+Future<List<Product>> fetchProducts() async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/products'));
+
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body);
+    return jsonResponse.map((data) => Product.fromJson(data)).toList();
+  } else {
+    throw Exception('Failed to load products');
+  }
+}
 class BodyContainer extends StatelessWidget {
   const BodyContainer({
     Key? key,
@@ -24,7 +36,7 @@ class BodyContainer extends StatelessWidget {
         children: [
           Container(
             height: 500,
-            width: double.infinity, // Make sure the container takes the full width available
+            width: double.infinity,
             child: AboutUsPage(),
           ),
           Container(
@@ -84,6 +96,7 @@ class BodyContainer extends StatelessWidget {
     );
   }
 }
+
 
 
 
@@ -236,19 +249,32 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxiscount,
-        childAspectRatio: aspectRatio,
-      ),
-      itemBuilder: (context, index) => Products(
-        press: () {},
-        product: products[index],
-      ),
-      itemCount: products.length,
+    return FutureBuilder<List<Product>>(
+      future: fetchProducts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No products available'));
+        } else {
+          final products = snapshot.data!;
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxiscount,
+              childAspectRatio: aspectRatio,
+            ),
+            itemBuilder: (context, index) => Products(
+              press: () {},
+              product: products[index],
+            ),
+            itemCount: products.length,
+          );
+        }
+      },
     );
   }
 }
-

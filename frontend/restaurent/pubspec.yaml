@@ -49,12 +49,15 @@ dependencies:
   auto_size_text: ^3.0.0
   url_launcher: ^6.3.0
   google_maps_flutter: ^2.7.0
-  http: 1.2.1
+ 
   mime: ^1.0.5
   image_picker: ^1.1.2
   excel: ^4.0.3
   pdf: ^3.11.0
   printing: ^5.13.1
+  pdfx: ^2.6.0
+ 
+  http: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
