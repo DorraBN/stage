@@ -3,7 +3,6 @@ import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/acceuil/screens/home/home_screen.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/init/provider_list.dart';
-import 'package:restaurent/post.dart';
 
 
 
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
-      home:ConvertToPdfPage(),
+      home:HomeScreen(),
     );
   }
 }

@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 class PaymentPage extends StatefulWidget {
   final List<Map<String, dynamic>> selectedProducts;
   final double totalPrice;
@@ -366,10 +371,52 @@ Widget build(BuildContext context) {
     );
   }
 
-  void _exportAsPdf() {
-    // Implémentez ici votre logique d'exportation en PDF
-    print('Export as PDF');
+void _exportAsPdf() async {
+  final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) => pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text('Restaurant Delivery Confirmation', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
+          pw.SizedBox(height: 20),
+          pw.Text('Customer Name: ${_nameController.text}'),
+          pw.Text('Phone Number: ${_phoneController.text}'),
+          pw.Text('Delivery Address: ${_addressController.text}'),
+          pw.SizedBox(height: 20),
+          pw.Text('Order Details:', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
+          pw.SizedBox(height: 10),
+          ...widget.selectedProducts.map((product) {
+            int quantity = product['quantity'] ?? 1;
+            return pw.Text('${product['name']} - $quantity x \$${product['price']}');
+          }).toList(),
+          pw.SizedBox(height: 20),
+          pw.Text('Total Price: ${widget.totalPrice.toStringAsFixed(2)} Dinars', style: pw.TextStyle(color: PdfColors.red)),
+          pw.SizedBox(height: 20),
+          pw.Text('Payment Method: $_paymentMethod'),
+          if (_paymentMethod == 'Credit Card') ...[
+            pw.SizedBox(height: 20),
+            pw.Text('Card Number: ${_cardNumberController.text}'),
+            pw.Text('Expiry Date: ${_expiryDateController.text}'),
+            pw.Text('CVV: ${_cvvController.text}'),
+          ],
+          pw.SizedBox(height: 20),
+          pw.Text('Delivery Date: ${DateTime.now()}'),
+        ],
+      ),
+    ),
+  );
+
+  try {
+    final pdfFile = await pdf.save();
+
+    // Share or save the PDF
+    await Printing.sharePdf(bytes: pdfFile, filename: 'restaurant_delivery_confirmation.pdf');
+  } catch (e) {
+    print('Error generating PDF: $e');
   }
+}
 
   void _exportAsExcel() {
     // Implémentez ici votre logique d'exportation en Excel
