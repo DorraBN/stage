@@ -386,19 +386,38 @@ class _ReserveState extends State<Reserve> {
                           child: Column(
                             children: [
                               Icon(Icons.update, size: 36, color: Colors.blue),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Text("Update Reservation"),
                             ],
                           ),
                         ),
                         content: Container(
                           color: secondaryColor,
-                          height: 200,
+                          height: 500,
+                          width: 300,
                           child: Column(
                             children: [
                               Text(
                                   "Update reservation for '${reservation['name'] ?? ''}':"),
                               SizedBox(height: 16),
+                                Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "Customer name",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                                Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "Number of person",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                 child: TextField(
@@ -413,6 +432,15 @@ class _ReserveState extends State<Reserve> {
                                 child: TextField(
                                   decoration: InputDecoration(
                                     labelText: "New Reservation Time",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                               Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    labelText: "status",
                                     border: OutlineInputBorder(),
                                   ),
                                 ),

@@ -1,5 +1,6 @@
 
 import 'package:restaurent/acceuil/screens/home/components/login.dart';
+import 'package:restaurent/acceuil/screens/home/home_screen.dart';
 
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/core/init/provider_list.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/home/home_screen.dart';
 
 
 

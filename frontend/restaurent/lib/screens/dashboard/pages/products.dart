@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/screens/dashboard/pages/images.dart';
@@ -197,18 +198,26 @@ class _ProductsPageState extends State<ProductsPage> {
             child: Text(item['category'] ?? ''),
           ),
         ),
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
-            child: Text(item['created_at'] ?? ''),
-          ),
-        ),
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
-            child: Text(item['updated_at'] ?? ''),
-          ),
-        ),
+          DataCell(
+  Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      item['created_at'] != null
+          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['created_at']))
+          : '',
+    ),
+  ),
+),
+DataCell(
+  Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      item['updated_at'] != null
+          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['updated_at']))
+          : '',
+    ),
+  ),
+),
         DataCell(
           Padding(
             padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du conteneur
@@ -271,12 +280,16 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Created At: ${item['created_at'] ?? ''}',
+                                   item['created_at'] != null
+          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['created_at']))
+          : '',
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  'Updated At: ${item['updated_at'] ?? ''}',
+                                    item['updated_at'] != null
+          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['updated_at']))
+          : '',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
