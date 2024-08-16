@@ -36,6 +36,7 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
+
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -173,7 +174,6 @@ class Body extends StatelessWidget {
                     onTap: () {
                       print(MediaQuery.of(context).size.width);
                     },
-                    
                     child: Text(
                       "Sign in here!",
                       style: TextStyle(
@@ -221,15 +221,16 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),  style: TextStyle(color: Colors.black),
+          ),
+          style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 30),
         TextField(
           controller: emailController,
           decoration: InputDecoration(
-            hintText: 'Enter email ',
+            hintText: 'Enter Email',
             filled: true,
-            fillColor:  const Color.fromARGB(255, 77, 77, 78),
+            fillColor: const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -240,15 +241,16 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),  style: TextStyle(color: Colors.black),
+          ),
+          style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 30),
         TextField(
           controller: phoneController,
           decoration: InputDecoration(
-            hintText: 'Enter Phone number',
+            hintText: 'Enter Phone',
             filled: true,
-            fillColor:  const Color.fromARGB(255, 77, 77, 78),
+            fillColor: const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -259,20 +261,16 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),  style: TextStyle(color: Colors.black),
+          ),
+          style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 30),
         TextField(
           controller: passwordController,
           decoration: InputDecoration(
             hintText: 'Password',
-            counterText: 'Forgot password?',
-            suffixIcon: Icon(
-              Icons.visibility_off_outlined,
-              color: Colors.grey,
-            ),
             filled: true,
-            fillColor:  const Color.fromARGB(255, 77, 77, 78),
+            fillColor: const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -283,136 +281,70 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
-          ),  style: TextStyle(color: Colors.black),
-        ),
-        SizedBox(height: 40),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 183, 116, 58),
-                spreadRadius: 10,
-                blurRadius: 20,
-              ),
-            ],
           ),
-          child: ElevatedButton(
-            onPressed: () {
-              registerUser(
-                nameController.text,
-                emailController.text,
-                phoneController.text,
-                passwordController.text,
+          style: TextStyle(color: Colors.black),
+        ),
+        SizedBox(height: 30),
+        GestureDetector(
+          onTap: () async {
+            var response = await _registerUser(
+              nameController.text,
+              emailController.text,
+              phoneController.text,
+              passwordController.text,
+            );
+            if (response['status'] == true) {
+              Navigator.push(
                 context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
-            },
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              child: Center(child: Text("Register")),
+            } else {
+              // Show error message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(response['message'] ?? 'Registration failed')),
+              );
+            }
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 183, 118, 58),
+              borderRadius: BorderRadius.circular(20),
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 183, 116, 58),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+            child: Center(
+              child: Text(
+                "Sign in",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
         ),
-        SizedBox(height: 40),
-        Row(
-          children: [
-            Expanded(
-              child: Divider(
-                color: Colors.grey[300],
-                height: 50,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text("Or continue with"),
-            ),
-            Expanded(
-              child: Divider(
-                color: Colors.grey[400],
-                height: 50,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _loginWithButton(image: 'assets/images/google.png'),
-            _loginWithButton(image: 'assets/images/github.png', isActive: true),
-            _loginWithButton(image: 'assets/images/facebook.png'),
-          ],
-        ),
+        SizedBox(height: 30),
       ],
     );
   }
 
-  Widget _loginWithButton({required String image, bool isActive = false}) {
-    return Container(
-      width: 90,
-      height: 70,
-      decoration: isActive
-          ? BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  spreadRadius: 2,
-                  blurRadius: 15,
-                ),
-              ],
-            )
-          : BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.grey),
-            ),
-      child: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage(image)),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<void> registerUser(String name, String email, String phoneNumber, String password, BuildContext context) async {
-    final String apiUrl = 'http://127.0.0.1:8000/api/register';
-
-    final Map<String, String> requestBody = {
-      'name': name,
-      'email': email,
-      'phone': phoneNumber,
-      'password': password,
-    };
-
+  Future<Map<String, dynamic>> _registerUser(String name, String email, String phone, String password) async {
     final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      Uri.parse('http://127.0.0.1:8000/api/register'),
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body: jsonEncode(requestBody),
+      body: jsonEncode({
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'password': password,
+      }),
     );
 
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration successful')));
-      // Optionally, you can navigate to another screen upon successful registration
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+    if (response.statusCode == 201) {
+      return jsonDecode(response.body);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registration failed')));
-      print('Failed to register: ${response.reasonPhrase}');
+      return {'status': false, 'message': 'Failed to register user'};
     }
   }
 }

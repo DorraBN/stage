@@ -28,7 +28,7 @@ class EmailBanner extends StatelessWidget {
             child: Column(
               children: [
                 AutoSizeText(
-                  "Join our member and get\ndiscount up to 50%",
+                  "Visit us now and get\ndiscount up to 50%",
                   maxLines: 2,
                   minFontSize: 14,
                   style: TextStyle(

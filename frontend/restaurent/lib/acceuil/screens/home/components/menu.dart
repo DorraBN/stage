@@ -58,6 +58,20 @@ class MobFooterMenu extends StatelessWidget {
       children: [
         HeaderMenu(
           press: () {},
+          title: "Home",
+        ),
+        SizedBox(
+          width: kPadding,
+        ),
+        HeaderMenu(
+          press: () {},
+          title: "About us ",
+        ),
+        SizedBox(
+          width: kPadding,
+        ),
+        HeaderMenu(
+          press: () {},
           title: "Menu",
         ),
         SizedBox(
@@ -65,28 +79,14 @@ class MobFooterMenu extends StatelessWidget {
         ),
         HeaderMenu(
           press: () {},
-          title: "For Riders",
+          title: "Reservation",
         ),
         SizedBox(
           width: kPadding,
         ),
         HeaderMenu(
           press: () {},
-          title: "About",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Reviews",
-        ),
-        SizedBox(
-          width: kPadding,
-        ),
-        HeaderMenu(
-          press: () {},
-          title: "Restaurants",
+          title: "Contact Us",
         ),
       ],
     );
@@ -132,6 +132,20 @@ class _MobMenuState extends State<MobMenu> {
         children: [
           HeaderMenu(
             press: () {},
+            title: "Home",
+          ),
+          SizedBox(
+            height: kPadding,
+          ),
+          HeaderMenu(
+            press: () {},
+            title: "About us",
+          ),
+          SizedBox(
+            height: kPadding,
+          ),
+          HeaderMenu(
+            press: () {},
             title: "Menu",
           ),
           SizedBox(
@@ -139,28 +153,14 @@ class _MobMenuState extends State<MobMenu> {
           ),
           HeaderMenu(
             press: () {},
-            title: "For Riders",
+            title: "Reservations",
           ),
           SizedBox(
             height: kPadding,
           ),
           HeaderMenu(
             press: () {},
-            title: "About",
-          ),
-          SizedBox(
-            height: kPadding,
-          ),
-          HeaderMenu(
-            press: () {},
-            title: "Reviews",
-          ),
-          SizedBox(
-            height: kPadding,
-          ),
-          HeaderMenu(
-            press: () {},
-            title: "Restaurants",
+            title: "Contact Us",
           ),
         ],
       ),

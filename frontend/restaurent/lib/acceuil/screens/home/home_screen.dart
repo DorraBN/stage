@@ -6,7 +6,8 @@ import 'package:restaurent/acceuil/screens/home/components/food.dart';
 import 'package:restaurent/acceuil/screens/home/components/footer.dart';
 import 'package:restaurent/acceuil/screens/home/components/header.dart';
 import 'package:restaurent/acceuil/screens/home/components/menus.dart';
-import 'package:restaurent/acceuil/screens/home/menu/meals.dart';
+import 'package:restaurent/acceuil/screens/home/components/services_card.dart';
+
 import 'package:restaurent/post.dart';
 import 'package:restaurent/screens/login/login_screen.dart';
 import 'components/body.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
             DrawerHeader(
               child: Center(
                 child: Text(
-                  "Foodie",
+                  "Parrot Chef",
                   style: TextStyle(
                     fontSize: 25.0,
                     fontWeight: FontWeight.w900,
@@ -47,13 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               HeaderContainer(),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 490),
-                  child: MealsListView(),
-                ),
-              ),
+             
               BodyContainer(),
               Align(
                 alignment: Alignment.center,

@@ -30,8 +30,8 @@ class Products extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.network(
-                    'http://127.0.0.1:8000${product.image}',  // Utilisation correcte de `product.image`
-                    height: 200,
+                    'http://127.0.0.1:8000${product.image}', // Utilisation correcte de `product.image`
+                    height: 230,
                     width: 300,
                     fit: BoxFit.cover,
                   ),
@@ -46,18 +46,17 @@ class Products extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                AutoSizeText(
-                  '\$${product.price.toStringAsFixed(2)}', // Formatage du prix avec 2 décimales
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green, // Couleur du texte du prix
-                  ),
-                ),
-                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    AutoSizeText(
+                      '\$${product.price.toStringAsFixed(2)}', // Formatage du prix avec 2 décimales
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green, // Couleur du texte du prix
+                      ),
+                    ),
                     IconButton(
                       onPressed: () {
                         // Action à effectuer lorsqu'on clique sur l'icône du panier

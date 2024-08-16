@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/model.dart/responsive.dart';
+import 'package:restaurent/acceuil/screens/home/components/login.dart';
 import 'package:restaurent/acceuil/screens/home/components/menu.dart';
+import 'package:restaurent/screens/login/login_screen.dart';
 
 import '../../../constants.dart';
 
@@ -86,7 +88,7 @@ class _MobBannerState extends State<MobBanner> {
         width: MediaQuery.of(context).size.width, // Ensure full width
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("../../../assets/images/banner.png"),
+            image: AssetImage("../../../assets/images/testimonial-bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -224,7 +226,6 @@ class AboutSection extends StatelessWidget {
   }
 }
 
-
 class Header extends StatelessWidget {
   const Header({
     Key? key,
@@ -245,38 +246,71 @@ class Header extends StatelessWidget {
               icon: Icon(Icons.menu),
             ),
           ),
-        Text(
-          "Restaurent",
-          style: TextStyle(
-            fontSize: 25.0,
-            fontWeight: FontWeight.w900,
-            color: kSecondaryColor,
-          ),
-        ),
+        // Replace the Text widget with an Image widget inside ClipOval
+    Padding(
+  padding: const EdgeInsets.only(left: 30.0, top: 10.0), // Ajuster les valeurs de padding si nécessaire
+  child: GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage ()), // Remplacez 'LoginPage' par le nom de votre page de connexion
+      );
+    },
+    child: ClipOval(
+      child: Image.asset(
+        '../../../assets/images/logo.jpg', // Chemin vers votre image
+        height: 60, // Ajuster la hauteur selon vos besoins
+        width: 60, // Ajuster la largeur pour que ce soit un cercle parfait
+        fit: BoxFit.cover, // Assurez-vous que l'image couvre toute la zone circulaire
+      ),
+    ),
+  ),
+),
+
         Spacer(),
         // Menu
         if (Responsive.isDesktop(context)) HeaderWebMenu(),
         Spacer(),
-        _size.width > 400
-            ? Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust left and right padding
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                  ),
-                ),
-              )
-            : Container(
-                padding: EdgeInsets.symmetric(horizontal: 5), // Adjust left and right padding
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                ),
-              ),
+       _size.width > 400
+    ? Expanded(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), // Adjust border color and width
+            borderRadius: BorderRadius.circular(5), // Optional: add rounded corners
+          ),
+          child: TextField(
+            style: TextStyle(color: Colors.black), // Set text color to black
+            decoration: InputDecoration(
+              hintText: 'Search...',
+              hintStyle: TextStyle(color: Colors.grey), // Optional: set hint text color
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.search, color: Colors.grey),
+            ),
+          ),
+        ),
+      )
+    : Container(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), // Adjust border color and width
+          borderRadius: BorderRadius.circular(5), // Optional: add rounded corners
+        ),
+        child: TextField(
+          style: TextStyle(color: Colors.black), // Set text color to black
+          decoration: InputDecoration(
+            hintText: 'Search...',
+            hintStyle: TextStyle(color: Colors.grey), // Optional: set hint text color
+            border: InputBorder.none,
+            prefixIcon: Icon(Icons.search, color: Colors.grey),
+          ),
+        ),
+      ),
+
         SizedBox(
           width: 10,
         ),

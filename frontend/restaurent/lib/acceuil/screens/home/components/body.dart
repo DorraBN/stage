@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import 'package:restaurent/acceuil/screens/home/components/about.dart';
 import 'package:restaurent/acceuil/screens/home/components/footer.dart';
+import 'package:restaurent/acceuil/screens/home/components/menu_details.dart';
 import 'package:restaurent/acceuil/screens/home/components/menus.dart';
 import 'package:restaurent/acceuil/screens/home/components/product.dart';
 import 'package:restaurent/acceuil/screens/home/components/services_card.dart';
@@ -46,8 +47,32 @@ class BodyContainer extends StatelessWidget {
             child: Column(
               children: [
                 ServicesCard(),
+                SizedBox(height: 40),
+Center(
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(Icons.food_bank, size: 40, color: Colors.orange), // Icône au-dessus du texte
+      SizedBox(height: 10), // Espacement entre l'icône et le texte
+      Text(
+        'Menu',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      SizedBox(height: 5), // Espacement entre le texte et le soulignement
+      Container(
+        height: 2,
+        width: 100, // Largeur du soulignement
+        color: Colors.orange, // Couleur du soulignement
+      ),
+    ],
+  ),
+),
                 Container(
                   height: 400,
+                  
                   child: RestaurantMenuPage(),
                 ),
        SizedBox(height: 20),
@@ -55,7 +80,7 @@ ElevatedButton.icon(
   onPressed: () {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ReservationForm()),
+      MaterialPageRoute(builder: (context) => MenuPage2()),
     );
   },
   icon: Icon(Icons.event, color: Colors.white),
@@ -75,16 +100,30 @@ ElevatedButton.icon(
     elevation: 5, // Add elevation for shadow effect
   ),
 ),
-  SizedBox(height: 40),
-                Center(
-                  child: Text(
-                    'Products',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+SizedBox(height: 40),
+Center(
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(Icons.store, size: 40, color: Colors.orange), // Icône au-dessus du texte
+      SizedBox(height: 10), // Espacement entre l'icône et le texte
+      Text(
+        'Products',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      SizedBox(height: 5), // Espacement entre le texte et le soulignement
+      Container(
+        height: 2,
+        width: 100, // Largeur du soulignement
+        color: Colors.orange, // Couleur du soulignement
+      ),
+    ],
+  ),
+),
+
                 Responsive(
                   desktop: ProductCard(
                     crossAxiscount: _size.width < 650 ? 2 : 3,
@@ -100,15 +139,30 @@ ElevatedButton.icon(
                   ),
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MenuPage1()),
-                    );
-                  },
-                  child: Text('see more'),
-                ),
+               ElevatedButton.icon(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>MenuPage1()),
+    );
+  },
+  icon: Icon(Icons.zoom_in, color: Colors.white),
+  label: Text(
+    'See more',
+    style: TextStyle(
+      fontSize: 14, // Increase font size
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+  ),
+  style: ElevatedButton.styleFrom(
+    minimumSize: Size(100, 60), backgroundColor: Colors.orange, // Background color
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Less rounded corners for a more rectangular shape
+    ),
+    elevation: 5, // Add elevation for shadow effect
+  ),
+),
                 SizedBox(height: 20),
                 EmailBanner(),
               ],

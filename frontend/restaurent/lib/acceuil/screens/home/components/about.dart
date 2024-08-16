@@ -9,7 +9,7 @@ class AboutUsPage extends StatelessWidget {
   AboutUsPage({
     this.imageWidth = 200,
     this.imageHeight = 200,
-    this.backgroundImageWidth = 400, // Valeurs par défaut pour l'image d'arrière-plan
+    this.backgroundImageWidth = 400, // Default values for the background image
     this.backgroundImageHeight = 400,
   });
 
@@ -19,7 +19,7 @@ class AboutUsPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('../../../../../assets/images/shape-5.png'), // Image d'arrière-plan
+            image: AssetImage('../../../../../assets/images/shape-5.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -28,7 +28,7 @@ class AboutUsPage extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Texte à gauche avec marges
+              // Text on the left with padding
               Expanded(
                 flex: 2,
                 child: Padding(
@@ -48,47 +48,47 @@ class AboutUsPage extends StatelessWidget {
                           child: Text(
                             'About Us',
                             style: TextStyle(
-                              fontSize: 32, // Taille de police plus grande pour le titre
-                              fontWeight: FontWeight.bold, // Texte en gras
-                              color: Colors.white, // Couleur du texte
+                              fontSize: 32, // Larger font size for the title
+                              fontWeight: FontWeight.bold, // Bold text
+                              color: Colors.white, // Text color
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 50),
                           child: Text(
-                            'Nous sommes une entreprise dédiée à fournir les meilleurs services à nos clients. '
-                            'Notre équipe est composée de professionnels passionnés et expérimentés qui travaillent '
-                            'sans relâche pour répondre à vos besoins.',
+                            'We are a company dedicated to providing the best services to our clients. '
+                            'Our team is composed of passionate and experienced professionals who work '
+                            'tirelessly to meet your needs.',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.white, // Texte en blanc
-                              height: 1.5, // Interligne
+                              color: Colors.white, // White text
+                              height: 1.5, // Line height
                             ),
                           ),
                         ),
-                        SizedBox(height: 16), // Espacement entre le texte et les boutons
+                        SizedBox(height: 16), // Spacing between text and buttons
                         Row(
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                // Action pour le bouton "Delivery"
+                                // Action for the "Delivery" button
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 172, 130, 13), // Couleur orange
+                                backgroundColor: Color.fromARGB(255, 13, 172, 32), // Orange color
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(0), // Square border
                                 ),
                               ),
                               child: Text('Delivery'),
                             ),
-                            SizedBox(width: 16), // Espacement entre les boutons
+                            SizedBox(width: 16), // Spacing between buttons
                             ElevatedButton(
                               onPressed: () {
-                                // Action pour le bouton "Reserve"
+                                // Action for the "Reserve" button
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 244, 124, 5), // Couleur orange
+                                backgroundColor: Color.fromARGB(255, 244, 124, 5), // Orange color
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(0), // Square border
                                 ),
@@ -102,12 +102,12 @@ class AboutUsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Images à droite
+              // Images on the right
               Stack(
                 children: [
-                  // Image d'arrière-plan avec marges
+                  // Background image with margins
                   Container(
-                    margin: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 50.0), // Marges autour de l'image d'arrière-plan
+                    margin: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 50.0), // Margins around the background image
                     width: backgroundImageWidth,
                     height: backgroundImageHeight,
                     child: Image.asset(
@@ -150,4 +150,3 @@ void main() {
     ),
   ));
 }
-

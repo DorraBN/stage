@@ -383,7 +383,7 @@ class Footer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Foodie',
+                        'Parrot Chef',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24.0,
