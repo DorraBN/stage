@@ -23,9 +23,9 @@ class _MenuPage2State extends State<MenuPage2> {
   final List<Map<String, String>> categories = [
     {'name': 'All', 'icon': 'Icons.list'},
     {'name': 'Appetizers', 'image': '../../../assets/images/Appetizers.webp'},
-    {'name': 'main course', 'image': '../../../assets/images/main.webp'},
-    {'name': 'desserts', 'image': '../../../assets/images/dessert.webp'},
-    {'name': 'drinks', 'image': '../../../assets/images/drinks.webp'},
+    {'name': 'Main Course', 'image': '../../../assets/images/main.webp'},
+    {'name': 'Desserts', 'image': '../../../assets/images/dessert.webp'},
+    {'name': 'Drinks', 'image': '../../../assets/images/drinks.webp'},
   ];
 
   @override
@@ -252,7 +252,7 @@ class MenuCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AutoSizeText(
-              '\$${item['price']}',
+              '${item['price']} dinars',
               style: TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
             ),

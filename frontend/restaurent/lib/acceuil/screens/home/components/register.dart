@@ -36,7 +36,6 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
-
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -174,6 +173,7 @@ class Body extends StatelessWidget {
                     onTap: () {
                       print(MediaQuery.of(context).size.width);
                     },
+                    
                     child: Text(
                       "Sign in here!",
                       style: TextStyle(
@@ -221,16 +221,19 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
+              prefixIcon: Icon(
+            Icons.person, // Icône de l'email
+            color: Colors.grey,
           ),
-          style: TextStyle(color: Colors.black),
+          ),  style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         TextField(
           controller: emailController,
           decoration: InputDecoration(
-            hintText: 'Enter Email',
+            hintText: 'Enter email ',
             filled: true,
-            fillColor: const Color.fromARGB(255, 77, 77, 78),
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -240,17 +243,19 @@ class Body extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
-            ),
+            ),  prefixIcon: Icon(
+            Icons.email_outlined, // Icône de l'email
+            color: Colors.grey,
           ),
-          style: TextStyle(color: Colors.black),
+          ),  style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         TextField(
           controller: phoneController,
           decoration: InputDecoration(
-            hintText: 'Enter Phone',
+            hintText: 'Enter Phone number',
             filled: true,
-            fillColor: const Color.fromARGB(255, 77, 77, 78),
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -261,16 +266,24 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
+              prefixIcon: Icon(
+            Icons.phone, // Icône de l'email
+            color: Colors.grey,
           ),
-          style: TextStyle(color: Colors.black),
+          ),  style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 20),
         TextField(
           controller: passwordController,
           decoration: InputDecoration(
             hintText: 'Password',
+            counterText: 'Forgot password?',
+            suffixIcon: Icon(
+              Icons.visibility_off_outlined,
+              color: Colors.grey,
+            ),
             filled: true,
-            fillColor: const Color.fromARGB(255, 77, 77, 78),
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -281,70 +294,186 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
+              prefixIcon: Icon(
+            Icons.lock_outlined, // Icône de l'email
+            color: Colors.grey,
           ),
-          style: TextStyle(color: Colors.black),
+          ),  style: TextStyle(color: Colors.black),
         ),
-        SizedBox(height: 30),
-        GestureDetector(
-          onTap: () async {
-            var response = await _registerUser(
-              nameController.text,
-              emailController.text,
-              phoneController.text,
-              passwordController.text,
-            );
-            if (response['status'] == true) {
-              Navigator.push(
+        SizedBox(height: 40),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 183, 116, 58),
+                spreadRadius: 10,
+                blurRadius: 20,
+              ),
+            ],
+          ),
+          child: ElevatedButton(
+            onPressed: () {
+              registerUser(
+                nameController.text,
+                emailController.text,
+                phoneController.text,
+                passwordController.text,
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
-            } else {
-              // Show error message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(response['message'] ?? 'Registration failed')),
-              );
-            }
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 183, 118, 58),
-              borderRadius: BorderRadius.circular(20),
+            },
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              child: Center(child: Text("Register")),
             ),
-            child: Center(
-              child: Text(
-                "Sign in",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 183, 116, 58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
           ),
         ),
-        SizedBox(height: 30),
+          SizedBox(height: 40),
+        Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: Colors.grey[300],
+                height: 50,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text("Or continue with"),
+            ),
+            Expanded(
+              child: Divider(
+                color: Colors.grey[400],
+                height: 50,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 40),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _loginWithButton(image: 'assets/images/google.png'),
+            _loginWithButton(image: '../../../assets/images/or.png', isActive: true),
+            _loginWithButton(image: 'assets/images/facebook.png'),
+          ],
+        ),
       ],
     );
   }
-
-  Future<Map<String, dynamic>> _registerUser(String name, String email, String phone, String password) async {
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/register'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'password': password,
-      }),
+  Widget _loginWithButton({required String image, bool isActive = false}) {
+    return Container(
+      width: 90,
+      height: 70,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey),
+        boxShadow: isActive
+            ? [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 10,
+                  blurRadius: 30,
+                ),
+              ]
+            : [],
+      ),
+      child: Center(
+        child: isActive
+            ? Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(35),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 2,
+                      blurRadius: 15,
+                    )
+                  ],
+                ),
+                child: Image.asset(
+                  image,
+                  width: 35,
+                ),
+              )
+            : Image.asset(
+                image,
+                width: 35,
+              ),
+      ),
     );
-
-    if (response.statusCode == 201) {
-      return jsonDecode(response.body);
-    } else {
-      return {'status': false, 'message': 'Failed to register user'};
-    }
   }
+
+Future<void> registerUser(String name, String email, String phoneNumber, String password, BuildContext context) async {
+  final String apiUrl = 'http://127.0.0.1:8000/api/register';
+
+  final Map<String, String> requestBody = {
+    'name': name,
+    'email': email,
+    'phone': phoneNumber,
+    'password': password,
+  };
+
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(requestBody),
+  );
+
+  if (response.statusCode == 200) {
+    // Afficher une boîte de dialogue de succès
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Registration Successful'),
+          content: Text('You have successfully registered.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Ferme la boîte de dialogue
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    // Afficher une boîte de dialogue d'échec
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Registration Failed'),
+          content: Text('Failed to register. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Ferme la boîte de dialogue
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    print('Failed to register: ${response.reasonPhrase}');
+  }
+}
 }

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -281,43 +283,43 @@ Widget build(BuildContext context) {
       ),
     );
   }
-
-  void _showCongratulationsDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Center(
-          child: Column(
-            children: [
-              Icon(Icons.check_circle, size: 36, color: Colors.green),
-              SizedBox(height: 20),
-              Text("Congratulations!"),
-            ],
-          ),
-        ),
-        content: Container(
-          color: const Color.fromARGB(255, 60, 60, 60),
-          height: 70,
-          child: Column(
-            children: [
-              Text("Your order has been successfully placed."),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Fermer la boîte de dialogue de félicitations
-                  _showExportOptionsDialog(context); // Afficher la boîte de dialogue d'exportation
-                },
-                child: Text("OK"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                ),
-              ),
-            ],
-          ),
+void _showCongratulationsDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Center(
+        child: Column(
+          children: [
+            Icon(Icons.check_circle, size: 36, color: Colors.green),
+            SizedBox(height: 20),
+            Text("Congratulations!"),
+          ],
         ),
       ),
-    );
-  }
+      content: Container(
+        color: const Color.fromARGB(255, 60, 60, 60),
+        height: 70,
+        child: Column(
+          children: [
+            Text("Your order has been successfully placed."),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fermer la boîte de dialogue de félicitations
+                 // Envoyer la commande au serveur
+                _showExportOptionsDialog(context); // Afficher la boîte de dialogue d'exportation
+              },
+              child: Text("OK"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
   void _showExportOptionsDialog(BuildContext context) {
     showDialog(
@@ -361,7 +363,7 @@ Widget build(BuildContext context) {
                       Navigator.of(context).pop();
                       _exportAsExcel();
                     },
-                    label: Text("Excel"),
+                    label: Text("Print"),
                   ),
                 ],
               ),
@@ -512,8 +514,53 @@ void _exportAsPdf() async {
   }
 }
 
-void _exportAsExcel() {
-  // Implémentez ici votre logique d'exportation en Excel
-  print('Export as Excel');
-}
+
+// Remplacez par l'URL correcte
+
+
+Future<void> _exportAsExcel() async {
+ final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            children: [
+              pw.Text('Order Details', style: pw.TextStyle(fontSize: 24)),
+              pw.SizedBox(height: 20),
+              pw.Text('Products:', style: pw.TextStyle(fontSize: 18)),
+              ...widget.selectedProducts.map((product) {
+                return pw.Row(
+                  children: [
+                    pw.Text('${product['name']}'),
+                    pw.SizedBox(width: 10),
+                    pw.Text('Quantity: ${product['quantity']}'),
+                    pw.SizedBox(width: 10),
+                    pw.Text('Price: ${product['price']}'),
+                  ],
+                );
+              }).toList(),
+              pw.SizedBox(height: 20),
+              pw.Text('Total Price: ${widget.totalPrice.toStringAsFixed(2)} Dinars', style: pw.TextStyle(fontSize: 18)),
+              pw.SizedBox(height: 20),
+              pw.Text('Delivery Details:', style: pw.TextStyle(fontSize: 18)),
+              pw.Text('Name: ${_nameController.text}'),
+              pw.Text('Phone: ${_phoneController.text}'),
+              pw.Text('Address: ${_addressController.text}'),
+              pw.SizedBox(height: 20),
+              pw.Text('Payment Method: ${_paymentMethod ?? 'Not Selected'}', style: pw.TextStyle(fontSize: 18)),
+              if (_paymentMethod == 'Credit Card') ...[
+                pw.Text('Card Number: ${_cardNumberController.text}'),
+                pw.Text('Expiry Date: ${_expiryDateController.text}'),
+                pw.Text('CVV: ${_cvvController.text}'),
+              ],
+            ],
+          );
+        },
+      ),
+    );
+
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
 }

@@ -267,7 +267,7 @@ class _MenuPage3State extends State<MenuPage3> {
                                   )
                                 : Text('No Image'),
                             title: Text(menu['name'], style: TextStyle(color: Colors.white)),
-                            subtitle: Text('\$${menu['price']}', style: TextStyle(color: Colors.white)),
+                            subtitle: Text('${menu['price']} dinars', style: TextStyle(color: Colors.white)),
                           );
                         },
                       ),
@@ -329,7 +329,7 @@ class MenuCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AutoSizeText(
-              '\$${item['price']}',
+              '${item['price']} dinars',
               style: TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
             ),

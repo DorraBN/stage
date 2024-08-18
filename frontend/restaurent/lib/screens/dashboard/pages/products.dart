@@ -133,7 +133,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   columns: [
                     DataColumn(label: Text("Name")),
                     DataColumn(label: Text("Image")),
-                    DataColumn(label: Text("Description")),
+                  
                     DataColumn(label: Text("Price")),
                     DataColumn(label: Text("Category")),
                     DataColumn(label: Text("Created At")),
@@ -180,12 +180,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 : Text('No Image'),
           ),
         ),
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
-            child: Text(item['description'] ?? ''),
-          ),
-        ),
+       
         DataCell(
           Padding(
             padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
@@ -308,61 +303,67 @@ DataCell(
                     );
                   },
                 ),
-                IconButton(
+            IconButton(
                   icon: Icon(Icons.edit, color: Colors.blue),
                   onPressed: () {
+                    _nameController.text = item['name'] ?? '';
+                    _descriptionController.text = item['description'] ?? '';
+                    _priceController.text = '${item['price'] ?? '0.0'}';
+                    _categoryController.text = item['category'] ?? '';
+                    isAvailable = item['available'] == true;
+
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) {
+                      builder: (_) {
                         return AlertDialog(
                           title: Text('Update Product'),
                           content: SingleChildScrollView(
                             child: Column(
                               children: [
                                 TextField(
-                                  controller: _nameController..text = item['name'] ?? '',
+                                  controller: _nameController,
                                   decoration: InputDecoration(labelText: 'Name'),
                                 ),
                                 TextField(
-                                  controller: _descriptionController..text = item['description'] ?? '',
+                                  controller: _descriptionController,
                                   decoration: InputDecoration(labelText: 'Description'),
                                 ),
                                 TextField(
-                                  controller: _priceController..text = item['price'].toString(),
+                                  controller: _priceController,
                                   decoration: InputDecoration(labelText: 'Price'),
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 ),
                                 TextField(
-                                  controller: _categoryController..text = item['category'] ?? '',
+                                  controller: _categoryController,
                                   decoration: InputDecoration(labelText: 'Category'),
                                 ),
                                 SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: getImage,
-                                  child: Text('Pick Image'),
+                                _buildImage(),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text('Available:'),
+                                    Switch(
+                                      value: isAvailable,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isAvailable = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                 OutlinedButton(
-                          onPressed: getImage,
-                          child: _buildImage(),
-                        ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _updateProduct(item['id'].toString());
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Update'),
+                                ),
                               ],
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                _updateProduct(item['id'].toString());
-                              },
-                              child: Text('Update'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Cancel'),
-                            ),
-                          ],
                         );
                       },
                     );

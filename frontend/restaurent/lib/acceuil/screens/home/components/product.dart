@@ -50,7 +50,7 @@ class Products extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      '\$${product.price.toStringAsFixed(2)}', // Formatage du prix avec 2 décimales
+                      '${product.price.toStringAsFixed(2)} dinars', // Formatage du prix avec 2 décimales
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

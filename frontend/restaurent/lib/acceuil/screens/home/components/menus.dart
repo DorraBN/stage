@@ -491,16 +491,7 @@ class ProductCard extends StatelessWidget {
                                   'Category: ${item['category'] ?? ''}',
                                   style: TextStyle(fontSize: 16),
                                 ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Created At: ${item['created_at'] ?? ''}',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Updated At: ${item['updated_at'] ?? ''}',
-                                  style: TextStyle(fontSize: 16),
-                                ),
+                              
                               ],
                             ),
                           ),

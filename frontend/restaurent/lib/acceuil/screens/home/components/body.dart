@@ -253,7 +253,7 @@ class _RestaurantMenuPageState extends State<RestaurantMenuPage> {
                           Text(item.name),
                           Row(
                             children: [
-                              Text('${item.price.toString()}€'),
+                              Text('${item.price.toString()} dinars'),
                               IconButton(
                                 icon: Icon(Icons.shopping_cart),
                                 onPressed: () {

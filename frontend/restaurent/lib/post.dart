@@ -96,17 +96,17 @@ class MyApp1 extends StatelessWidget {
                   TestimonialCard(
                     name: 'John Doe',
                     testimonial: 'Excellent experience! The service was impeccable and the quality of the products was top-notch.',
-                    imageUrl: "../../../assets/images/testi-avatar.jpg",
+                    imageUrl: "../../../assets/images/test2.jpg",
                   ),
                   TestimonialCard(
-                    name: 'Marie Curie',
+                    name: 'justin doe',
                     testimonial: 'I highly recommend this company. Very professional and attentive.',
                     imageUrl: "../../../assets/images/testi-avatar.jpg",
                   ),
                   TestimonialCard(
                     name: 'Peter Martin',
                     testimonial: 'A unique experience, I was very satisfied with the service and the products.',
-                    imageUrl: "../../../assets/images/testi-avatar.jpg",
+                    imageUrl: "../../../assets/images/test1.jpg",
                   ),
                 ],
               ),

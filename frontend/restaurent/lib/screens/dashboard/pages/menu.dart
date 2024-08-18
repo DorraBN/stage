@@ -1,17 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
-import 'package:restaurent/screens/dashboard/pages/images.dart';
 import 'package:restaurent/screens/dashboard/pages/menup.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
-  
 
   @override
   _MenuPageState createState() => _MenuPageState();
@@ -23,9 +19,11 @@ class _MenuPageState extends State<MenuPage> {
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
   final _categoryController = TextEditingController();
+  String _availability = 'Available'; // Use string for dropdown
   XFile? _pickedFile;
   String? _imageDataUrl;
   final picker = ImagePicker();
+  bool _isAvailable = true; // Added missing variable for Switch
 
   @override
   void initState() {
@@ -44,7 +42,7 @@ class _MenuPageState extends State<MenuPage> {
     }
   }
 
- Future<void> getImage() async {
+  Future<void> getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
@@ -57,6 +55,7 @@ class _MenuPageState extends State<MenuPage> {
       print('No image selected.');
     }
   }
+
   Future<void> _deleteProduct(String id) async {
     final response = await http.delete(Uri.parse('http://127.0.0.1:8000/api/destroy/$id'));
 
@@ -77,7 +76,8 @@ class _MenuPageState extends State<MenuPage> {
         'description': _descriptionController.text,
         'price': double.parse(_priceController.text),
         'category': _categoryController.text,
-        'image': _imageDataUrl, // Add image data to the update request
+        'image': _imageDataUrl,
+        'available': _isAvailable, // Fixed this line to use _isAvailable
       }),
       headers: {"Content-Type": "application/json"},
     );
@@ -91,6 +91,7 @@ class _MenuPageState extends State<MenuPage> {
       throw Exception('Failed to update product');
     }
   }
+
   Widget _buildImage() {
     return _pickedFile != null
         ? Image.memory(
@@ -100,11 +101,12 @@ class _MenuPageState extends State<MenuPage> {
           )
         : Text('No image selected');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products"),
+        title: Text("Menu products"),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -134,7 +136,6 @@ class _MenuPageState extends State<MenuPage> {
                   columns: [
                     DataColumn(label: Text("Name")),
                     DataColumn(label: Text("Image")),
-                    DataColumn(label: Text("Description")),
                     DataColumn(label: Text("Price")),
                     DataColumn(label: Text("Category")),
                     DataColumn(label: Text("Created At")),
@@ -158,24 +159,24 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   DataRow dataRow(Map<String, dynamic> item, BuildContext context) {
-    bool isAvailable = item['available'] == 1;
-
+    String availability = item['available'] == true ? 'Available' : 'Not Available';
+ Color availabilityColor = item['available'] == true ? Colors.green : Colors.red;
     return DataRow(
       cells: [
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0),
             child: Text(item['name'] ?? ''),
           ),
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(2.0), // Ajouter un padding autour de l'image
+            padding: const EdgeInsets.all(2.0),
             child: item['image_url'] != null
                 ? Image.network(
                     'http://127.0.0.1:8000${item['image_url']}',
-                    height: 200, // Ajuster la hauteur de l'image
-                    width: 100, // Ajuster la largeur de l'image
+                    height: 200,
+                    width: 100,
                     fit: BoxFit.cover,
                   )
                 : Text('No Image'),
@@ -183,62 +184,61 @@ class _MenuPageState extends State<MenuPage> {
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
-            child: Text(item['description'] ?? ''),
-          ),
-        ),
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0),
             child: Text('${item['price'] ?? '0.0'}'),
           ),
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0),
             child: Text(item['category'] ?? ''),
           ),
         ),
-      DataCell(
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              item['created_at'] != null
+                  ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['created_at']))
+                  : '',
+            ),
+          ),
+        ),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              item['updated_at'] != null
+                  ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['updated_at']))
+                  : '',
+            ),
+          ),
+        ),
+       DataCell(
   Padding(
     padding: const EdgeInsets.all(8.0),
-    child: Text(
-      item['created_at'] != null
-          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['created_at']))
-          : '',
-    ),
-  ),
-),
-DataCell(
-  Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Text(
-      item['updated_at'] != null
-          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['updated_at']))
-          : '',
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: availabilityColor, // La couleur de fond du carré
+        borderRadius: BorderRadius.circular(4.0), // Coins arrondis si désiré
+      ),
+      child: Center(
+        child: Text(
+          availability,
+          style: TextStyle(
+            color: Colors.white, // Couleur du texte dans le carré coloré
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     ),
   ),
 ),
 
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du conteneur
-            child: Container(
-              width: 100, // Ajuster la largeur
-              height: 40, // Ajuster la hauteur
-              color: isAvailable ? Colors.green : Colors.red,
-              child: Center(
-                child: Text(
-                  isAvailable ? 'Available' : 'Not Available',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ),
-        ),
-        DataCell(
-          Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour de la ligne de boutons
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -282,16 +282,7 @@ DataCell(
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                    item['created_at'] != null
-          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['created_at']))
-          : '',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                   item['updated_at'] != null
-          ? DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(item['updated_at']))
-          : '',
+                                  'Availability: ${availability}',
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -299,9 +290,7 @@ DataCell(
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
+                              onPressed: () => Navigator.of(context).pop(),
                               child: Text('Close'),
                             ),
                           ],
@@ -313,58 +302,64 @@ DataCell(
                 IconButton(
                   icon: Icon(Icons.edit, color: Colors.blue),
                   onPressed: () {
+                    _nameController.text = item['name'] ?? '';
+                    _descriptionController.text = item['description'] ?? '';
+                    _priceController.text = '${item['price'] ?? '0.0'}';
+                    _categoryController.text = item['category'] ?? '';
+                    _isAvailable = item['available'] == true;
+
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) {
+                      builder: (_) {
                         return AlertDialog(
                           title: Text('Update Product'),
                           content: SingleChildScrollView(
                             child: Column(
                               children: [
                                 TextField(
-                                  controller: _nameController..text = item['name'] ?? '',
+                                  controller: _nameController,
                                   decoration: InputDecoration(labelText: 'Name'),
                                 ),
                                 TextField(
-                                  controller: _descriptionController..text = item['description'] ?? '',
+                                  controller: _descriptionController,
                                   decoration: InputDecoration(labelText: 'Description'),
                                 ),
                                 TextField(
-                                  controller: _priceController..text = item['price'].toString(),
+                                  controller: _priceController,
                                   decoration: InputDecoration(labelText: 'Price'),
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 ),
                                 TextField(
-                                  controller: _categoryController..text = item['category'] ?? '',
+                                  controller: _categoryController,
                                   decoration: InputDecoration(labelText: 'Category'),
                                 ),
                                 SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: getImage,
-                                  child: Text('Pick Image'),
+                                _buildImage(),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text('Available:'),
+                                    Switch(
+                                      value: _isAvailable,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _isAvailable = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                 OutlinedButton(
-                          onPressed: getImage,
-                          child: _buildImage(),
-                        ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _updateProduct(item['id'].toString());
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Update'),
+                                ),
                               ],
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                _updateProduct(item['id'].toString());
-                              },
-                              child: Text('Update'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('Cancel'),
-                            ),
-                          ],
                         );
                       },
                     );
@@ -428,10 +423,11 @@ DataCell(
                   );
                 },
               ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    ],
-  );
- }}
+      ],
+    );
+  }
+}

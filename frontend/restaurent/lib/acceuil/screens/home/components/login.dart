@@ -268,7 +268,7 @@ class Body extends StatelessWidget {
   decoration: InputDecoration(
     hintText: 'Enter email or Phone number',
     filled: true,
-    fillColor: Colors.blueGrey[50],
+    fillColor:  const Color.fromARGB(255, 77, 77, 78),
     labelStyle: TextStyle(fontSize: 12),
     contentPadding: EdgeInsets.only(left: 30),
     enabledBorder: OutlineInputBorder(
@@ -279,14 +279,17 @@ class Body extends StatelessWidget {
       borderSide: BorderSide(color: Colors.blueGrey),
       borderRadius: BorderRadius.circular(15),
     ),
+       prefixIcon: Icon(
+            Icons.email_outlined, // Icône de l'email
+            color: Colors.grey,
+          ),
   ),
   style: TextStyle(color: Colors.black), // Définit la couleur du texte à noir
 )
 ,
-        SizedBox(height: 30),
+         SizedBox(height: 20),
         TextField(
           controller: passwordController,
-          obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
             counterText: 'Forgot password?',
@@ -295,7 +298,7 @@ class Body extends StatelessWidget {
               color: Colors.grey,
             ),
             filled: true,
-            fillColor: Colors.blueGrey[50],
+            fillColor:  const Color.fromARGB(255, 77, 77, 78),
             labelStyle: TextStyle(fontSize: 12),
             contentPadding: EdgeInsets.only(left: 30),
             enabledBorder: OutlineInputBorder(
@@ -306,8 +309,11 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),
+                prefixIcon: Icon(
+            Icons.lock_outline, // Icône de verrouillage pour le mot de passe
+            color: Colors.grey,
           ),
-            style: TextStyle(color: Colors.black),
+          ),  style: TextStyle(color: Colors.black),
         ),
         SizedBox(height: 40),
         Container(
@@ -363,7 +369,7 @@ class Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _loginWithButton(image: 'assets/images/google.png'),
-            _loginWithButton(image: 'assets/images/github.png', isActive: true),
+            _loginWithButton(image: '../../../assets/images/or.png', isActive: true),
             _loginWithButton(image: 'assets/images/facebook.png'),
           ],
         ),
