@@ -293,11 +293,11 @@ class Body extends StatelessWidget {
       borderRadius: BorderRadius.circular(15),
     ),
        prefixIcon: Icon(
-            Icons.email_outlined, // Icône de l'email
+            Icons.email_outlined,
             color: Colors.grey,
           ),
   ),
-  style: TextStyle(color: Colors.black), // Définit la couleur du texte à noir
+  style: TextStyle(color: Colors.black), 
 )
 ,
          SizedBox(height: 20),
@@ -323,7 +323,7 @@ class Body extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
                 prefixIcon: Icon(
-            Icons.lock_outline, // Icône de verrouillage pour le mot de passe
+            Icons.lock_outline,
             color: Colors.grey,
           ),
           ),  style: TextStyle(color: Colors.black),

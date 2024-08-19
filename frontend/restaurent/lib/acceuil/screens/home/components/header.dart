@@ -40,8 +40,8 @@ class BannerSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height, // Adjust height as needed
-        width: MediaQuery.of(context).size.width, // Ensure full width
+        height: MediaQuery.of(context).size.height, 
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("../../../assets/images/testimonial-bg.jpg"),
@@ -85,7 +85,7 @@ class _MobBannerState extends State<MobBanner> {
     return SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width, // Ensure full width
+        width: MediaQuery.of(context).size.width, 
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("../../../assets/images/testimonial-bg.jpg"),
@@ -236,7 +236,7 @@ class Header extends StatelessWidget {
     final Size _size = MediaQuery.of(context).size;
     return Row(
       children: [
-        // It displays only on mobile and tab
+  
         if (!Responsive.isDesktop(context))
           Builder(
             builder: (context) => IconButton(
@@ -246,22 +246,22 @@ class Header extends StatelessWidget {
               icon: Icon(Icons.menu),
             ),
           ),
-        // Replace the Text widget with an Image widget inside ClipOval
+
     Padding(
-  padding: const EdgeInsets.only(left: 30.0, top: 10.0), // Ajuster les valeurs de padding si nécessaire
+  padding: const EdgeInsets.only(left: 30.0, top: 10.0), 
   child: GestureDetector(
     onTap: () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage ()), // Remplacez 'LoginPage' par le nom de votre page de connexion
+        MaterialPageRoute(builder: (context) => LoginPage ()), 
       );
     },
     child: ClipOval(
       child: Image.asset(
-        '../../../assets/images/logo.jpg', // Chemin vers votre image
-        height: 60, // Ajuster la hauteur selon vos besoins
-        width: 60, // Ajuster la largeur pour que ce soit un cercle parfait
-        fit: BoxFit.cover, // Assurez-vous que l'image couvre toute la zone circulaire
+        '../../../assets/images/logo.jpg', 
+        height: 60,
+        width: 60, 
+        fit: BoxFit.cover, 
       ),
     ),
   ),
@@ -278,14 +278,14 @@ class Header extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), // Adjust border color and width
-            borderRadius: BorderRadius.circular(5), // Optional: add rounded corners
+            border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), 
+            borderRadius: BorderRadius.circular(5), 
           ),
           child: TextField(
-            style: TextStyle(color: Colors.black), // Set text color to black
+            style: TextStyle(color: Colors.black),
             decoration: InputDecoration(
               hintText: 'Search...',
-              hintStyle: TextStyle(color: Colors.grey), // Optional: set hint text color
+              hintStyle: TextStyle(color: Colors.grey),
               border: InputBorder.none,
               prefixIcon: Icon(Icons.search, color: Colors.grey),
             ),
@@ -297,14 +297,14 @@ class Header extends StatelessWidget {
         height: 50,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), // Adjust border color and width
-          borderRadius: BorderRadius.circular(5), // Optional: add rounded corners
+          border: Border.all(color: Colors.black.withOpacity(0.3), width: 1.5), 
+          borderRadius: BorderRadius.circular(5), 
         ),
         child: TextField(
-          style: TextStyle(color: Colors.black), // Set text color to black
+          style: TextStyle(color: Colors.black), 
           decoration: InputDecoration(
             hintText: 'Search...',
-            hintStyle: TextStyle(color: Colors.grey), // Optional: set hint text color
+            hintStyle: TextStyle(color: Colors.grey), 
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search, color: Colors.grey),
           ),
@@ -341,11 +341,11 @@ class HeaderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(8.0), // Adjust outer padding as needed
+      padding: EdgeInsets.all(8.0), 
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(0), // Adjust inner padding as needed
+            padding: EdgeInsets.all(0), 
             constraints: BoxConstraints(maxWidth: 3000),
             child: Column(
               children: [

@@ -20,23 +20,23 @@ class CardPage extends StatelessWidget {
             "Title",
             style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black),
           ),
-          SizedBox(height: 16), // Padding between the title and the cards
+          SizedBox(height: 16),
           Row(
             children: [
               Expanded(child: _buildCard(Icons.fastfood, "Number of dishes", "150")),
-              SizedBox(width: 16), // Space between the cards
+              SizedBox(width: 16), 
               Expanded(child: _buildCard(Icons.people, "Today's customers", "120")),
             ],
           ),
-          SizedBox(height: 16), // Vertical space between the rows of cards
+          SizedBox(height: 16), 
           Row(
             children: [
               Expanded(child: _buildCard(Icons.attach_money, "Revenue", "\$2400")),
-              SizedBox(width: 16), // Space between the cards
+              SizedBox(width: 16), 
               Expanded(child: _buildCard(Icons.star, "Rating", "4.5")),
             ],
           ),
-          // Add more rows of cards here if necessary
+        
         ],
       ),
     );

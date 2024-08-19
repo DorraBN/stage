@@ -27,9 +27,9 @@ class _ReserveState extends State<Reserve> {
     final response = await http.delete(Uri.parse('http://127.0.0.1:8000/api/deletereserves/$id'));
 
     if (response.statusCode == 200) {
-      // Successfully deleted
+   
       setState(() {
-        futureReservations = fetchReservations(); // Refresh the list
+        futureReservations = fetchReservations(); 
       });
     } else {
       throw Exception('Failed to delete reservation');
@@ -204,7 +204,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white), 
                       children: [
                         TextSpan(
                           text: "Name: ", 
@@ -227,7 +227,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white), 
                       children: [
                         TextSpan(
                           text: "Email: ", 
@@ -250,7 +250,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white),
                       children: [
                         TextSpan(
                           text: "Phone Number: ", 
@@ -273,7 +273,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white), 
                       children: [
                         TextSpan(
                           text: "Number of People: ", 
@@ -296,7 +296,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white), 
                       children: [
                         TextSpan(
                           text: "Reservation Date: ", 
@@ -319,7 +319,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white), 
                       children: [
                         TextSpan(
                           text: "Reservation Time: ", 
@@ -342,7 +342,7 @@ class _ReserveState extends State<Reserve> {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: TextStyle(color: Colors.white), // Default color for the whole text
+                      style: TextStyle(color: Colors.white),
                       children: [
                         TextSpan(
                           text: "Message: ", 
@@ -463,7 +463,7 @@ class _ReserveState extends State<Reserve> {
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blue),
                                     onPressed: () {
-                                      // Add your update logic here
+                                     
                                       Navigator.of(context).pop();
                                     },
                                     label: Text("Update"),

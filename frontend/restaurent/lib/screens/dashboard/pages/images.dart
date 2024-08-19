@@ -83,15 +83,15 @@ void _showSuccessDialog() {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text('Name: ${_nameController.text}'),
-              SizedBox(height: 8), // Espace entre les lignes
+              SizedBox(height: 8), 
               Text('Description: ${_descriptionController.text}'),
-              SizedBox(height: 8), // Espace entre les lignes
+              SizedBox(height: 8), 
               Text('Price: ${_priceController.text}'),
-              SizedBox(height: 8), // Espace entre les lignes
+              SizedBox(height: 8),
               Text('Category: ${_categoryController.text}'),
-              SizedBox(height: 8), // Espace entre les lignes
+              SizedBox(height: 8),
               Text('Availability: ${_isAvailable ? "Available" : "Not Available"}'),
-              SizedBox(height: 8), // Espace entre les lignes
+              SizedBox(height: 8), 
               _buildImage(),
             ],
           ),
@@ -100,10 +100,10 @@ void _showSuccessDialog() {
           TextButton(
             child: Text('OK'),
             onPressed: () {
-              Navigator.of(context).pop(); // Ferme le dialogue
+              Navigator.of(context).pop(); 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProductsPage()), // Redirection vers ProductPage
+                MaterialPageRoute(builder: (context) => ProductsPage()), 
               );
             },
           ),

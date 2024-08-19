@@ -62,7 +62,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
     if (response.statusCode == 200) {
       setState(() {
-        futureProduct = fetchProduct(); // Refresh the list
+        futureProduct = fetchProduct(); 
       });
     } else {
       throw Exception('Failed to delete product');
@@ -77,14 +77,14 @@ class _ProductsPageState extends State<ProductsPage> {
         'description': _descriptionController.text,
         'price': double.parse(_priceController.text),
         'category': _categoryController.text,
-        'image': _imageDataUrl, // Add image data to the update request
+        'image': _imageDataUrl, 
       }),
       headers: {"Content-Type": "application/json"},
     );
 
     if (response.statusCode == 200) {
       setState(() {
-        futureProduct = fetchProduct(); // Refresh the list
+        futureProduct = fetchProduct(); 
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product updated successfully')));
     } else {
@@ -141,7 +141,7 @@ class _ProductsPageState extends State<ProductsPage> {
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  columnSpacing: 44.0, // Increase column spacing
+                  columnSpacing: 44.0,
                   columns: [
                     DataColumn(label: Text("Name")),
                     DataColumn(label: Text("Image")),
@@ -175,18 +175,18 @@ class _ProductsPageState extends State<ProductsPage> {
       cells: [
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0),
             child: Text(item['name'] ?? ''),
           ),
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(2.0), // Ajouter un padding autour de l'image
+            padding: const EdgeInsets.all(2.0), 
             child: item['image'] != null
                 ? Image.network(
                     'http://127.0.0.1:8000${item['image']}',
-                    height: 200, // Ajuster la hauteur de l'image
-                    width: 100, // Ajuster la largeur de l'image
+                    height: 200,
+                    width: 100, 
                     fit: BoxFit.cover,
                   )
                 : Text('No Image'),
@@ -195,13 +195,13 @@ class _ProductsPageState extends State<ProductsPage> {
        
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0), 
             child: Text('${item['price'] ?? '0.0'}'),
           ),
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du texte
+            padding: const EdgeInsets.all(8.0), 
             child: Text(item['category'] ?? ''),
           ),
         ),
@@ -227,10 +227,10 @@ DataCell(
 ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour du conteneur
+            padding: const EdgeInsets.all(8.0), 
             child: Container(
-              width: 100, // Ajuster la largeur
-              height: 40, // Ajuster la hauteur
+              width: 100, 
+              height: 40, 
               color: isAvailable ? Colors.green : Colors.red,
               child: Center(
                 child: Text(
@@ -243,7 +243,7 @@ DataCell(
         ),
         DataCell(
           Padding(
-            padding: const EdgeInsets.all(8.0), // Ajouter un padding autour de la ligne de boutons
+            padding: const EdgeInsets.all(8.0), 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -381,7 +381,7 @@ DataCell(
                     );
                   },
                 ),
-                SizedBox(width: 16), // Espacement horizontal entre les boutons
+                SizedBox(width: 16), 
               IconButton(
                 icon: Icon(Icons.delete, color: Colors.redAccent),
                 onPressed: () {

@@ -85,7 +85,7 @@ Future<void> _submitReservation() async {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Image.asset('../../../../../assets/images/p4.png', // Remplacez par le chemin vers votre image
+              Image.asset('../../../../../assets/images/p4.png',
                 height: 100,
                 width: 100,
               ),
@@ -409,7 +409,7 @@ class _ReservationForm1State extends State<ReservationForm1> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.asset('assets/images/p4.png', // Remplacez par le chemin vers votre image
+                Image.asset('assets/images/p4.png', 
                   height: 100,
                   width: 100,
                 ),
@@ -564,7 +564,7 @@ class _ReservationForm1State extends State<ReservationForm1> {
                           ),
                         ),
                       ),
-                      SizedBox(width: screenWidth > 600 ? 10 : 0), // Responsive spacing
+                      SizedBox(width: screenWidth > 600 ? 10 : 0), 
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 5),
@@ -595,7 +595,7 @@ class _ReservationForm1State extends State<ReservationForm1> {
                           ),
                         ),
                       ),
-                      SizedBox(width: screenWidth > 600 ? 10 : 0), // Responsive spacing
+                      SizedBox(width: screenWidth > 600 ? 10 : 0),
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 5),
@@ -677,13 +677,13 @@ class Footer extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 25.0, // Adjust as needed for positioning from the top
-            left: -10.0, // Adjust as needed for horizontal positioning
+            top: 25.0,
+            left: -10.0, 
             child: Transform.rotate(
-              angle: -0.2, // Adjust the tilt angle here
+              angle: -0.2,
               child: Image.asset(
-                "../../../assets/images/shape-9.png", // Adjust the path accordingly
-                height: 170.0, // Adjust the size of the image as needed
+                "../../../assets/images/shape-9.png",
+                height: 170.0, 
                 width: 170.0,
               ),
             ),
@@ -777,28 +777,28 @@ class Footer extends StatelessWidget {
                           icon: Icons.restaurant_menu,
                           title: 'Appetizers',
                           onPressed: () {
-                            // Action to perform when clicking on "Appetizers"
+                           
                           },
                         ),
                         MenuLink(
                           icon: Icons.restaurant_menu,
                           title: 'Main Course',
                           onPressed: () {
-                            // Action to perform when clicking on "Main Course"
+                           
                           },
                         ),
                         MenuLink(
                           icon: Icons.restaurant_menu,
                           title: 'Desserts',
                           onPressed: () {
-                            // Action to perform when clicking on "Desserts"
+                           
                           },
                         ),
                         MenuLink(
                           icon: Icons.restaurant_menu,
                           title: 'Drinks',
                           onPressed: () {
-                            // Action to perform when clicking on "Drinks"
+                            
                           },
                         ),
                       ],
@@ -829,7 +829,7 @@ class Footer extends StatelessWidget {
               SizedBox(height: 40.0),
               ElevatedButton(
                 onPressed: () {
-                  // Handle button press
+                  
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:restaurent/acceuil/screens/home/home_screen.dart';class ProfilePage extends StatelessWidget {
+import 'package:restaurent/acceuil/screens/home/home_screen.dart';
+import 'package:restaurent/screens/home/home_screen.dart';class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +15,7 @@ import 'package:restaurent/acceuil/screens/home/home_screen.dart';class ProfileP
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.purple, // Couleur mauve pour l'en-tête du tiroir
+                color: Colors.purple, 
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,7 +23,7 @@ import 'package:restaurent/acceuil/screens/home/home_screen.dart';class ProfileP
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('../../assets/b4.jpg'), // Ajout de l'image de profil
+                    backgroundImage: AssetImage('../../assets/b4.jpg'),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -38,13 +39,13 @@ import 'package:restaurent/acceuil/screens/home/home_screen.dart';class ProfileP
             ListTile(
               title: Row(
                 children: [
-                  Icon(Icons.home), // Ajout de l'icône Home
+                  Icon(Icons.home),
                   SizedBox(width: 10),
                   Text('Home'),
                 ],
               ),
               onTap: () {
-                // Naviguer vers HomeScreen
+          
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -54,37 +55,37 @@ import 'package:restaurent/acceuil/screens/home/home_screen.dart';class ProfileP
             ListTile(
               title: Row(
                 children: [
-                  Icon(Icons.person), // Ajout de l'icône Person
+                  Icon(Icons.person),
                   SizedBox(width: 10),
                   Text('Profile'),
                 ],
               ),
               onTap: () {
-                // Ajouter la logique de navigation ici
+         
               },
             ),
             ListTile(
               title: Row(
                 children: [
-                  Icon(Icons.settings), // Ajout de l'icône Settings
+                  Icon(Icons.settings), 
                   SizedBox(width: 10),
                   Text('Settings'),
                 ],
               ),
               onTap: () {
-                // Ajouter la logique de navigation ici
+              
               },
             ),
             ListTile(
               title: Row(
                 children: [
-                  Icon(Icons.logout), // Ajout de l'icône Logout
+                  Icon(Icons.logout), 
                   SizedBox(width: 10),
                   Text('Logout'),
                 ],
               ),
               onTap: () {
-                // Ajouter la logique de déconnexion ici
+             
               },
             ),
           ],

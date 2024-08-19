@@ -19,7 +19,7 @@ class _MenuPage2State extends State<MenuPage2> {
   String selectedCategory = 'All';
   int menuCounter = 0;
 
-  // Définir des catégories statiques avec des images associées
+
   final List<Map<String, String>> categories = [
     {'name': 'All', 'icon': 'Icons.list'},
     {'name': 'Appetizers', 'image': '../../../assets/images/Appetizers.webp'},
@@ -69,7 +69,7 @@ Widget build(BuildContext context) {
           margin: EdgeInsets.all(8.0),
           child: TextButton.icon(
             onPressed: () {
-              // Action à définir pour le bouton Track Orders
+           
             },
             icon: Icon(Icons.track_changes, color: Colors.white),
             label: Text("Track Orders", style: TextStyle(color: Colors.white)),
@@ -129,7 +129,7 @@ Widget build(BuildContext context) {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0), // Padding en bas
+                            padding: const EdgeInsets.only(bottom: 20.0), 
                             child: ElevatedButton.icon(
                               onPressed: () {
                                
@@ -142,16 +142,16 @@ Widget build(BuildContext context) {
                               label: Text(
                                 'Reserve a table',
                                 style: TextStyle(
-                                  fontSize: 14, // Taille de police augmentée
+                                  fontSize: 14, 
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(150, 50),
-                                backgroundColor: Colors.orange, // Couleur de fond
+                                backgroundColor: Colors.orange, 
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10), // Coins légèrement arrondis
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 elevation: 5, // Effet d'ombre
                               ),
@@ -160,7 +160,7 @@ Widget build(BuildContext context) {
                         ],
                       ),
                     ),
-                    // Section de droite
+                 
                     Expanded(
                       flex: 2,
                       child: GridView.builder(
@@ -197,7 +197,7 @@ Widget build(BuildContext context) {
 
 
   void _showMenuDetails(Map<String, dynamic> menu) async {
-    // Méthode pour afficher les détails du menu (comme vous l'avez implémentée)
+
   }
 
   void _addToCart(Map<String, dynamic> menu) {
@@ -269,7 +269,7 @@ class MenuCard extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MenuPage3()), // Navigation vers MenuPage3
+                    MaterialPageRoute(builder: (context) => MenuPage3()), 
                   );
                 },
               ),

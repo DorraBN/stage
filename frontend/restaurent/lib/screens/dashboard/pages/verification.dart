@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // To use jsonDecode
-
+import 'dart:convert'; 
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 
-// API URL (replace with your API URL)
+
 const String baseUrl = 'http://localhost:8000/api/reservations';
 
 Future<List<UserReservation>> fetchUserDataByEmail(String email) async {
   final Uri apiUrl = Uri.parse(baseUrl).replace(queryParameters: {'email': email});
 
-  print('Fetching data from: $apiUrl'); // Debug print
-  print('Email: $email'); // Debug print
+  print('Fetching data from: $apiUrl'); 
+  print('Email: $email'); 
 
   try {
     final response = await http.get(apiUrl);
 
-    print('Response status: ${response.statusCode}'); // Debug print
-    print('Response body: ${response.body}'); // Debug print
+    print('Response status: ${response.statusCode}'); 
+    print('Response body: ${response.body}'); 
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -65,7 +64,7 @@ Future<void> updateReservation(UserReservation reservation) async {
     );
 
     if (response.statusCode == 200) {
-      // Successfully updated
+    
     } else {
       throw Exception('Failed to update reservation');
     }

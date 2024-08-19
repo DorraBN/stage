@@ -98,8 +98,8 @@ class AuthController extends Controller
                     ],
                 ], 200);
             } else {
-                // For non-admin email, return unauthorized
-                Auth::logout(); // Log out the user
+               
+                Auth::logout(); 
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: You are not an admin user.',

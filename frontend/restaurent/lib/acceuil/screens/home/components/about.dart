@@ -9,7 +9,7 @@ class AboutUsPage extends StatelessWidget {
   AboutUsPage({
     this.imageWidth = 200,
     this.imageHeight = 200,
-    this.backgroundImageWidth = 400, // Default values for the background image
+    this.backgroundImageWidth = 400, 
     this.backgroundImageHeight = 400,
   });
 
@@ -19,7 +19,7 @@ class AboutUsPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('../../../../../assets/images/shape-5.png'), // Background image
+            image: AssetImage('../../../../../assets/images/shape-5.png'), 
             fit: BoxFit.cover,
           ),
         ),
@@ -28,16 +28,15 @@ class AboutUsPage extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Text on the left with padding
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 140.0, right: 180), // Adjusted padding
+                  padding: const EdgeInsets.only(left: 140.0, right: 180), 
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5), // Background color with opacity
-                      borderRadius: BorderRadius.circular(10), // Rounded corners
-                      border: Border.all(color: Colors.white, width: 2), // Border color and width
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.white, width: 2), 
                     ),
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -48,9 +47,9 @@ class AboutUsPage extends StatelessWidget {
                           child: Text(
                             'About Us',
                             style: TextStyle(
-                              fontSize: 32, // Larger font size for the title
-                              fontWeight: FontWeight.bold, // Bold text
-                              color: Colors.white, // Text color
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -62,35 +61,31 @@ class AboutUsPage extends StatelessWidget {
                             'tirelessly to meet your needs.',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.white, // White text
-                              height: 1.5, // Line height
+                              color: Colors.white,
+                              height: 1.5,
                             ),
                           ),
                         ),
-                        SizedBox(height: 16), // Spacing between text and buttons
+                        SizedBox(height: 16),
                         Row(
                           children: [
                             ElevatedButton(
-                              onPressed: () {
-                                // Action for the "Delivery" button
-                              },
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 13, 172, 32), // Orange color
+                                backgroundColor: Color.fromARGB(255, 13, 172, 32),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0), // Square border
+                                  borderRadius: BorderRadius.circular(0), 
                                 ),
                               ),
                               child: Text('Delivery'),
                             ),
-                            SizedBox(width: 16), // Spacing between buttons
+                            SizedBox(width: 16), 
                             ElevatedButton(
-                              onPressed: () {
-                                // Action for the "Reserve" button
-                              },
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(255, 244, 124, 5), // Orange color
+                                backgroundColor: Color.fromARGB(255, 244, 124, 5),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0), // Square border
+                                  borderRadius: BorderRadius.circular(0), 
                                 ),
                               ),
                               child: Text('Reserve'),
@@ -102,12 +97,10 @@ class AboutUsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Images on the right
               Stack(
                 children: [
-                  // Background image with margins
                   Container(
-                    margin: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 50.0), // Margins around the background image
+                    margin: EdgeInsets.only(top: 16.0, bottom: 16.0, right: 50.0),
                     width: backgroundImageWidth,
                     height: backgroundImageHeight,
                     child: Image.asset(

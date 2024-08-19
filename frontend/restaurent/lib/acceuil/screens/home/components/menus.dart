@@ -84,7 +84,7 @@ class _MenuPage1State extends State<MenuPage1> {
                         color: const Color.fromARGB(255, 47, 46, 46),
                         child: Icon(Icons.image_not_supported),
                       ),
-                    SizedBox(height: 10), // Add space between image and text
+                    SizedBox(height: 10), 
                     _buildDetailRow(Icons.person, "Name: ", productDetails['name']),
                     _buildDetailRow(Icons.category, "Category: ", productDetails['category']),
                     _buildDetailRow(Icons.description, "Description: ", productDetails['description']),
@@ -173,10 +173,10 @@ Widget build(BuildContext context) {
             margin: EdgeInsets.all(8.0),
             child: TextButton.icon(
               onPressed: () {
-                // Action à définir pour le bouton Track Orders
+             
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Login1()), // Remplacez par la page cible
+                  MaterialPageRoute(builder: (context) => Login1()),
                 );
               },
               icon: Icon(Icons.track_changes, color: Colors.white),
@@ -351,7 +351,7 @@ Widget build(BuildContext context) {
     borderRadius: BorderRadius.circular(8.0),
   ),
   child: Row(
-    mainAxisAlignment: MainAxisAlignment.center, // Centre le contenu dans la Row
+    mainAxisAlignment: MainAxisAlignment.center, 
     children: [
       Text(
         'Continue',
@@ -360,7 +360,7 @@ Widget build(BuildContext context) {
           fontSize: 14,
         ),
       ),
-      SizedBox(width: 8), // Espacement entre le texte et l'icône
+      SizedBox(width: 8), 
       Icon(
         Icons.fast_forward_sharp, // Icône de flèche vers l'avant
         color: Colors.white,

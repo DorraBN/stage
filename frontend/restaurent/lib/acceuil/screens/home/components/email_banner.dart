@@ -52,11 +52,11 @@ class EmailBanner extends StatelessWidget {
                                 topLeft: Radius.circular(15.0),
                                 bottomLeft: Radius.circular(15.0))),
                         child: TextFormField(
-                          style: TextStyle(color: Colors.black), // Change the color of the input text to black
+                          style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                               hintText: "Enter your email here",
                               hintStyle: TextStyle(
-                                  color: Colors.black, // Change the color to black
+                                  color: Colors.black, 
                                   fontWeight: FontWeight.w600, 
                                   fontSize: 14),
                               focusedBorder: UnderlineInputBorder(

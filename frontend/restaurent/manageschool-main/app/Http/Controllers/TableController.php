@@ -35,17 +35,16 @@ class TableController extends Controller
 
     public function update(Request $request, $id)
     {
-        $table = Table::findOrFail($id); // Récupérer l'élément existant par son ID
-        
-        // Valider et mettre à jour les champs nécessaires
+        $table = Table::findOrFail($id); 
+       
         $table->name = $request->input('name');
         $table->capacity = $request->input('capacity');
         $table->position = $request->input('position');
         $table->availability = $request->input('availability');
     
-        $table->save(); // Sauvegarder les modifications
+        $table->save(); 
     
-        return response()->json($table, 200); // Répondre avec l'élément mis à jour
+        return response()->json($table, 200); 
     }
 
     public function destroy($id)

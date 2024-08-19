@@ -30,12 +30,12 @@ class _ContactFormState extends State<ContactForm> {
   String _email = '';
   String _subject = '';
   String _message = '';
-  bool _isLoading = false; // Variable to control the loading state
+  bool _isLoading = false; 
 
   Future<void> _sendEmail() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
-        _isLoading = true; // Show loading spinner
+        _isLoading = true; 
       });
 
       final response = await http.post(
@@ -49,7 +49,7 @@ class _ContactFormState extends State<ContactForm> {
       );
 
       setState(() {
-        _isLoading = false; // Hide loading spinner
+        _isLoading = false;
       });
 
       if (response.statusCode == 200) {
@@ -66,22 +66,22 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( // Add scrolling capability
+    return SingleChildScrollView( 
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          // Additional content
-          Image.asset('assets/contact_image.png'), // Add an image (make sure you have the image in your assets)
+          
+          Image.asset('assets/contact_image.png'), 
           SizedBox(height: 10),
           Text(
             'Nous serions ravis d\'avoir de vos nouvelles ! Remplissez le formulaire ci-dessous pour nous envoyer un message.',
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 20),
-          Divider(), // Divider to separate sections
+          Divider(),
           SizedBox(height: 20),
-          // Form content
+      
           Form(
             key: _formKey,
             child: Column(
@@ -132,7 +132,7 @@ class _ContactFormState extends State<ContactForm> {
                 ),
                 SizedBox(height: 20),
                 _isLoading
-                    ? Center(child: CircularProgressIndicator()) // Show loading spinner
+                    ? Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                         onPressed: _sendEmail,
                         child: Text('Envoyer'),

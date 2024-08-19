@@ -20,11 +20,11 @@ class _MenuPageState extends State<MenuPage> {
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
   final _categoryController = TextEditingController();
-  String _availability = 'Available'; // Use string for dropdown
+  String _availability = 'Available'; 
   XFile? _pickedFile;
   String? _imageDataUrl;
   final picker = ImagePicker();
-  bool _isAvailable = true; // Added missing variable for Switch
+  bool _isAvailable = true;
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _MenuPageState extends State<MenuPage> {
 
     if (response.statusCode == 200) {
       setState(() {
-        futureProduct = fetchProduct(); // Refresh the list
+        futureProduct = fetchProduct(); 
       });
     } else {
       throw Exception('Failed to delete product');
@@ -78,14 +78,14 @@ class _MenuPageState extends State<MenuPage> {
         'price': double.parse(_priceController.text),
         'category': _categoryController.text,
         'image': _imageDataUrl,
-        'available': _isAvailable, // Fixed this line to use _isAvailable
+        'available': _isAvailable, 
       }),
       headers: {"Content-Type": "application/json"},
     );
 
     if (response.statusCode == 200) {
       setState(() {
-        futureProduct = fetchProduct(); // Refresh the list
+        futureProduct = fetchProduct(); 
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Product updated successfully')));
     } else {
@@ -144,7 +144,7 @@ class _MenuPageState extends State<MenuPage> {
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  columnSpacing: 44.0, // Increase column spacing
+                  columnSpacing: 44.0, 
                   columns: [
                     DataColumn(label: Text("Name")),
                     DataColumn(label: Text("Image")),
@@ -232,14 +232,14 @@ class _MenuPageState extends State<MenuPage> {
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
-        color: availabilityColor, // La couleur de fond du carré
-        borderRadius: BorderRadius.circular(4.0), // Coins arrondis si désiré
+        color: availabilityColor, 
+        borderRadius: BorderRadius.circular(4.0), 
       ),
       child: Center(
         child: Text(
           availability,
           style: TextStyle(
-            color: Colors.white, // Couleur du texte dans le carré coloré
+            color: Colors.white, 
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -377,7 +377,7 @@ class _MenuPageState extends State<MenuPage> {
                     );
                   },
                 ),
-                SizedBox(width: 16), // Espacement horizontal entre les boutons
+                SizedBox(width: 16),
               IconButton(
                 icon: Icon(Icons.delete, color: Colors.redAccent),
                 onPressed: () {

@@ -25,7 +25,7 @@ class TableItem {
   });
 }
 
-// Page TablesPage StatefulWidget
+
 class TablesPage extends StatefulWidget {
   @override
   _TablesPageState createState() => _TablesPageState();
@@ -43,9 +43,8 @@ class _TablesPageState extends State<TablesPage> {
     _fetchTableItems();
   }
 
-  // Fonction pour récupérer les éléments de la Table depuis l'API
   Future<void> _fetchTableItems() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/table'); // Correction du nom de l'API
+    final url = Uri.parse('http://127.0.0.1:8000/api/table'); 
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -69,9 +68,9 @@ class _TablesPageState extends State<TablesPage> {
     }
   }
 
-  // Fonction pour ajouter un nouvel élément à la Table via l'API
+
   Future<void> _saveTableItem(TableItem item) async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/storeTable'); // Endpoint de sauvegarde
+    final url = Uri.parse('http://127.0.0.1:8000/api/storeTable'); 
     try {
       final response = await http.post(
         url,
@@ -79,14 +78,13 @@ class _TablesPageState extends State<TablesPage> {
           'name': item.name,
           'capacity': item.capacity.toString(),
           'position': item.position,
-          'availability': item.availability ? '1' : '0', // Conversion en entier pour l'API
         },
       );
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final newTableItem = TableItem(
-          id: responseData['id'], // Assurez-vous que votre API retourne l'ID nouvellement créé
+          id: responseData['id'], 
           name: item.name,
           capacity: item.capacity,
           position: item.position,
@@ -96,7 +94,7 @@ class _TablesPageState extends State<TablesPage> {
         );
 
         setState(() {
-          _tableItems.add(newTableItem); // Ajoutez à la liste locale
+          _tableItems.add(newTableItem); 
         });
 
         print('Item added successfully!');
@@ -108,17 +106,16 @@ class _TablesPageState extends State<TablesPage> {
     }
   }
 
-  // Fonction pour éditer un élément existant de la Table via l'API
   Future<void> _editTableItem(int index, TableItem item) async {
     try {
-      final url = Uri.parse('http://127.0.0.1:8000/api/update/${item.id}'); // Endpoint de mise à jour
+      final url = Uri.parse('http://127.0.0.1:8000/api/update/${item.id}'); 
       final response = await http.put(
         url,
         body: {
           'name': item.name,
           'capacity': item.capacity.toString(),
           'position': item.position,
-          'availability': item.availability ? '1' : '0', // Conversion en entier pour l'API
+          'availability': item.availability ? '1' : '0',
         },
       );
 
@@ -135,16 +132,16 @@ class _TablesPageState extends State<TablesPage> {
     }
   }
 
-  // Fonction pour supprimer un élément de la Table via l'API
+
   Future<void> _deleteTableItem(int index) async {
     try {
       int id = _tableItems[index].id;
-      final String apiUrl = 'http://127.0.0.1:8000/api/destroyTable/$id'; // Endpoint de suppression
+      final String apiUrl = 'http://127.0.0.1:8000/api/destroyTable/$id'; 
       var response = await http.delete(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
         setState(() {
-          _tableItems.removeAt(index); // Supprimer localement l'élément supprimé
+          _tableItems.removeAt(index); 
         });
         print('Table ID $id deleted successfully');
       } else {
@@ -155,7 +152,6 @@ class _TablesPageState extends State<TablesPage> {
     }
   }
 
-  // Fonction pour afficher le dialogue d'ajout ou d'édition d'un élément de la Table
   void _showTableItemDialog({TableItem? item, int? index}) {
     final _formKey = GlobalKey<FormState>();
     final _nameController = TextEditingController(text: item?.name);
@@ -331,7 +327,7 @@ Widget build(BuildContext context) {
                                     style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                                     onPressed: () {
                                       _deleteTableItem(_tableItems.indexOf(item));
-                                      Navigator.of(context).pop(); // Ferme le dialogue
+                                      Navigator.of(context).pop(); 
                                     },
                                     label: Text("Delete"),
                                   ),

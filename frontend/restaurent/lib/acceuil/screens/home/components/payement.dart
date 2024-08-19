@@ -36,20 +36,20 @@ Widget build(BuildContext context) {
     ),
     body: Row(
       children: [
-        // Partie gauche: Image
+     
         Expanded(
           flex: 1,
           child: Container(
-            color: Colors.grey[200], // Couleur de fond pour l'image
+            color: Colors.grey[200], 
             child: Image.asset(
-              '../../../../../assets/images/d3.jpg', // Remplacez par le chemin de votre image
+              '../../../../../assets/images/d3.jpg', 
               fit: BoxFit.cover,
-              width: double.infinity, // Assurez-vous que l'image occupe toute la largeur
-              height: double.infinity, // Assurez-vous que l'image occupe toute la hauteur
+              width: double.infinity, 
+              height: double.infinity, 
             ),
           ),
         ),
-        // Partie droite: Formulaire avec défilement
+     
         Expanded(
           flex: 1,
           child: SingleChildScrollView(
@@ -62,8 +62,8 @@ Widget build(BuildContext context) {
          children: [
   Row(
     children: [
-      Icon(Icons.add_shopping_cart, size: 24,color: Colors.green,), // Icône à gauche du texte
-      SizedBox(width: 8), // Espacement entre l'icône et le texte
+      Icon(Icons.add_shopping_cart, size: 24,color: Colors.green,), 
+      SizedBox(width: 8), 
       Text(
         'Products:',
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -74,7 +74,7 @@ Widget build(BuildContext context) {
     int quantity = product['quantity'] ?? 1;
     return Row(
       children: [
-        Icon(Icons.restaurant_menu, size: 24), // Icône du produit
+        Icon(Icons.restaurant_menu, size: 24), 
         SizedBox(width: 8),
         Expanded(
           child: Text(
@@ -102,7 +102,7 @@ Widget build(BuildContext context) {
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name',
-                        prefixIcon: Icon(Icons.person), // Icône du nom
+                        prefixIcon: Icon(Icons.person), 
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
@@ -112,7 +112,7 @@ Widget build(BuildContext context) {
                       controller: _phoneController,
                       decoration: InputDecoration(
                         labelText: 'Phone Number',
-                        prefixIcon: Icon(Icons.phone), // Icône du téléphone
+                        prefixIcon: Icon(Icons.phone), 
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) => value == null || value.isEmpty ? 'Please enter your phone number' : null,
@@ -122,7 +122,7 @@ Widget build(BuildContext context) {
                       controller: _addressController,
                       decoration: InputDecoration(
                         labelText: 'Delivery Address',
-                        prefixIcon: Icon(Icons.home), // Icône de l'adresse
+                        prefixIcon: Icon(Icons.home), 
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) => value == null || value.isEmpty ? 'Please enter your address' : null,
@@ -143,7 +143,7 @@ Widget build(BuildContext context) {
                           });
                         },
                       ),
-                      trailing: Icon(Icons.credit_card), // Icône de la carte de crédit
+                      trailing: Icon(Icons.credit_card), 
                     ),
                     ListTile(
                       title: const Text('Cash on Delivery'),
@@ -156,7 +156,7 @@ Widget build(BuildContext context) {
                           });
                         },
                       ),
-                      trailing: Icon(Icons.money), // Icône de l'argent
+                      trailing: Icon(Icons.money), 
                     ),
                     Visibility(
                       visible: _paymentMethod == 'Credit Card',
@@ -172,7 +172,7 @@ Widget build(BuildContext context) {
                             controller: _cardNumberController,
                             decoration: InputDecoration(
                               labelText: 'Card Number',
-                              prefixIcon: Icon(Icons.credit_card), // Icône du numéro de carte
+                              prefixIcon: Icon(Icons.credit_card), 
                               border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
@@ -183,7 +183,7 @@ Widget build(BuildContext context) {
                             controller: _expiryDateController,
                             decoration: InputDecoration(
                               labelText: 'Expiry Date (MM/YY)',
-                              prefixIcon: Icon(Icons.date_range), // Icône de la date
+                              prefixIcon: Icon(Icons.date_range),
                               border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.datetime,
@@ -194,7 +194,7 @@ Widget build(BuildContext context) {
                             controller: _cvvController,
                             decoration: InputDecoration(
                               labelText: 'CVV',
-                              prefixIcon: Icon(Icons.lock), // Icône du CVV
+                              prefixIcon: Icon(Icons.lock), 
                               border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
@@ -213,10 +213,10 @@ Widget build(BuildContext context) {
                         },
                         child: Text('Confirm Order'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange, // Couleur de fond orange
+                          backgroundColor: Colors.orange, 
                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10), // Coins arrondis
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
@@ -270,8 +270,8 @@ Widget build(BuildContext context) {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green),
                     onPressed: () {
-                      Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
-                      _showCongratulationsDialog(context); // Afficher la boîte de dialogue de félicitations
+                      Navigator.of(context).pop(); 
+                      _showCongratulationsDialog(context); 
                     },
                     label: Text("Confirm"),
                   ),
@@ -305,9 +305,9 @@ void _showCongratulationsDialog(BuildContext context) {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Fermer la boîte de dialogue de félicitations
-                 // Envoyer la commande au serveur
-                _showExportOptionsDialog(context); // Afficher la boîte de dialogue d'exportation
+                Navigator.of(context).pop();
+               
+                _showExportOptionsDialog(context); 
               },
               child: Text("OK"),
               style: ElevatedButton.styleFrom(
@@ -378,7 +378,7 @@ void _showCongratulationsDialog(BuildContext context) {
 void _exportAsPdf() async {
   final pdf = pw.Document();
 
-  // Remplacez 'assets/logo.png' par le chemin de votre image de logo
+  
   final logoImage = pw.MemoryImage(
     (await rootBundle.load('../../../.././assets/images/logo.jpg')).buffer.asUint8List(),
   );
@@ -387,7 +387,7 @@ void _exportAsPdf() async {
     pw.Page(
       build: (pw.Context context) => pw.Stack(
         children: [
-          // Cadre décoré
+       
           pw.Positioned(
             left: 10,
             top: 10,
@@ -395,18 +395,18 @@ void _exportAsPdf() async {
             bottom: 10,
             child: pw.Container(
               decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.blue, width: 4), // Cadre épais bleu
-                borderRadius: pw.BorderRadius.circular(15), // Coins arrondis
-                // Ajoutez des motifs ou des décorations supplémentaires si nécessaire
+                border: pw.Border.all(color: PdfColors.blue, width: 4),
+                borderRadius: pw.BorderRadius.circular(15),
+         
               ),
               padding: pw.EdgeInsets.all(20),
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  // Logo centré
+                 
                   pw.Align(
                     alignment: pw.Alignment.topCenter,
-                    child: pw.Image(logoImage, width: 100), // Ajustez la taille du logo si nécessaire
+                    child: pw.Image(logoImage, width: 100), 
                   ),
                   pw.SizedBox(height: 20),
                   pw.Text(
@@ -475,7 +475,7 @@ void _exportAsPdf() async {
               ),
             ),
           ),
-          // Adresse et numéro de téléphone du restaurant en bas à droite
+        
           pw.Positioned(
             bottom: 20,
             right: 20,
@@ -507,7 +507,7 @@ void _exportAsPdf() async {
   try {
     final pdfFile = await pdf.save();
 
-    // Share or save the PDF
+  
     await Printing.sharePdf(bytes: pdfFile, filename: 'restaurant_delivery_confirmation.pdf');
   } catch (e) {
     print('Error generating PDF: $e');
@@ -515,7 +515,9 @@ void _exportAsPdf() async {
 }
 
 
-// Remplacez par l'URL correcte
+
+
+
 
 
 Future<void> _exportAsExcel() async {

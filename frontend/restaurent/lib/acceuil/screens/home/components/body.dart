@@ -52,8 +52,8 @@ Center(
   child: Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Icon(Icons.food_bank, size: 40, color: Colors.orange), // Icône au-dessus du texte
-      SizedBox(height: 10), // Espacement entre l'icône et le texte
+      Icon(Icons.food_bank, size: 40, color: Colors.orange), 
+      SizedBox(height: 10), 
       Text(
         'Menu',
         style: TextStyle(
@@ -61,11 +61,11 @@ Center(
           fontWeight: FontWeight.bold,
         ),
       ),
-      SizedBox(height: 5), // Espacement entre le texte et le soulignement
+      SizedBox(height: 5), 
       Container(
         height: 2,
-        width: 100, // Largeur du soulignement
-        color: Colors.orange, // Couleur du soulignement
+        width: 100, 
+        color: Colors.orange, 
       ),
     ],
   ),
@@ -93,11 +93,11 @@ ElevatedButton.icon(
     ),
   ),
   style: ElevatedButton.styleFrom(
-    minimumSize: Size(100, 60), backgroundColor: Colors.orange, // Background color
+    minimumSize: Size(100, 60), backgroundColor: Colors.orange,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10), // Less rounded corners for a more rectangular shape
+      borderRadius: BorderRadius.circular(10), 
     ),
-    elevation: 5, // Add elevation for shadow effect
+    elevation: 5,
   ),
 ),
 SizedBox(height: 40),
@@ -105,8 +105,8 @@ Center(
   child: Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Icon(Icons.store, size: 40, color: Colors.orange), // Icône au-dessus du texte
-      SizedBox(height: 10), // Espacement entre l'icône et le texte
+      Icon(Icons.store, size: 40, color: Colors.orange), 
+      SizedBox(height: 10), 
       Text(
         'Products',
         style: TextStyle(
@@ -114,11 +114,11 @@ Center(
           fontWeight: FontWeight.bold,
         ),
       ),
-      SizedBox(height: 5), // Espacement entre le texte et le soulignement
+      SizedBox(height: 5), 
       Container(
         height: 2,
-        width: 100, // Largeur du soulignement
-        color: Colors.orange, // Couleur du soulignement
+        width: 100, 
+        color: Colors.orange,
       ),
     ],
   ),
@@ -156,11 +156,11 @@ Center(
     ),
   ),
   style: ElevatedButton.styleFrom(
-    minimumSize: Size(100, 60), backgroundColor: Colors.orange, // Background color
+    minimumSize: Size(100, 60), backgroundColor: Colors.orange, 
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10), // Less rounded corners for a more rectangular shape
+      borderRadius: BorderRadius.circular(10), 
     ),
-    elevation: 5, // Add elevation for shadow effect
+    elevation: 5, 
   ),
 ),
                 SizedBox(height: 20),
@@ -211,7 +211,7 @@ class _RestaurantMenuPageState extends State<RestaurantMenuPage> {
         leading: IconButton(
           icon: Icon(Icons.food_bank, color: Colors.amber),
           onPressed: () {
-            // Add your menu toggle logic here
+         
           },
         ),
       ),
@@ -239,7 +239,7 @@ class _RestaurantMenuPageState extends State<RestaurantMenuPage> {
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: ListTile(
                       leading: Image.network(
-                        'http://127.0.0.1:8000${item.image}', // Corrected image URL
+                        'http://127.0.0.1:8000${item.image}', 
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
@@ -295,7 +295,7 @@ class MenuItem {
   factory MenuItem.fromJson(Map<String, dynamic> json) {
     return MenuItem(
       name: json['name'] ?? 'Unknown Name',
-      image: json['image_url'] ?? '/path/to/default_image.jpg', // Provide a default image path
+      image: json['image_url'] ?? '/path/to/default_image.jpg', 
       price: double.tryParse(json['price'].toString()) ?? 0.0,
       category: json['category'] ?? 'Unknown Category',
     );

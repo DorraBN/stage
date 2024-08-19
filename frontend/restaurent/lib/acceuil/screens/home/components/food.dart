@@ -57,7 +57,7 @@ class Products1 extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () {
-                          // Action à effectuer lorsqu'on clique sur l'icône du panier
+                         
                         },
                         icon: Icon(Icons.shopping_cart),
                       ),

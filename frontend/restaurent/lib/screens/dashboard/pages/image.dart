@@ -76,9 +76,9 @@ class _ImageUploadState extends State<ImageUpload> {
   if (response.statusCode == 200) {
     final jsonData = json.decode(response.body);
 
-    // Vérifier si jsonData est null ou si la liste est vide
+ 
     if (jsonData == null) {
-      return []; // Retourner une liste vide si jsonData est null
+      return [];
     }
 
     if (jsonData is Map<String, dynamic>) {

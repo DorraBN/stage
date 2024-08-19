@@ -77,7 +77,7 @@ class _HomeScreen1State extends State<HomeScreen1> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.check_circle_outline, color: Colors.white), // Icon
+                          Icon(Icons.check_circle_outline, color: Colors.white), 
                           SizedBox(width: 10), 
                           Text(
                             'Check Reservations',
@@ -95,7 +95,7 @@ class _HomeScreen1State extends State<HomeScreen1> {
                           borderRadius: BorderRadius.circular(70), 
                         ),
                         padding: EdgeInsets.symmetric(vertical: 25, horizontal: 80), 
-                        elevation: 5, // Shadow
+                        elevation: 5, 
                       ),
                     ),
                   ],

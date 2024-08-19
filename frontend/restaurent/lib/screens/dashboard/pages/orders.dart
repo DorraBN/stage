@@ -2,7 +2,7 @@ import 'package:colorize_text_avatar/colorize_text_avatar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:intl/intl.dart'; 
 
 class Order {
   final int id;
@@ -104,7 +104,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
     if (response.statusCode == 200) {
       setState(() {
-        futureOrders = OrderService().fetchOrders(); // Refresh the list
+        futureOrders = OrderService().fetchOrders(); 
       });
     } else {
       throw Exception('Failed to delete order');
@@ -130,7 +130,7 @@ void _viewOrder(Order order) async {
           content: Container(
             width: 360,
             height: 370,
-            child: SingleChildScrollView( // Use SingleChildScrollView to avoid overflow issues
+            child: SingleChildScrollView( 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -402,7 +402,7 @@ void _viewOrder(Order order) async {
       },
     );
   } catch (e) {
-    // Handle errors
+   
     print('Error fetching order details: $e');
   }
 }
@@ -521,7 +521,7 @@ void _updateOrder(Order order) async {
                     OrderService().updateOrder(order.id, updatedOrder).then((_) {
                       Navigator.of(context).pop();
                       setState(() {
-                        futureOrders = OrderService().fetchOrders(); // Refresh the list
+                        futureOrders = OrderService().fetchOrders();
                       });
                     }).catchError((e) {
                       print('Error updating order: $e');
@@ -598,10 +598,10 @@ void _updateOrder(Order order) async {
                     DataCell(Text('${order.totalPrice.toStringAsFixed(2)} dinars')),
                     DataCell(
                       ElevatedButton(
-                        onPressed: () {}, // Add functionality if needed
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: order.isConfirmed ? Colors.green : Colors.red,
-                          minimumSize: Size(100, 36), // Adjust size as needed
+                          minimumSize: Size(100, 36),
                         ),
                         child: Text(
                           order.isConfirmed ? 'Confirmed' : 'Cancelled',

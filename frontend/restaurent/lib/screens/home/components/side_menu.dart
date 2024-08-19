@@ -12,7 +12,6 @@ import 'package:restaurent/screens/dashboard/pages/tables.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  // Create a global key to uniquely identify the Scaffold
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -49,7 +48,7 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: SingleChildScrollView(
-        // it enables scrolling
+      
         child: Column(
           children: [
             DrawerHeader(
@@ -63,7 +62,7 @@ class SideMenu extends StatelessWidget {
   child: Image.asset(
     "../../../.././assets/images/logo.jpg",
     scale: 5,
-    width: 50, // ajustez la largeur et la hauteur selon vos besoins
+    width: 50, 
     height: 50,
   ),
 )

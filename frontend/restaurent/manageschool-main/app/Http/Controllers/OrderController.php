@@ -35,7 +35,6 @@ class OrderController extends Controller
  
     }
 
-    // Afficher un produit spécifique
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,7 +49,7 @@ class OrderController extends Controller
             'products' => 'required|array',
         ]);
     
-        // Stockez les données dans la base de données, ou effectuez toute autre opération nécessaire
+  
         $order = new Order();
         $order->customer_name = $validated['customer_name'];
         $order->phone_number = $validated['phone_number'];
@@ -62,7 +61,6 @@ class OrderController extends Controller
         $order->total_price = $validated['total_price'];
         $order->save();
     
-        // Enregistrez les produits associés à la commande
         foreach ($validated['products'] as $product) {
             $orderProduct = new OrderProduct();
             $orderProduct->order_id = $order->id;
@@ -77,7 +75,7 @@ class OrderController extends Controller
     
     public function update(Request $request, $id)
 {
-    // Définir les règles de validation
+    
     $rules = [
         'customer_name' => 'nullable|string|max:255',
         'phone_number' => 'nullable|string|max:20',
@@ -94,13 +92,13 @@ class OrderController extends Controller
            'is_confirmed' => 'nullable|boolean'
     ];
 
-    // Valider la requête
+    
     $validatedData = $request->validate($rules);
 
-    // Trouver la commande ou échouer
+
     $order = Order::findOrFail($id);
 
-    // Mettre à jour les champs de la commande s'ils sont présents dans la requête
+  
     $orderData = array_filter([
         'customer_name' => $validatedData['customer_name'] ?? $order->customer_name,
         'phone_number' => $validatedData['phone_number'] ?? $order->phone_number,
@@ -110,22 +108,20 @@ class OrderController extends Controller
         'expiry_date' => $validatedData['expiry_date'] ?? $order->expiry_date,
         'cvv' => $validatedData['cvv'] ?? $order->cvv,
         'total_price' => $validatedData['total_price'] ?? $order->total_price,
-         // Ne pas modifier cette valeur ici si ce n'est pas nécessaire
+        
     ]);
 
-    // Mettre à jour les champs de la commande
+
     $order->update($orderData);
 
-    // Remplacer les éléments de la commande par les nouveaux éléments fournis
+    
     if (isset($validatedData['items'])) {
-        // Convertir le tableau d'éléments en JSON et mettre à jour le champ `items`
+   
         $order->items = json_encode($validatedData['items']);
     }
 
-    // Sauvegarder les modifications
     $order->save();
 
-    // Répondre avec l'élément mis à jour
     return response()->json($order, 200);
 }
 

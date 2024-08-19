@@ -30,7 +30,7 @@ class ImageController extends Controller
     {
         $request->validate([
             'title' => 'required|string',
-            'image' => 'nullable|string', // Assurez-vous que l'image est une chaîne
+            'image' => 'nullable|string', 
         ]);
         
         $image = new Image();

@@ -30,7 +30,7 @@ class Products extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.network(
-                    'http://127.0.0.1:8000${product.image}', // Utilisation correcte de `product.image`
+                    'http://127.0.0.1:8000${product.image}',
                     height: 230,
                     width: 300,
                     fit: BoxFit.cover,
@@ -50,16 +50,16 @@ class Products extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      '${product.price.toStringAsFixed(2)} dinars', // Formatage du prix avec 2 décimales
+                      '${product.price.toStringAsFixed(2)} dinars', 
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green, // Couleur du texte du prix
+                        color: Colors.green, 
                       ),
                     ),
                     IconButton(
                       onPressed: () {
-                        // Action à effectuer lorsqu'on clique sur l'icône du panier
+                        
                       },
                       icon: Icon(Icons.shopping_cart),
                     ),

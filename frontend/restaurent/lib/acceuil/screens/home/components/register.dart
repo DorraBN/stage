@@ -222,7 +222,7 @@ class Body extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
               prefixIcon: Icon(
-            Icons.person, // Icône de l'email
+            Icons.person, 
             color: Colors.grey,
           ),
           ),  style: TextStyle(color: Colors.black),
@@ -244,7 +244,7 @@ class Body extends StatelessWidget {
               borderSide: BorderSide(color: Colors.blueGrey),
               borderRadius: BorderRadius.circular(15),
             ),  prefixIcon: Icon(
-            Icons.email_outlined, // Icône de l'email
+            Icons.email_outlined,
             color: Colors.grey,
           ),
           ),  style: TextStyle(color: Colors.black),
@@ -267,7 +267,7 @@ class Body extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
               prefixIcon: Icon(
-            Icons.phone, // Icône de l'email
+            Icons.phone,
             color: Colors.grey,
           ),
           ),  style: TextStyle(color: Colors.black),
@@ -295,7 +295,7 @@ class Body extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
               prefixIcon: Icon(
-            Icons.lock_outlined, // Icône de l'email
+            Icons.lock_outlined, 
             color: Colors.grey,
           ),
           ),  style: TextStyle(color: Colors.black),
@@ -432,7 +432,7 @@ Future<void> registerUser(String name, String email, String phoneNumber, String 
   );
 
   if (response.statusCode == 200) {
-    // Afficher une boîte de dialogue de succès
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -442,7 +442,7 @@ Future<void> registerUser(String name, String email, String phoneNumber, String 
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Ferme la boîte de dialogue
+                Navigator.of(context).pop(); 
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
@@ -455,7 +455,7 @@ Future<void> registerUser(String name, String email, String phoneNumber, String 
       },
     );
   } else {
-    // Afficher une boîte de dialogue d'échec
+  
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -465,7 +465,7 @@ Future<void> registerUser(String name, String email, String phoneNumber, String 
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Ferme la boîte de dialogue
+                Navigator.of(context).pop(); 
               },
               child: Text('OK'),
             ),

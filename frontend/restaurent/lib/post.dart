@@ -45,46 +45,46 @@ class MyApp1 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Centre le contenu du Row
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Testimonials', // Correction du texte
+              'Testimonials', 
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
-                 // Souligner le texte
+               
               ),
             ),
-            SizedBox(width: 8), // Espacement entre le titre et l'icône
-            Icon(Icons.star, color: Colors.orange), // Icône pour les témoignages
+            SizedBox(width: 8),
+            Icon(Icons.star, color: Colors.orange), 
           ],
         ),
-        // La propriété actions est laissée vide car l'icône est incluse dans le titre
+       
       ),
       body: Stack(
         children: [
-          // Image positioned at the top right corner
+         
           Positioned(
             top: 0,
             right: 0,
             child: Image.asset(
               "../../../assets/images/b.png",
               width: 100, 
-              height: 100, // Set the desired height
+              height: 100,
             ),
           ),
-          // Image positioned at the bottom left corner
+          
           Positioned(
             bottom: 0,
             left: 0,
             child: Image.asset(
               "../../../assets/images/b2.png",
-              width: 100, // Set the desired width
-              height: 100, // Set the desired height
+              width: 100, 
+              height: 100, 
             ),
           ),
-          // Foreground content
+         
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Center(
@@ -154,8 +154,8 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate the card width based on screen width
-        double cardWidth = constraints.maxWidth > 600 ? 350 : 250; // Use a smaller width for smaller screens
+  
+        double cardWidth = constraints.maxWidth > 600 ? 350 : 250; 
 
         return MouseRegion(
           onEnter: (_) {
@@ -181,21 +181,21 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
                     margin: EdgeInsets.symmetric(horizontal: 8.0),
                     elevation: 4.0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0), // Increased border radius
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Container(
-                      width: cardWidth, // Use dynamic width based on screen size
+                      width: cardWidth, 
                       padding: EdgeInsets.only(
-                        top: 60.0, left: 16.0, right: 16.0, bottom: 16.0), // Increased top padding
+                        top: 60.0, left: 16.0, right: 16.0, bottom: 16.0), 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 40.0), // Adjust space for the image
+                          SizedBox(height: 40.0),
                           Text(
                             widget.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.0, // Increased font size
+                              fontSize: 20.0,
                               color: Colors.deepOrange,
                             ),
                           ),
@@ -221,17 +221,17 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
                     ),
                   ),
                   Positioned(
-                    top: -40, // Adjust position to fit with new size
+                    top: -40, 
                     left: 0,
                     right: 0,
                     child: CircleAvatar(
-                      radius: 50.0, // Increased radius for the avatar
+                      radius: 50.0, 
                       backgroundColor: Colors.transparent,
                       child: ClipOval(
                         child: Image.network(
                           widget.imageUrl,
                           fit: BoxFit.cover,
-                          width: 100.0, // Match the size of the CircleAvatar
+                          width: 100.0, 
                           height: 100.0,
                         ),
                       ),

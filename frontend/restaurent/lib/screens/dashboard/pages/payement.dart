@@ -8,45 +8,45 @@ class PaymentsPage extends StatelessWidget {
         title: Text("Payments Dashboard"),
       ),
       body: GridView.count(
-        crossAxisCount: 3, // Display three cards per row
+        crossAxisCount: 3, 
         padding: EdgeInsets.all(160.0),
-        childAspectRatio: 0.8, // Adjusted aspect ratio for smaller cards
+        childAspectRatio: 0.8, 
         children: [
           _buildDashboardItem(
             icon: Icons.account_circle,
             title: 'Interface utilisateur',
             subtitle: 'Fournir une interface intuitive',
-            color: Colors.orange, // Color for the card
+            color: Colors.orange, 
           ),
           _buildDashboardItem(
             icon: Icons.payment,
             title: 'Paiements',
             subtitle: 'Accepter différents modes de paiement',
-            color: Colors.green, // Color for the card
+            color: Colors.green, 
           ),
           _buildDashboardItem(
             icon: Icons.description,
             title: 'Facturation',
             subtitle: 'Générer des factures détaillées',
-            color: Colors.blue, // Color for the card
+            color: Colors.blue,
           ),
           _buildDashboardItem(
             icon: Icons.auto_awesome,
             title: 'Facturation automatique',
             subtitle: 'Générer automatiquement les factures',
-            color: Colors.purple, // Color for the card
+            color: Colors.purple, 
           ),
           _buildDashboardItem(
             icon: Icons.history,
             title: 'Historique des factures',
             subtitle: 'Consulter et auditer les factures',
-            color: Colors.red, // Color for the card
+            color: Colors.red,
           ),
           _buildDashboardItem(
             icon: Icons.file_download,
             title: 'Exportation',
             subtitle: 'Exporter les factures en PDF, Excel',
-            color: Colors.teal, // Color for the card
+            color: Colors.teal,
           ),
         ],
       ),
@@ -59,22 +59,22 @@ class PaymentsPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
       ),
-      color: color, // Set the background color of the card
+      color: color,
       child: Padding(
-        padding: EdgeInsets.all(150.0), // Adjusted padding for the content
+        padding: EdgeInsets.all(150.0), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              size: 76, // Icon size
-              color: Colors.white, // Icon color (white for contrast)
+              size: 76, 
+              color: Colors.white, 
             ),
-            SizedBox(height: 4), // Reduced height between icon and text
+            SizedBox(height: 4),
             Text(
               title,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white), // Title style (white for contrast)
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
             ),
            
           ],

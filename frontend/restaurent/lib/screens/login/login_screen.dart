@@ -23,8 +23,8 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
 
   var _isMoved = false;
-  String _email = ''; // Store the email value
-  String _name = ''; // Store the name value
+  String _email = ''; 
+  String _name = ''; 
 
   @override
   void initState() {
@@ -44,14 +44,14 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
 
   Future<bool> _checkEmailExists(String email) async {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/api/check-email'), // Replace with your API endpoint
+      Uri.parse('http://127.0.0.1:8000/api/check-email'), 
       body: jsonEncode({'email': email}),
       headers: {'Content-Type': 'application/json'},
     );
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      return result['exists']; // Assuming your backend returns a JSON with an 'exists' field
+      return result['exists']; 
     } else {
       throw Exception('Failed to check email');
     }
@@ -168,7 +168,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
   text: "Check your reservations",
   onPressed: () async {
     if (_email.isEmpty) {
-      // Handle empty email case
+     
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please enter an email address')),
       );
@@ -197,8 +197,8 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                 TextButton(
                   child: Text('OK'),
                   onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context).pop(); // Go back to the previous page
+                    Navigator.of(context).pop(); 
+                    Navigator.of(context).pop(); 
                   },
                 ),
               ],
@@ -208,7 +208,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
       }
     } catch (e) {
       print('Error: $e');
-      // Handle error
+ 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An error occurred. Please try again later.')),
       );

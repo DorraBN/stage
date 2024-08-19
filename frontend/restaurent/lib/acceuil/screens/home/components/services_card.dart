@@ -128,7 +128,7 @@ class FoodPricePage extends StatelessWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: 2, // Adjusted for 3 images per row
+                itemCount: 2, 
                 itemBuilder: (context, index) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -170,7 +170,7 @@ class FoodPricePage extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Action à effectuer lors du clic sur le bouton
+              
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 243, 156, 33),
@@ -196,12 +196,12 @@ class FoodPricePage extends StatelessWidget {
     required String price,
     String? badge,
     required String description,
-    required double width, // Added width parameter
+    required double width, 
   }) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       padding: EdgeInsets.all(20),
-      width: width, // Set width based on parameter
+      width: width, 
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.7),
         borderRadius: BorderRadius.circular(10),

@@ -75,9 +75,8 @@ class ReserveController extends Controller
 
 public function update(Request $request, $id)
 {
-    $reserve = Reserve::findOrFail($id); // Récupérer l'élément existant par son ID
-    
-    // Valider et mettre à jour les champs nécessaires
+    $reserve = Reserve::findOrFail($id); 
+
     $reserve->name = $request->input('name');
     $reserve->phone = $request->input('phone');
     $reserve->email = $request->input('email');
@@ -88,9 +87,9 @@ public function update(Request $request, $id)
     $reserve->message = $request->input('message');
     $reserve->status = $request->input('status');
 
-    $reserve->save(); // Sauvegarder les modifications
+    $reserve->save();
 
-    return response()->json($resere, 200); // Répondre avec l'élément mis à jour
+    return response()->json($resere, 200); 
 }
 
 

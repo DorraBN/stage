@@ -11,13 +11,13 @@ class PostController extends Controller
         $request->validate([
             'body' => 'required|string',
             'user_id' => 'required|integer',
-            'image' => 'nullable|url', // Vérification que c'est bien un URL
+            'image' => 'nullable|url', 
         ]);
 
         $post = Post::create([
             'body' => $request->input('body'),
             'user_id' => $request->input('user_id'),
-            'image' => $request->input('image'), // Sauvegarde de l'URL de l'image
+            'image' => $request->input('image'),
         ]);
 
         return response()->json($post, 200);
