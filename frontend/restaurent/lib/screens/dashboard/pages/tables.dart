@@ -4,13 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 
-// Modèle de TableItem
+
 class TableItem {
-  int id; // Ajout de l'ID pour identifier chaque élément de la Table
+  int id; 
   String name;
   int capacity;
   String position;
-  bool availability; // Utilisation de bool pour l'indicateur d'availability
+  bool availability;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -31,10 +31,10 @@ class TablesPage extends StatefulWidget {
   _TablesPageState createState() => _TablesPageState();
 }
 
-// État _TablesPageState de TablesPage
+
 class _TablesPageState extends State<TablesPage> {
-  List<TableItem> _tableItems = []; // Renommage en _tableItems
-  List<String> _positions = ['corner', 'left', 'right', 'center']; // Correction du typo 'right'
+  List<TableItem> _tableItems = []; 
+  List<String> _positions = ['corner', 'left', 'right', 'center']; 
   String _selectedPosition = 'corner';
 
   @override
@@ -56,7 +56,7 @@ class _TablesPageState extends State<TablesPage> {
             name: item['name'] ?? '',
             capacity: item['capacity'] ?? 0,
             position: item['position'] ?? '',
-            availability: item['availability'] == 1, // Conversion en booléen
+            availability: item['availability']  ?? 0, 
             createdAt: DateTime.parse(item['created_at'] ?? DateTime.now().toString()),
             updatedAt: DateTime.parse(item['updated_at'] ?? DateTime.now().toString()),
           )).toList();
@@ -223,22 +223,22 @@ class _TablesPageState extends State<TablesPage> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   final newItem = TableItem(
-                    id: item?.id ?? 0, // Utilisation de l'ID existant ou 0 pour un nouvel élément
+                    id: item?.id ?? 0, 
                     name: _nameController.text,
                     capacity: int.parse(_capacityController.text),
                     position: _positionController.text,
-                    availability: _availabilityController.text == '1', // Conversion en booléen
+                    availability: _availabilityController.text == '1',
                     createdAt: DateTime.now(),
                     updatedAt: DateTime.now(),
                   );
 
                   if (item == null) {
-                    _saveTableItem(newItem); // Appel de la fonction de sauvegarde pour nouvel élément
+                    _saveTableItem(newItem); 
                   } else {
-                    _editTableItem(index!, newItem); // Appel de la fonction d'édition
+                    _editTableItem(index!, newItem); 
                   }
 
-                  Navigator.of(context).pop(); // Fermeture de la boîte de dialogue
+                  Navigator.of(context).pop(); 
                 }
               },
               child: Text(item == null ? 'Add' : 'Save'),
@@ -249,7 +249,7 @@ class _TablesPageState extends State<TablesPage> {
     );
   }
 
-  // Méthode build de l'interface utilisateur
+  
 @override
 Widget build(BuildContext context) {
   return Scaffold(

@@ -118,7 +118,6 @@ class MyApp1 extends StatelessWidget {
   }
 }
 
-
 class TestimonialCard extends StatefulWidget {
   final String name;
   final String testimonial;
@@ -153,90 +152,97 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _isHovered = true;
-          _controller.forward();
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _isHovered = false;
-          _controller.reverse();
-        });
-      },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: FadeTransition(
-          opacity: _opacityAnimation,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Card(
-                margin: EdgeInsets.symmetric(horizontal: 8.0),
-                elevation: 4.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0), // Increased border radius
-                ),
-                child: Container(
-                  width: 350, // Increased card width
-                  padding: EdgeInsets.only(
-                    top: 60.0, left: 16.0, right: 16.0, bottom: 16.0), // Increased top padding
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 40.0), // Adjust space for the image
-                      Text(
-                        widget.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0, // Increased font size
-                          color: Colors.deepOrange,
-                        ),
-                      ),
-                      SizedBox(height: 28.0),
-                      Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Calculate the card width based on screen width
+        double cardWidth = constraints.maxWidth > 600 ? 350 : 250; // Use a smaller width for smaller screens
+
+        return MouseRegion(
+          onEnter: (_) {
+            setState(() {
+              _isHovered = true;
+              _controller.forward();
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              _isHovered = false;
+              _controller.reverse();
+            });
+          },
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: FadeTransition(
+              opacity: _opacityAnimation,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Card(
+                    margin: EdgeInsets.symmetric(horizontal: 8.0),
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0), // Increased border radius
+                    ),
+                    child: Container(
+                      width: cardWidth, // Use dynamic width based on screen size
+                      padding: EdgeInsets.only(
+                        top: 60.0, left: 16.0, right: 16.0, bottom: 16.0), // Increased top padding
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.format_quote, color: Colors.grey),
-                          SizedBox(width: 28.0),
-                          Expanded(
-                            child: Text(
-                              widget.testimonial,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black87,
-                              ),
-                              textAlign: TextAlign.left,
+                          SizedBox(height: 40.0), // Adjust space for the image
+                          Text(
+                            widget.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0, // Increased font size
+                              color: Colors.deepOrange,
                             ),
+                          ),
+                          SizedBox(height: 28.0),
+                          Row(
+                            children: [
+                              Icon(Icons.format_quote, color: Colors.grey),
+                              SizedBox(width: 28.0),
+                              Expanded(
+                                child: Text(
+                                  widget.testimonial,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black87,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: -40, // Adjust position to fit with new size
-                left: 0,
-                right: 0,
-                child: CircleAvatar(
-                  radius: 50.0, // Increased radius for the avatar
-                  backgroundColor: Colors.transparent,
-                  child: ClipOval(
-                    child: Image.network(
-                      widget.imageUrl,
-                      fit: BoxFit.cover,
-                      width: 100.0, // Match the size of the CircleAvatar
-                      height: 100.0,
                     ),
                   ),
-                ),
+                  Positioned(
+                    top: -40, // Adjust position to fit with new size
+                    left: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 50.0, // Increased radius for the avatar
+                      backgroundColor: Colors.transparent,
+                      child: ClipOval(
+                        child: Image.network(
+                          widget.imageUrl,
+                          fit: BoxFit.cover,
+                          width: 100.0, // Match the size of the CircleAvatar
+                          height: 100.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

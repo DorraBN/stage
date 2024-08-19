@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/screens/dashboard/pages/menup.dart';
+import 'package:restaurent/screens/home/home_screen.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -106,19 +107,30 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menu products"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ImageUploads1()),
-              );
-            },
-          ),
-        ],
-      ),
+  title: Text("Menu products"),
+  leading: IconButton(
+    icon: Icon(Icons.arrow_back),
+    onPressed: () {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (Route<dynamic> route) => false,
+      );
+    },
+  ),
+  actions: [
+    IconButton(
+      icon: Icon(Icons.add),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ImageUploads1()),
+        );
+      },
+    ),
+  ],
+),
+
       body: Container(
         padding: EdgeInsets.all(30.0),
         child: FutureBuilder<List<Map<String, dynamic>>>(

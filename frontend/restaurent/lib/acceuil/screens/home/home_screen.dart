@@ -13,14 +13,14 @@ import 'package:restaurent/screens/login/login_screen.dart';
 import 'components/body.dart';
 import 'components/menu.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen1 extends StatefulWidget {
+  const HomeScreen1({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreen1State createState() => _HomeScreen1State();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreen1State extends State<HomeScreen1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(0), // Adjust inner padding as needed
+                padding: EdgeInsets.all(0), 
                 constraints: BoxConstraints(maxWidth: 750),
                 child: Column(
                   children: [
                     SizedBox(height: 50),
-                    Responsive.isDesktop(context) ? ReservationForm() : MobBanner(),
-                    SizedBox(height: 20), // Add some spacing between form/banner and button
+                    Responsive.isDesktop(context) ? ReservationForm() :  ReservationForm1(),
+                    SizedBox(height: 20), 
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.check_circle_outline, color: Colors.white), // Icon
-                          SizedBox(width: 10), // Space between icon and text
+                          SizedBox(width: 10), 
                           Text(
                             'Check Reservations',
                             style: TextStyle(
@@ -90,11 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, 
-                        backgroundColor: Colors.green, // Background color
+                        backgroundColor: Colors.green, 
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(70), // Rounded corners
+                          borderRadius: BorderRadius.circular(70), 
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 80), // Padding inside the button
+                        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 80), 
                         elevation: 5, // Shadow
                       ),
                     ),
@@ -102,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
                
-              SizedBox(height: 80),
-              
-              Footer(),
+               SizedBox(height: 80),
+                    Responsive.isDesktop(context) ? Footer() :  Footer(),
             ],
           ),
         ),

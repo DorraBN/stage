@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:restaurent/acceuil/model.dart/product_model.dart';
 import 'package:restaurent/core/constants/color_constants.dart';
 import 'package:restaurent/screens/dashboard/pages/images.dart';
+import 'package:restaurent/screens/home/home_screen.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -102,20 +103,31 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Products"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ImageUploads()),
-              );
-            },
-          ),
-        ],
-      ),
+     appBar: AppBar(
+  title: Text("Products"),
+  leading: IconButton(
+    icon: Icon(Icons.arrow_back),
+    onPressed: () {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (Route<dynamic> route) => false,
+      );
+    },
+  ),
+  actions: [
+    IconButton(
+      icon: Icon(Icons.add),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ImageUploads()),
+        );
+      },
+    ),
+  ],
+),
+
       body: Container(
         padding: EdgeInsets.all(30.0),
         child: FutureBuilder<List<Map<String, dynamic>>>(

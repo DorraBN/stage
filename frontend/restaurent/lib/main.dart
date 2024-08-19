@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
-      home:HomeScreen(),
+      home:HomeScreen1(),
     );
   }
 }

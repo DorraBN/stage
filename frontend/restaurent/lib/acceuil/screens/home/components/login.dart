@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:restaurent/acceuil/screens/home/home_screen.dart';
 import 'dart:convert';
 
 import 'package:restaurent/screens/home/home_screen.dart';
@@ -88,7 +89,15 @@ class Menu extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _menuItem(title: 'Home'),
+              _menuItem(
+                title: 'Home',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen1()),
+                  );
+                },
+              ),
               _menuItem(title: 'About us'),
               _menuItem(title: 'Contact us'),
               _menuItem(title: 'Help'),
@@ -105,39 +114,43 @@ class Menu extends StatelessWidget {
     );
   }
 
-  Widget _menuItem({String title = 'Title Menu', bool isActive = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 75),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Column(
-          children: [
-            Text(
-              '$title',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color:
-                    isActive ? Color.fromARGB(255, 183, 148, 58) : Colors.grey,
+  Widget _menuItem({required String title, bool isActive = false, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 75),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Column(
+            children: [
+              Text(
+                '$title',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isActive
+                      ? Color.fromARGB(255, 183, 148, 58)
+                      : Colors.grey,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            isActive
-                ? Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 183, 118, 58),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  )
-                : SizedBox(),
-          ],
+              SizedBox(
+                height: 6,
+              ),
+              isActive
+                  ? Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 183, 118, 58),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          ),
         ),
       ),
     );
   }
+
 
   Widget _registerButton(BuildContext context) {
     return GestureDetector(
